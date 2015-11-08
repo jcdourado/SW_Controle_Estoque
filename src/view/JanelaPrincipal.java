@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 
 public class JanelaPrincipal {
 	private JFrame frame = new JFrame("Tela Principal");
-	private JPanel panelCli = new JPanel(new GridLayout(11, 2));
+	private JPanel panelPro = new JPanel(new GridLayout(11, 2));
 	private JPanel panelDep = new JPanel(new GridLayout(6, 2));
 	private JPanel panelFor = new JPanel(new GridLayout(5, 2));
 	private JPanel panelEnt = new JPanel(new GridLayout(10, 2));
@@ -26,7 +26,6 @@ public class JanelaPrincipal {
 	private JTextField qtdMaxima = new JTextField();
 	private JTextField consumo = new JTextField();
 	private JTextField consumoPrevisto = new JTextField();
-	private JTextField mediaEntrega = new JTextField();
 	private JButton salvarCli = new JButton("Salvar");
 	private JButton limparCli = new JButton("Limpar");
 	
@@ -41,7 +40,6 @@ public class JanelaPrincipal {
 	private JTextField nomeDep = new JTextField();
 	private JTextField localDep = new JTextField();
 	private JTextField contatoDep = new JTextField();
-	private JTextField consumoDep = new JTextField();
 	private JButton salvarDep = new JButton("Salvar");
 	private JButton limparDep = new JButton("Limpar");
 	
@@ -52,15 +50,12 @@ public class JanelaPrincipal {
 	private JTextField dataNFEEnt = new JTextField();
 	private JTextField qtdEnt = new JTextField();
 	private JTextField tempoEnt = new JTextField();
-	private JTextField precoEnt = new JTextField();
-	private JTextField pesoEnt = new JTextField();
 	private JButton salvarEnt = new JButton("Salvar");
 	private JButton limparEnt = new JButton("Limpar");
 	
 	private JTextField codSai = new JTextField();
 	private JTextField tipoSai = new JTextField();
 	private JTextField dataSai = new JTextField();
-	private JTextField precoSai = new JTextField();
 	private JTextField tempoSai = new JTextField();
 	private JTextField pesoSai = new JTextField();
 	private JButton salvarSai = new JButton("Salvar");
@@ -71,32 +66,30 @@ public class JanelaPrincipal {
 	public JanelaPrincipal() {
 		frame.setSize(500, 400);
 		tabs.setBounds(0, 0, 502, 371);
-		frame.getContentPane().add(tabs);
+		frame.setContentPane(tabs);
 		
-		panelCli.add(new JLabel("Código"));
-		panelCli.add(codCli);
-		panelCli.add(new JLabel("Nome"));
-		panelCli.add(nomeCli);
-		panelCli.add(new JLabel("Uso"));
-		panelCli.add(uso);
-		panelCli.add(new JLabel("Qtd em Estoque"));
-		panelCli.add(qtdEstoque);
-		panelCli.add(new JLabel("Qtd Minima"));
-		panelCli.add(qtdMinima);
-		panelCli.add(new JLabel("Qtd de segurança"));
-		panelCli.add(qtdSeguranca);
-		panelCli.add(new JLabel("Qtd Máxima"));
-		panelCli.add(qtdMaxima);
-		panelCli.add(new JLabel("Consumo"));
-		panelCli.add(consumo);
-		panelCli.add(new JLabel("Consumo Previsto"));
-		panelCli.add(consumoPrevisto);
-		panelCli.add(new JLabel("Media de Entrega"));
-		panelCli.add(mediaEntrega);
-		panelCli.add(salvarCli);
-		panelCli.add(limparCli);
+		panelPro.add(new JLabel("Código"));
+		panelPro.add(codCli);
+		panelPro.add(new JLabel("Nome"));
+		panelPro.add(nomeCli);
+		panelPro.add(new JLabel("Uso"));
+		panelPro.add(uso);
+		panelPro.add(new JLabel("Quantidade em estoque"));
+		panelPro.add(qtdEstoque);
+		panelPro.add(new JLabel("Quantidade mínima"));
+		panelPro.add(qtdMinima);
+		panelPro.add(new JLabel("Quantidade de segurança"));
+		panelPro.add(qtdSeguranca);
+		panelPro.add(new JLabel("Quantidade máxima"));
+		panelPro.add(qtdMaxima);
+		panelPro.add(new JLabel("Consumo"));
+		panelPro.add(consumo);
+		panelPro.add(new JLabel("Consumo previsto"));
+		panelPro.add(consumoPrevisto);
+		panelPro.add(salvarCli);
+		panelPro.add(limparCli);
 		
-		panelFor.add(new JLabel("Codigo"));
+		panelFor.add(new JLabel("Código"));
 		panelFor.add(codFor);
 		panelFor.add(new JLabel("Nome"));
 		panelFor.add(nomeFor);
@@ -107,7 +100,7 @@ public class JanelaPrincipal {
 		panelFor.add(salvarFor);
 		panelFor.add(limparFor);
 		
-		panelDep.add(new JLabel("Codigo"));
+		panelDep.add(new JLabel("Código"));
 		panelDep.add(codDep);
 		panelDep.add(new JLabel("Nome"));
 		panelDep.add(nomeDep);
@@ -115,48 +108,40 @@ public class JanelaPrincipal {
 		panelDep.add(localDep);
 		panelDep.add(new JLabel("Contato"));
 		panelDep.add(contatoDep);
-		panelDep.add(new JLabel("Media de Consumo"));
-		panelDep.add(consumoDep);
 		panelDep.add(salvarDep);
 		panelDep.add(limparDep);
 		
-		panelEnt.add(new JLabel("Codigo"));
+		panelEnt.add(new JLabel("Código"));
 		panelEnt.add(codEnt);
-		panelEnt.add(new JLabel("Data da Entrada"));
+		panelEnt.add(new JLabel("Data da entrada"));
 		panelEnt.add(dataEnt);
-		panelEnt.add(new JLabel("Tipo de Entrada"));
+		panelEnt.add(new JLabel("Tipo de entrada"));
 		panelEnt.add(tipoEnt);
-		panelEnt.add(new JLabel("NFE"));
+		panelEnt.add(new JLabel("Nota Fiscal Eletrônica"));
 		panelEnt.add(NFEEnt);
 		panelEnt.add(new JLabel("Data da NFE"));
 		panelEnt.add(dataNFEEnt);
 		panelEnt.add(new JLabel("Quantidade de Entrada"));
 		panelEnt.add(qtdEnt);
-		panelEnt.add(new JLabel("Tempo de Entrada"));
+		panelEnt.add(new JLabel("Tempo de entrada"));
 		panelEnt.add(tempoEnt);
-		panelEnt.add(new JLabel("Preço Total"));
-		panelEnt.add(precoEnt);
-		panelEnt.add(new JLabel("Peso Total"));
-		panelEnt.add(pesoEnt);
 		panelEnt.add(salvarEnt);
 		panelEnt.add(limparEnt);
 		
-		panelSai.add(new JLabel("Codigo de Saida"));
+		panelSai.add(new JLabel("Código"));
 		panelSai.add(codSai);
-		panelSai.add(new JLabel("Tipo de Saida"));
+		panelSai.add(new JLabel("Tipo"));
 		panelSai.add(tipoSai);
-		panelSai.add(new JLabel("Data da Saida"));
+		panelSai.add(new JLabel("Data"));
 		panelSai.add(dataSai);
-		panelSai.add(new JLabel("Preço da Saida"));
-		panelSai.add(precoSai);
-		panelSai.add(new JLabel("Tempo da Saida"));
+		panelSai.add(new JLabel("Tempo da saida"));
 		panelSai.add(tempoSai);
-		panelSai.add(new JLabel("Peso da Saida"));
+		panelSai.add(new JLabel("Peso da saida"));
 		panelSai.add(pesoSai);
 		panelSai.add(salvarSai);
 		panelSai.add(limparSai);
 		
-		tabs.addTab("Cliente", panelCli);
+		tabs.addTab("Produto", panelPro);
 		tabs.addTab("Fornecedor", panelFor);
 		tabs.addTab("Departamento", panelDep);
 		tabs.addTab("Entrada", panelEnt);
