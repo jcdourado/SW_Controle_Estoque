@@ -11,11 +11,11 @@ import javax.swing.JTextField;
 
 public class JanelaPrincipal {
 	private JFrame frame = new JFrame("Tela Principal");
-	private JPanel panelPro = new JPanel(new GridLayout(11, 2));
-	private JPanel panelDep = new JPanel(new GridLayout(6, 2));
+	private JPanel panelPro = new JPanel(new GridLayout(10, 2));
+	private JPanel panelDep = new JPanel(new GridLayout(5, 2));
 	private JPanel panelFor = new JPanel(new GridLayout(5, 2));
-	private JPanel panelEnt = new JPanel(new GridLayout(10, 2));
-	private JPanel panelSai = new JPanel(new GridLayout(7, 2));
+	private JPanel panelEnt = new JPanel(new GridLayout(8, 2));
+	private JPanel panelSai = new JPanel(new GridLayout(6, 2));
 	
 	private JTextField codCli = new JTextField();
 	private JTextField nomeCli = new JTextField();
