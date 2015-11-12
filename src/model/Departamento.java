@@ -88,6 +88,26 @@ public class Departamento {
 		setConsumoGeral(qtd);
 		return qtd;
 	}
+	public float calcQtdRecebidaPorProduto(Produto p){
+		float total = 0;
+		for(SolicitacaoDepartamento sol :solicitacoes){
+			for(ProdutoSolicitacaoSaida saidas: sol.getRecebidos()){
+				if(saidas.getIdProduto() == p.getId()){
+					total += saidas.getQuantidade();
+				}
+			}
+		}
+		return total;
+	}
+	public float calcQtdRecebidaGeral(){
+		float total = 0;
+		for(SolicitacaoDepartamento sol :solicitacoes){
+			for(ProdutoSolicitacaoSaida saidas: sol.getRecebidos()){
+				total += saidas.getQuantidade();
+			}
+		}
+		return total;		
+	}
 	public float getConsumoGeral() {
 		calcConsumoGeral();
 		return consumoGeral;
@@ -101,4 +121,35 @@ public class Departamento {
 	public void setMediaConsumo(float mediaConsumo) {
 		this.mediaConsumo = mediaConsumo;
 	}
+	public float getRestante(Produto p){
+		int qtd = 0;
+		for(SolicitacaoDepartamento sol: solicitacoes){
+			for(SolicitacaoProdutoDepartamento solProduto:sol.getSoliticacoes()){
+				if(solProduto.getIdProduto() == p.getId()){
+					qtd += sol.getQtdRestante(p);
+				}
+			}
+		}
+		return qtd;
+	}
+	public boolean restaAlgoGeral(){
+		for(SolicitacaoDepartamento sol :solicitacoes)
+			if(sol.qtdRestanteGeral() > 0){
+				return false;
+			}
+		return true;
+	}
+	public boolean restaAlgo(Produto p){
+		if(getRestante(p) > 0){
+			return false;
+		}
+		return true;
+	}
+	public float qtdRestanteGeral(){
+		int rest = 0;
+		for(SolicitacaoDepartamento sol : solicitacoes){
+			rest+=sol.qtdRestanteGeral();
+		}
+		return rest;
+	}	
 }

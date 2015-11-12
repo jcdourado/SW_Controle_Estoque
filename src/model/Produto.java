@@ -192,5 +192,5 @@ public class Produto {
 	}
 	public float qtdPedidosPorProduto(Fornecedor f){
 		return f.getQtdPedidosPorProduto(this);
-	}
+	}	
 }

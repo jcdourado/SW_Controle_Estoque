@@ -8,9 +8,10 @@ public class SolicitacaoDepartamento {
 	private int id;
 	private Date data;
 	private int idDepartamento;
+	private float qtdRestante;
 	private List<SolicitacaoProdutoDepartamento> solicitacoes = new ArrayList<SolicitacaoProdutoDepartamento>();
 	private List<ProdutoSolicitacaoSaida> recebidos = new ArrayList<ProdutoSolicitacaoSaida>();
-		
+	
 	public int getId() {
 		return id;
 	}
@@ -58,5 +59,58 @@ public class SolicitacaoDepartamento {
 	}
 	public void removeRecebidoPorIndice(int i){
 		recebidos.remove(i);
-	}	
+	}
+	public float qtdRestante(Produto p){
+		int qtdNecessaria = 0;
+		int qtdInterna = 0;
+		for(SolicitacaoProdutoDepartamento sol : solicitacoes){
+			if(sol.getIdProduto() == p.getId()){
+				qtdNecessaria += sol.getQuantidade();
+			}
+		}
+		for(ProdutoSolicitacaoSaida sol : recebidos){
+			if(sol.getIdProduto() == p.getId()){
+				qtdInterna += sol.getQuantidade();
+			}
+		}
+		if(qtdNecessaria < qtdInterna){
+			setQtdRestante(0);
+			return 0;
+		}
+		setQtdRestante(qtdNecessaria - qtdInterna);
+		return (qtdNecessaria - qtdInterna);
+	}
+	public float getQtdRestante(Produto p) {
+		qtdRestante(p);
+		return qtdRestante;
+	}
+	public void setQtdRestante(float qtdRestante) {
+		this.qtdRestante = qtdRestante;
+	}
+	public boolean restaAlgo(Produto p){
+		if(getQtdRestante(p) > 0){
+			return false;
+		}
+		return true;
+	}
+	public boolean restaAlgoGeral(){
+		if(qtdRestanteGeral() > 0){
+			return false;
+		}
+		return true;
+	}
+	public float qtdRestanteGeral(){
+		int qtdNecessaria = 0;
+		int qtdInterna = 0;
+		for(SolicitacaoProdutoDepartamento sol : solicitacoes){
+			qtdNecessaria += sol.getQuantidade();
+		}
+		for(ProdutoSolicitacaoSaida sol : recebidos){
+			qtdInterna += sol.getQuantidade();
+		}
+		if(qtdNecessaria < qtdInterna){
+			return 0;
+		}
+		return (qtdNecessaria - qtdInterna);
+	}
 }

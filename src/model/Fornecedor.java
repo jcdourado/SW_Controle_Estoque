@@ -200,6 +200,35 @@ public class Fornecedor {
 		}
 		return res;
 	}
+	public float qtdRestante(Produto p){
+		int qtd = 0;
+		for(SolicitacaoFornecedor sol: solicitacoes){
+			for(SolicitacaoProdutoFornecedor solProduto:sol.getSolicitacoes()){
+				if(solProduto.getIdProduto() == p.getId()){
+					qtd += sol.getQtdRestante(p);
+				}
+			}
+		}
+		return qtd;
+	}
+	public boolean restaAlgoGeral(){
+		for(SolicitacaoFornecedor sol :solicitacoes)
+			if(sol.qtdRestanteGeral() > 0){
+				return false;
+			}
+		return true;
+	}
+	public boolean restaAlgo(Produto p){
+		if(qtdRestante(p) > 0){
+			return false;
+		}
+		return true;
+	}
+	public float qtdRestanteGeral(){
+		int rest = 0;
+		for(SolicitacaoFornecedor sol : solicitacoes){
+			rest+=sol.qtdRestanteGeral();
+		}
+		return rest;
+	}	
 }
-
-

@@ -87,4 +87,16 @@ public class Entrada {
 	public void removeEntreguePorIndice(int i){
 		entregues.remove(i);
 	}
+	public float qtdTotalItens(){
+		return itens.size();
+	}
+	public float qtdTotalItemProduto(Produto p){
+		float qtd = 0;
+		for(Item i : itens){
+			if (i.getIdProduto() == p.getId()){
+				qtd++;
+			}
+		}
+		return qtd;
+	}
 }
