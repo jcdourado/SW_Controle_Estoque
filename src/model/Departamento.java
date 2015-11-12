@@ -10,6 +10,7 @@ public class Departamento {
 	private String predio;
 	private String telefone;
 	private float mediaConsumo; // fazer a media
+	private float consumoGeral;
 	private int codResponsavel;
 	private List<SolicitacaoDepartamento> solicitacoes = new ArrayList<SolicitacaoDepartamento>();
 	public int getId() {
@@ -62,6 +63,37 @@ public class Departamento {
 	}
 	public void removePorIndice(int i){
 		solicitacoes.remove(i);
+	}
+	public float calcConsumoGeral(){
+		float qtd = 0;
+		for(SolicitacaoDepartamento sol : solicitacoes){
+			List<SolicitacaoProdutoDepartamento> solProduto = (ArrayList<SolicitacaoProdutoDepartamento>)sol.getSoliticacoes();
+			for(SolicitacaoProdutoDepartamento solFinal : solProduto){
+				qtd += solFinal.getQuantidade();
+			}
+		}
+		setConsumoGeral(qtd);
+		return qtd;
+	}
+	public float calcConsumoProduto(Produto p){
+		float qtd = 0;
+		for(SolicitacaoDepartamento sol : solicitacoes){
+			List<SolicitacaoProdutoDepartamento> solProduto = (ArrayList<SolicitacaoProdutoDepartamento>)sol.getSoliticacoes();
+			for(SolicitacaoProdutoDepartamento solFinal : solProduto){
+				if(p.getId() == solFinal.getIdProduto()){
+					qtd += solFinal.getQuantidade();
+				}
+			}
+		}
+		setConsumoGeral(qtd);
+		return qtd;
+	}
+	public float getConsumoGeral() {
+		calcConsumoGeral();
+		return consumoGeral;
+	}
+	public void setConsumoGeral(float consumoGeral) {
+		this.consumoGeral = consumoGeral;
 	}
 	public float getMediaConsumo() {
 		return mediaConsumo;

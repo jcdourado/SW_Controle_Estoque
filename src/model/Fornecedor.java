@@ -11,7 +11,11 @@ public class Fornecedor {
 	private String cidade;
 	private String estado;
 	private String tel;
-	private float mediaPedida; // conta de media pedida
+	private float qtdPedidos;
+	private float qtdPedidosPorProduto;
+	private float qtdProdutosPedidosTotal;
+	private float qtdProdutosEntregues;
+	private float mediaTempo;
 	private List<SolicitacaoFornecedor> solicitacoes = new ArrayList<SolicitacaoFornecedor>();
 	private List<Entrada> entradas = new ArrayList<Entrada>();
 		
@@ -87,10 +91,115 @@ public class Fornecedor {
 	public void removeEntradaPorIndice(int i){
 		entradas.remove(i);
 	}
-	public float getMediaPedida() {
-		return mediaPedida;
+	public int qtdPedidosFornecedor(){
+		setQtdPedidos(solicitacoes.size());
+		return solicitacoes.size();
 	}
-	public void setMediaPedida(float mediaPedida) {
-		this.mediaPedida = mediaPedida;
-	}	
+	public float qtdPedidosPorProduto(Produto produto){
+		float qtd = 0;
+		for(SolicitacaoFornecedor sol : solicitacoes){
+			ArrayList<SolicitacaoProdutoFornecedor> p =  (ArrayList<SolicitacaoProdutoFornecedor>) sol.getSolicitacoes();
+			for(SolicitacaoProdutoFornecedor solFornecedor : p){
+				if(produto.getId() == solFornecedor.getIdProduto()){
+					qtd += solFornecedor.getQuantidade();
+				}
+			}
+		}
+		setQtdPedidosPorProduto(qtd);
+		return qtd;
+	}
+	public float qtdProdutosPedidosFornecedor(){
+		float qtd = 0;
+		for(SolicitacaoFornecedor sol : solicitacoes){
+			ArrayList<SolicitacaoProdutoFornecedor> p =  (ArrayList<SolicitacaoProdutoFornecedor>) sol.getSolicitacoes();
+			for(SolicitacaoProdutoFornecedor solFornecedor : p){
+				qtd += solFornecedor.getQuantidade();
+			}
+		}
+		setQtdProdutosPedidosTotal(qtd);
+		return qtd;
+	}
+	public float getQtdPedidos() {
+		qtdPedidosFornecedor();
+		return qtdPedidos;
+	}
+	public void setQtdPedidos(float qtdPedidos) {
+		this.qtdPedidos = qtdPedidos;
+	}
+	public float getQtdPedidosPorProduto(Produto p) {
+		qtdPedidosPorProduto(p);
+		return qtdPedidosPorProduto;
+	}
+	public void setQtdPedidosPorProduto(float qtdPedidosPorProduto) {
+		this.qtdPedidosPorProduto = qtdPedidosPorProduto;
+	}
+	public float getQtdProdutosPedidosTotal() {
+		qtdProdutosPedidosFornecedor();
+		return qtdProdutosPedidosTotal;
+	}
+	public void setQtdProdutosPedidosTotal(float qtdProdutosPedidosTotal) {
+		this.qtdProdutosPedidosTotal = qtdProdutosPedidosTotal;
+	}
+	public float calcQtdTempo(Produto p){
+		float tempo = 0;
+		int div = 0;
+		for(Entrada ent : entradas){
+			int cont = 0;
+			ArrayList<ProdutoSolicitacaoEntrada> solEntrada = (ArrayList<ProdutoSolicitacaoEntrada>) ent.getEntregues();
+			for(ProdutoSolicitacaoEntrada pFinal : solEntrada){
+				if(cont == 0){
+					if(pFinal.getIdProduto() == p.getId()){
+						tempo = ent.getTempo()+tempo;
+						cont++;
+						div++;
+					}
+				}
+			}
+		}
+		if(div > 0){
+			tempo = tempo / div;
+		}
+		setMediaTempo(tempo);
+		return tempo;
+	}
+	public float getMediaTempo(Produto p) {
+		calcQtdTempo(p);
+		return mediaTempo;
+	}
+	public void setMediaTempo(float mediaTempo) {
+		this.mediaTempo = mediaTempo;
+	}
+	public float qtdEntregueTotal(){
+		float res = 0;
+		for(Entrada ent : entradas){
+			ArrayList<ProdutoSolicitacaoEntrada> solEntrada = (ArrayList<ProdutoSolicitacaoEntrada>) ent.getEntregues();
+			for(ProdutoSolicitacaoEntrada pFinal : solEntrada){
+					res += pFinal.getQuantidade();
+			}
+		}
+		setQtdProdutosEntregues(res);
+		return res;
+	}
+	
+	public float getQtdProdutosEntregues() {
+		qtdEntregueTotal();
+		return qtdProdutosEntregues;
+	}
+	public void setQtdProdutosEntregues(float qtdProdutosEntregues) {
+		this.qtdProdutosEntregues = qtdProdutosEntregues;
+	}
+	public float qtdEntregueProduto(Produto p){
+		float res = 0;
+		for(Entrada ent : entradas){
+			ArrayList<ProdutoSolicitacaoEntrada> solEntrada = (ArrayList<ProdutoSolicitacaoEntrada>) ent.getEntregues();
+			for(ProdutoSolicitacaoEntrada pFinal : solEntrada){
+					if(p.getId() == pFinal.getIdProduto()){
+						res += pFinal.getQuantidade();
+					}
+			}
+		}
+		return res;
+	}
 }
+
+

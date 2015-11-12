@@ -29,4 +29,10 @@ public class Item {
 	public void setIdEntrada(int idEntrada) {
 		this.idEntrada = idEntrada;
 	}
+	public boolean verSaida(){
+		if(idSaida == 0){
+			return false;
+		}
+		return true;
+	}
 }
