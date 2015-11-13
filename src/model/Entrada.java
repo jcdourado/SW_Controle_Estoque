@@ -99,4 +99,40 @@ public class Entrada {
 		}
 		return qtd;
 	}
+	public float qtdProdutosDoadosTotal(){
+		float qtd = 0;
+		for(ProdutoSolicitacaoEntrada pEntrada : entregues){
+			if(pEntrada.getIdSolicitacao() == 0){
+				qtd+=pEntrada.getQuantidade();
+			}
+		}
+		return qtd;
+	}
+	public float qtdProdutosDoadosProduto(Produto p){
+		float qtd = 0;
+		for(ProdutoSolicitacaoEntrada pEntrada : entregues){
+			if(p.getId() == pEntrada.getIdProduto() && pEntrada.getIdSolicitacao() == 0){
+				qtd+=pEntrada.getQuantidade();
+			}
+		}
+		return qtd;
+	}
+	public boolean isDoacao(){
+		float qtdTotal = 0;
+		float qtdTotalDoacao = qtdProdutosDoadosTotal();
+		for(ProdutoSolicitacaoEntrada pEntrada : entregues){
+			qtdTotal += pEntrada.getQuantidade();
+		}
+		if(qtdTotal == qtdTotalDoacao){
+			return true;
+		}
+		return false;
+	}
+	public boolean containsDoacao(){
+		float qtdTotalDoacao = qtdProdutosDoadosTotal();
+		if(qtdTotalDoacao > 0){
+			return true;
+		}
+		return false;
+	}
 }

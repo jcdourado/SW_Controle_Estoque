@@ -71,4 +71,40 @@ public class Saida {
 		}
 		return qtd;
 	}
+	public float qtdProdutosDoadosTotal(){
+		float qtd = 0;
+		for(ProdutoSolicitacaoSaida pSaida : solicitacoes){
+			if(pSaida.getIdSolicitacao() == 0){
+				qtd+=pSaida.getQuantidade();
+			}
+		}
+		return qtd;
+	}
+	public float qtdProdutosDoadosProduto(Produto p){
+		float qtd = 0;
+		for(ProdutoSolicitacaoSaida pSaida : solicitacoes){
+			if(p.getId() == pSaida.getIdProduto() && pSaida.getIdSolicitacao() == 0){
+				qtd+=pSaida.getQuantidade();
+			}
+		}
+		return qtd;
+	}
+	public boolean isDoacao(){
+		float qtdTotal = 0;
+		float qtdTotalDoacao = qtdProdutosDoadosTotal();
+		for(ProdutoSolicitacaoSaida pSaida : solicitacoes){
+			qtdTotal += pSaida.getQuantidade();
+		}
+		if(qtdTotal == qtdTotalDoacao){
+			return true;
+		}
+		return false;
+	}
+	public boolean containsDoacao(){
+		float qtdTotalDoacao = qtdProdutosDoadosTotal();
+		if(qtdTotalDoacao > 0){
+			return true;
+		}
+		return false;
+	}
 }
