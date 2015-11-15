@@ -14,6 +14,8 @@ public class Produto {
 	private float consumo;
 	private String consumoPrevisto;
 	private float mediaEntrega;
+	private float peso;
+	private float preco;
 	private List<SolicitacaoProdutoFornecedor> qtdPedidoFornecedor = new ArrayList<SolicitacaoProdutoFornecedor>();
 	private List<SolicitacaoProdutoDepartamento> qtdPedidoDepartamento = new ArrayList<SolicitacaoProdutoDepartamento>();
 	private List<ProdutoSolicitacaoEntrada> entradas = new ArrayList<ProdutoSolicitacaoEntrada>(); 
@@ -192,5 +194,17 @@ public class Produto {
 	}
 	public float qtdPedidosPorProduto(Fornecedor f){
 		return f.getQtdPedidosPorProduto(this);
+	}
+	public float getPeso() {
+		return peso;
+	}
+	public void setPeso(float peso) {
+		this.peso = peso;
+	}
+	public float getPreco() {
+		return preco;
+	}
+	public void setPreco(float preco) {
+		this.preco = preco;
 	}	
 }

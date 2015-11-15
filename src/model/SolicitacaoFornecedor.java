@@ -113,4 +113,46 @@ public class SolicitacaoFornecedor {
 		}
 		return (qtdNecessaria - qtdInterna);
 	}
+	public float calcPesoPorProduto(Produto p){
+		float peso = 0;
+		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
+			if(solProduto.getIdProduto() == p.getId()){
+				peso += p.getPeso() * solProduto.getQuantidade();
+			}
+		}
+		return peso;
+	}
+	public float calcPrecoPorProduto(Produto p){
+		float preco = 0;
+		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
+			if(solProduto.getIdProduto() == p.getId()){
+				preco += p.getPreco() * solProduto.getQuantidade();
+			}
+		}
+		return preco;
+	}
+	public float calcPesoPorSolicitacaoProduto(SolicitacaoProdutoFornecedor solProduto, Produto p){
+		float peso = 0;
+		peso += p.getPeso() * solProduto.getQuantidade();
+		return peso;
+	}
+	public float calcPrecoPorSolicitacaoProduto(SolicitacaoProdutoFornecedor solProduto, Produto p){
+		float preco = 0;
+		preco += p.getPreco() * solProduto.getQuantidade();
+		return preco;
+	}
+	public float calcPesoGeral(){
+		float peso = 0;
+		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
+			peso += solProduto.getP().getPeso() * solProduto.getQuantidade();
+		}
+		return peso;
+	}
+	public float calcPrecoGeral(){
+		float preco = 0;
+		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
+			preco += solProduto.getP().getPreco() * solProduto.getQuantidade();
+		}
+		return preco;
+	}	
 }

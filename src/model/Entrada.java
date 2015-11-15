@@ -135,4 +135,46 @@ public class Entrada {
 		}
 		return false;
 	}
+	public float calcPesoPorProduto(Produto p){
+		float peso = 0;
+		for(ProdutoSolicitacaoEntrada solProduto : entregues){
+			if(solProduto.getIdProduto() == p.getId()){
+				peso += p.getPeso() * solProduto.getQuantidade();
+			}
+		}
+		return peso;
+	}
+	public float calcPrecoPorProduto(Produto p){
+		float preco = 0;
+		for(ProdutoSolicitacaoEntrada solProduto : entregues){
+			if(solProduto.getIdProduto() == p.getId()){
+				preco += p.getPreco() * solProduto.getQuantidade();
+			}
+		}
+		return preco;
+	}
+	public float calcPesoPorSolicitacaoProduto(ProdutoSolicitacaoEntrada solProduto, Produto p){
+		float peso = 0;
+		peso += p.getPeso() * solProduto.getQuantidade();
+		return peso;
+	}
+	public float calcPrecoPorSolicitacaoProduto(ProdutoSolicitacaoEntrada solProduto, Produto p){
+		float preco = 0;
+		preco += p.getPreco() * solProduto.getQuantidade();
+		return preco;
+	}
+	public float calcPesoGeral(){
+		float peso = 0;
+		for(ProdutoSolicitacaoEntrada solProduto : entregues){
+			peso += solProduto.getP().getPeso() * solProduto.getQuantidade();
+		}
+		return peso;
+	}
+	public float calcPrecoGeral(){
+		float preco = 0;
+		for(ProdutoSolicitacaoEntrada solProduto : entregues){
+			preco += solProduto.getP().getPreco() * solProduto.getQuantidade();
+		}
+		return preco;
+	}
 }

@@ -4,6 +4,7 @@ public class SolicitacaoProdutoFornecedor {
 	private int idProduto;
 	private int idSolicitacao;
 	private float quantidade;
+	private Produto p;
 	public int getIdProduto() {
 		return idProduto;
 	}
@@ -21,5 +22,11 @@ public class SolicitacaoProdutoFornecedor {
 	}
 	public void setQuantidade(float quantidade) {
 		this.quantidade = quantidade;
+	}
+	public Produto getP() {
+		return p;
+	}
+	public void setP(Produto p) {
+		this.p = p;
 	}
 }

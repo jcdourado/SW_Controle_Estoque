@@ -152,4 +152,60 @@ public class Departamento {
 		}
 		return rest;
 	}	
+	public float calcPesoGeral(){
+		int preco = 0;
+		for(SolicitacaoDepartamento sol: solicitacoes){
+			preco += sol.calcPesoGeral();
+		}
+		return preco;
+	}	
+	public float calcPrecoGeral(){
+		int preco = 0;
+		for(SolicitacaoDepartamento sol: solicitacoes){
+			preco += sol.calcPrecoGeral();
+		}
+		return preco;
+	}	
+	public float calcPesoPorProduto(Produto p){
+		int preco = 0;
+		for(SolicitacaoDepartamento sol: solicitacoes){
+			preco += sol.calcPesoPorProduto(p);
+		}
+		return preco;
+	}	
+	public float calcPrecoPorProduto(Produto p){
+		int preco = 0;
+		for(SolicitacaoDepartamento sol: solicitacoes){
+			preco += sol.calcPrecoPorProduto(p);
+		}
+		return preco;
+	}
+	public float calcPrecoPorSolicitacao(SolicitacaoDepartamento solDpto){
+		int preco = 0;
+		for(SolicitacaoProdutoDepartamento solProduto : solDpto.getSoliticacoes()){
+			preco += solDpto.calcPrecoPorSolicitacaoProduto(solProduto, solProduto.getP());
+		}
+		return preco;
+	}
+	public float calcPesoPorSolicitacao(SolicitacaoDepartamento solDpto){
+		int preco = 0;
+		for(SolicitacaoProdutoDepartamento solProduto : solDpto.getSoliticacoes()){
+			preco += solDpto.calcPesoPorSolicitacaoProduto(solProduto, solProduto.getP());
+		}
+		return preco;
+	}
+	public float calcPrecoPorSolicitacaoProduto(SolicitacaoDepartamento solDpto, Produto p){
+		int preco = 0;
+		for(SolicitacaoProdutoDepartamento solProduto : solDpto.getSoliticacoes()){
+			preco += solDpto.calcPrecoPorSolicitacaoProduto(solProduto, p);
+		}
+		return preco;
+	}
+	public float calcPesoPorSolicitacaoProduto(SolicitacaoDepartamento solDpto, Produto p){
+		int preco = 0;
+		for(SolicitacaoProdutoDepartamento solProduto : solDpto.getSoliticacoes()){
+			preco += solDpto.calcPesoPorSolicitacaoProduto(solProduto, p);
+		}
+		return preco;
+	}
 }
