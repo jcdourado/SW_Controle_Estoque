@@ -19,10 +19,9 @@ public class TipoDAO {
 	
 	public void adicionar(Tipo e) {
 		try {
-			String sql = "INSERT INTO tipo (codTipo, nome) VALUES (?, ?)";
+			String sql = "INSERT INTO tipo (nome) VALUES (?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getId());
-			ps.setString(2, e.getNome());
+			ps.setString(1, e.getNome());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -30,12 +29,12 @@ public class TipoDAO {
 		}
 	}
 	
-	public void atualizar(int cod, Tipo e) {
+	public void atualizar(Tipo e) {
 		try {
 			String sql = "UPDATE tipo SET nome = ? WHERE codTipo = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setString(1, e.getNome());
-			ps.setInt(2, cod);
+			ps.setInt(2, e.getId());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {

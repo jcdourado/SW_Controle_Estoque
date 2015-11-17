@@ -20,11 +20,10 @@ public class ResponsavelDAO {
 	
 	public void adicionar(Responsavel e) {
 		try {
-			String sql = "INSERT INTO responsavel (codResponsavel, nome, telefone) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO responsavel (nome, telefone) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getId());
-			ps.setString(2, e.getNome());
-			ps.setString(3, e.getTel());
+			ps.setString(1, e.getNome());
+			ps.setString(2, e.getTel());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -32,7 +31,7 @@ public class ResponsavelDAO {
 		}
 	}
 	
-	public void atualizar(int cod, Responsavel e) {
+	public void atualizar(Responsavel e) {
 		try {
 			String sql = "UPDATE responsavel " + 
 				     " SET nome = ?, telefone = ? WHERE codResponsavel = ? ";

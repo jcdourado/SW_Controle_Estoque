@@ -20,15 +20,14 @@ public class ProSolSaiDAO {
 	
 	public void adicionar(ProdutoSolicitacaoSaida e) {
 		try {
-			String sql = "INSERT INTO produto_Solicitacao_Saida (codSolicitacaoSaida, quantidade, uso, "
-					+ "idPoduto, idSaida, idSolicitacao) VALUES (?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO produto_Solicitacao_Saida (quantidade, uso, "
+					+ "idPoduto, idSaida, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getCodSolicitacaoSaida());
-			ps.setFloat(2, e.getQuantidade());
-			ps.setString(3, e.getUso());
-			ps.setInt(4, e.getIdProduto());
-			ps.setInt(5, e.getIdSaida());
-			ps.setInt(6, e.getIdSolicitacao());
+			ps.setFloat(1, e.getQuantidade());
+			ps.setString(2, e.getUso());
+			ps.setInt(3, e.getIdProduto());
+			ps.setInt(4, e.getIdSaida());
+			ps.setInt(5, e.getIdSolicitacao());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -36,7 +35,7 @@ public class ProSolSaiDAO {
 		}
 	}
 	
-	public void atualizar(int cod, ProdutoSolicitacaoSaida e) {
+	public void atualizar(ProdutoSolicitacaoSaida e) {
 		try {
 			String sql = "UPDATE produto_Solicitacao_Saida SET quantidade = ?, uso = ?, idProduto = ?, "
 					+ "idEntrada = ?, idSolicitacao = ? WHERE codSolicitacaoSaida = ?";
@@ -46,7 +45,7 @@ public class ProSolSaiDAO {
 			ps.setInt(3, e.getIdProduto());
 			ps.setInt(4, e.getIdSaida());
 			ps.setInt(5, e.getIdSolicitacao());
-			ps.setInt(6, cod);
+			ps.setInt(6, e.getCodSolicitacaoSaida());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {

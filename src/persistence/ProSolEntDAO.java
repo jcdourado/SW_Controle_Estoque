@@ -20,15 +20,14 @@ public class ProSolEntDAO {
 	
 	public void adicionar(ProdutoSolicitacaoEntrada e) {
 		try {
-			String sql = "INSERT INTO produto_Solicitacao_Entrada (codSolicitacaoEntrada, quantidade, uso, "
-					+ "idPoduto, idEntrada, idSolicitacao) VALUES (?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO produto_Solicitacao_Entrada (quantidade, uso, "
+					+ "idPoduto, idEntrada, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getCodSolicitacaoEntrada());
-			ps.setFloat(2, e.getQuantidade());
-			ps.setString(3, e.getUso());
-			ps.setInt(4, e.getIdProduto());
-			ps.setInt(5, e.getIdEntrada());
-			ps.setInt(6, e.getIdSolicitacao());
+			ps.setFloat(1, e.getQuantidade());
+			ps.setString(2, e.getUso());
+			ps.setInt(3, e.getIdProduto());
+			ps.setInt(4, e.getIdEntrada());
+			ps.setInt(5, e.getIdSolicitacao());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -36,7 +35,7 @@ public class ProSolEntDAO {
 		}
 	}
 	
-	public void atualizar(int cod, ProdutoSolicitacaoEntrada e) {
+	public void atualizar(ProdutoSolicitacaoEntrada e) {
 		try {
 			String sql = "UPDATE produto_Solicitacao_Entrada SET quantidade = ?, uso = ?, idProduto = ?, "
 					+ "idEntrada = ?, idSolicitacao = ? WHERE codSolicitacaoEntrada = ?";
@@ -46,7 +45,7 @@ public class ProSolEntDAO {
 			ps.setInt(3, e.getIdProduto());
 			ps.setInt(4, e.getIdEntrada());
 			ps.setInt(5, e.getIdSolicitacao());
-			ps.setInt(6, cod);
+			ps.setInt(6, e.getCodSolicitacaoEntrada());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -56,7 +55,7 @@ public class ProSolEntDAO {
 	
 	public void remove(int cod) {
 		try {
-			String sql = "DELETE FROM produto_Solicitacao_Entrada WHERE codcodSolicitacaoEntrada = ?";
+			String sql = "DELETE FROM produto_Solicitacao_Entrada WHERE codSolicitacaoEntrada = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, cod);
 			ps.execute();

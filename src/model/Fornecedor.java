@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Fornecedor {
 	private int id;
+	private String nome;
 	private String rua;
 	private int numero;
 	private String bairro;
@@ -19,6 +20,13 @@ public class Fornecedor {
 	private List<SolicitacaoFornecedor> solicitacoes = new ArrayList<SolicitacaoFornecedor>();
 	private List<Entrada> entradas = new ArrayList<Entrada>();
 		
+	
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 	public int getId() {
 		return id;
 	}

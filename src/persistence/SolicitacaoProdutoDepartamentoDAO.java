@@ -32,13 +32,13 @@ public class SolicitacaoProdutoDepartamentoDAO {
 		}
 	}
 	
-	public void atualizar(int cod, SolicitacaoProdutoDepartamento e) {
+	public void atualizar(SolicitacaoProdutoDepartamento e) {
 		try {
-			String sql = "UPDATE solicitacao_Produto_Departamento SET id_Solicitacao = ?, quantidade = ? WHERE id_Produto = ?";
+			String sql = "UPDATE solicitacao_Produto_Departamento SET quantidade = ? WHERE id_Produto = ? AND id_Solicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getIdSolicitacao());
-			ps.setFloat(2, e.getQuantidade());
-			ps.setInt(3, cod);
+			ps.setFloat(1, e.getQuantidade());
+			ps.setInt(2, e.getIdProduto());
+			ps.setInt(3, e.getIdSolicitacao());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -46,11 +46,12 @@ public class SolicitacaoProdutoDepartamentoDAO {
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(SolicitacaoProdutoDepartamento e) {
 		try {
-			String sql = "DELETE FROM solicitacao_Produto_Departamento WHERE id_Produto = ?";
+			String sql = "DELETE FROM solicitacao_Produto_Departamento WHERE id_Produto = ? AND id_Solicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, cod);
+			ps.setInt(1, e.getIdProduto());
+			ps.setInt(2, e.getIdSolicitacao());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {

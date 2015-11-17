@@ -16,12 +16,19 @@ public class Produto {
 	private float mediaEntrega;
 	private float peso;
 	private float preco;
+	private int tipo;
 	private List<SolicitacaoProdutoFornecedor> qtdPedidoFornecedor = new ArrayList<SolicitacaoProdutoFornecedor>();
 	private List<SolicitacaoProdutoDepartamento> qtdPedidoDepartamento = new ArrayList<SolicitacaoProdutoDepartamento>();
 	private List<ProdutoSolicitacaoEntrada> entradas = new ArrayList<ProdutoSolicitacaoEntrada>(); 
 	private List<ProdutoSolicitacaoSaida> saidas = new ArrayList<ProdutoSolicitacaoSaida>();
 	private List<Item> itens = new ArrayList<Item>();
 	
+	public int getTipo() {
+		return tipo;
+	}
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
 	public int getId() {
 		return id;
 	}

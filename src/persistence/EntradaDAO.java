@@ -20,18 +20,17 @@ private Connection c;
 	
 	public void adicionar(Entrada e) {
 		try {
-			String sql = "INSERT INTO entrada (codEntrada, data, tipoTransferencia, NFE, "
-					+ "dataEmissaoNFE, tempo, codFornecedor) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO entrada (data, tipoTransferencia, NFE, "
+					+ "dataEmissaoNFE, tempo, codFornecedor) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			java.sql.Date sd = new java.sql.Date( e.getData().getTime() );
 			java.sql.Date sd2 = new java.sql.Date( e.getDataEmissarNFE().getTime());
-			ps.setInt(1, e.getIdEntrada());
-			ps.setDate(2, sd);
-			ps.setString(3, e.getTipoTransf());
-			ps.setString(4, e.getNFE());
-			ps.setDate(5, sd2);
-			ps.setFloat(6, e.getTempo());
-			ps.setInt(7, e.getIdFornecedor());
+			ps.setDate(1, sd);
+			ps.setString(2, e.getTipoTransf());
+			ps.setString(3, e.getNFE());
+			ps.setDate(4, sd2);
+			ps.setFloat(5, e.getTempo());
+			ps.setInt(6, e.getIdFornecedor());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -39,7 +38,7 @@ private Connection c;
 		}
 	}
 	
-	public void atualizar(int cod, Entrada e) {
+	public void atualizar(Entrada e) {
 		try {
 			String sql = "UPDATE entrada " + 
 				     " SET data = ?, tipoTransferencia = ?, NFE = ?, dataEmissaoNFE = ?"
@@ -53,7 +52,7 @@ private Connection c;
 			ps.setDate(4, sd2);
 			ps.setFloat(5, e.getTempo());
 			ps.setInt(6, e.getIdFornecedor());
-			ps.setInt(7, cod);
+			ps.setInt(7, e.getIdEntrada());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {

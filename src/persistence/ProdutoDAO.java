@@ -20,28 +20,26 @@ public class ProdutoDAO {
 	
 	public void adicionar(Produto e) {
 		try {
-			String sql = "INSERT INTO produto (codProduto, nome, uso, qtdMinima, qtdSeguranca, qtdMaxima, "
-					+ "consumoPrevisto, preco, peso, codTipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO produto (nome, uso, qtdMinima, qtdSeguranca, qtdMaxima, "
+					+ "consumoPrevisto, preco, peso, codTipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getId());
-			ps.setString(2, e.getNome());
-			ps.setString(3, e.getUso());
-			ps.setFloat(4, e.getQtdMinima());
-			ps.setFloat(5, e.getQtdSeguranca());
-			ps.setFloat(6, e.getQtdMaxima());
-			ps.setString(7, e.getConsumoPrevisto());
-			/* Deveria ter um getPreco por aqui */
-			/* Deveria ter um getPeso por aqui */
-			/* Deveria ter um getCodTipo por aqui */
+			ps.setString(1, e.getNome());
+			ps.setString(2, e.getUso());
+			ps.setFloat(3, e.getQtdMinima());
+			ps.setFloat(4, e.getQtdSeguranca());
+			ps.setFloat(5, e.getQtdMaxima());
+			ps.setString(6, e.getConsumoPrevisto());
+			ps.setFloat(7, e.getPreco());
+			ps.setFloat(8, e.getPeso());
+			ps.setInt(9, e.getTipo());
 			ps.execute();
 			ps.close();
 			} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
 	}
 
-	public void atualizar(int cod, Produto e) {
+	public void atualizar( Produto e) {
 		try {
 			String sql = "UPDATE produto SET nome = ?, uso = ?, qtdMinima = ?, qtdSeguranca = ?, qtdMaxima = ?, "
 					+ "consumoPrevisto = ?, preco = ?, peso = ?, codTipo = ? WHERE codProduto = ? ";
@@ -52,10 +50,10 @@ public class ProdutoDAO {
 			ps.setFloat(4, e.getQtdSeguranca());
 			ps.setFloat(5, e.getQtdMaxima());
 			ps.setString(6, e.getConsumoPrevisto());
-			/* Deveria ter um getPreco por aqui */
-			/* Deveria ter um getPeso por aqui */
-			/* Deveria ter um getCodTipo por aqui */
-			ps.setInt(10, cod);
+			ps.setFloat(7, e.getPreco());
+			ps.setFloat(8, e.getPeso());
+			ps.setInt(9, e.getTipo());
+			ps.setInt(10, e.getId());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {

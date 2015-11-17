@@ -20,12 +20,11 @@ public class SaidaDAO {
 	
 	public void adicionar(Saida e) {
 		try {
-			String sql = "INSERT INTO saida (codSaida, data, descricao) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO saida (data, descricao) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			java.sql.Date sd = new java.sql.Date( e.getData().getTime() );
-			ps.setInt(1, e.getIdSaida());
-			ps.setDate(2, sd);
-			ps.setString(3, e.getDescricao());
+			ps.setDate(1, sd);
+			ps.setString(2, e.getDescricao());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -34,7 +33,7 @@ public class SaidaDAO {
 		
 	}
 
-	public void atualizar(int cod, Saida e) {
+	public void atualizar( Saida e) {
 		try {
 			String sql = "UPDATE saida " + 
 				     " SET data = ?, descricao = ? " + 

@@ -19,12 +19,11 @@ public class SolicitacaoDepartamentoDAO {
 	
 	public void adicionar(SolicitacaoDepartamento e) {
 		try {
-			String sql = "INSERT INTO solicitacao_Departamento (codSolicitacao, codDepartamento, data) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO solicitacao_Departamento (codDepartamento, data) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			java.sql.Date sd = new java.sql.Date( e.getData().getTime() );
-			ps.setInt(1, e.getId());
-			ps.setInt(2, e.getIdDepartamento());
-			ps.setDate(3, sd);
+			ps.setInt(1, e.getIdDepartamento());
+			ps.setDate(2, sd);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -32,7 +31,7 @@ public class SolicitacaoDepartamentoDAO {
 		}
 	}
 	
-	public void atualizar(int cod, SolicitacaoDepartamento e) {
+	public void atualizar(SolicitacaoDepartamento e) {
 		try {
 			String sql = "UPDATE solicitacao_Departamento SET codDepartamento = ?, data = ? WHERE codSolicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);

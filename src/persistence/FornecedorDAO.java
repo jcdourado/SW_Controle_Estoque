@@ -20,17 +20,16 @@ public class FornecedorDAO {
 	
 	public void adicionar(Fornecedor e) {
 		try {
-			String sql = "INSERT INTO fornecedor (codFornecedor, rua, numero, bairro, "
-					+ "cidade, estado, nome, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO fornecedor (rua, numero, bairro, "
+					+ "cidade, estado, nome, telefone) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, e.getId());
-			ps.setString(2, e.getRua());
-			ps.setInt(3, e.getNumero());
-			ps.setString(4, e.getBairro());
-			ps.setString(5, e.getCidade());
-			ps.setString(6, e.getEstado());
-			/* getNome() */
-			ps.setString(8, e.getTel());
+			ps.setString(1, e.getRua());
+			ps.setInt(2, e.getNumero());
+			ps.setString(3, e.getBairro());
+			ps.setString(4, e.getCidade());
+			ps.setString(5, e.getEstado());
+			ps.setString(6, e.getNome());
+			ps.setString(7, e.getTel());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -48,7 +47,7 @@ public class FornecedorDAO {
 			ps.setString(3, e.getBairro());
 			ps.setString(4, e.getCidade());
 			ps.setString(5, e.getEstado());
-			/* getNome() */
+			ps.setString(6, e.getNome());
 			ps.setString(7, e.getTel());
 			ps.setInt(8, e.getId());
 			ps.execute();

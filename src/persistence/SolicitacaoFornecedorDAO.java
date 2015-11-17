@@ -19,12 +19,11 @@ public class SolicitacaoFornecedorDAO {
 	
 	public void adicionar(SolicitacaoFornecedor e) {
 		try {
-			String sql = "INSERT INTO solicitacao_Fornecedor (codSolicitacao, codSolicitacao, data) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO solicitacao_Fornecedor (codFornecedor, data) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			java.sql.Date sd = new java.sql.Date( e.getData().getTime() );
-			ps.setInt(1, e.getId());
-			ps.setInt(2, e.getIdFornecedor());
-			ps.setDate(3, sd);
+			ps.setInt(1, e.getIdFornecedor());
+			ps.setDate(2, sd);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
