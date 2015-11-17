@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Entrada;
 
@@ -77,5 +79,114 @@ private Connection c;
 		} else {
 			return 1;
 		}
+	}
+	
+	public List<Entrada> cons() throws SQLException {
+		List<Entrada> lista = new ArrayList<Entrada>();
+		String sql = "SELECT codEntrada, data, tipoTransferencia, NFE, "
+					+ "dataEmissaoNFE, tempo, codFornecedor";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Entrada dp = new Entrada();
+			dp.setIdEntrada(rs.getInt("codEntrada"));
+			dp.setData(rs.getDate("data"));
+			dp.setTipoTransf(rs.getString("tipoTransferencia"));
+			dp.setNFE(rs.getString("NFE"));
+			dp.setDataEmissarNFE(rs.getDate("dataEmissaoNFE"));
+			dp.setTempo(rs.getFloat("tempo"));
+			dp.setIdFornecedor(rs.getInt("codFornecedor"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
+	}
+	
+	private String getSql(Entrada d){
+		int ver = 0;
+		String sql = "SELECT codEntrada, data, tipoTransferencia, NFE, "
+					+ "dataEmissaoNFE, tempo, codFornecedor ";
+		if(d.getIdEntrada() != 0 ){
+			sql += "WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ";
+			ver++;
+		}		
+		if(d.getData() != null){
+			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
+			if(ver>0){
+				sql += "AND data LIKE '%"+sd+"%' ";
+			}
+			else{
+				sql += "WHERE data LIKE '%"+sd+"%' ";	
+				ver++;
+			}
+		}		
+		if(d.getTipoTransf() != null){
+			if(ver>0){
+				sql += "AND tipoTransferencia LIKE '%"+d.getTipoTransf()+"%' ";
+			}
+			else{
+				sql += "WHERE tipoTransferencia LIKE '%"+d.getTipoTransf()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getNFE() != null){
+			if(ver>0){
+				sql += "AND NFE LIKE '%"+d.getNFE()+"%' ";
+			}
+			else{
+				sql += "WHERE NFE LIKE '%"+d.getNFE()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getDataEmissarNFE() != null){
+			java.sql.Date sd = new java.sql.Date( d.getDataEmissarNFE().getTime() );
+			if(ver>0){
+				sql += "AND dataEmissaoNFE LIKE '%"+sd+"%' ";
+			}
+			else{
+				sql += "WHERE dataEmissaoNFE LIKE '%"+sd+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getTempo() != 0){
+			if(ver>0){
+				sql += "AND tempo LIKE '%"+d.getTempo()+"%' ";
+			}
+			else{
+				sql += "WHERE tempo LIKE '%"+d.getTempo()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getIdFornecedor() != 0){
+			if(ver>0){
+				sql += "AND codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ";
+			}
+			else{
+				sql += "WHERE codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ";	
+				ver++;
+			}
+		}
+		return sql;
+	}
+		
+		public List<Entrada> cons(Entrada d) throws SQLException {
+		List<Entrada> lista = new ArrayList<Entrada>();
+		PreparedStatement ps = c.prepareStatement(getSql(d));
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Entrada dp = new Entrada();
+			dp.setIdEntrada(rs.getInt("codEntrada"));
+			dp.setData(rs.getDate("data"));
+			dp.setTipoTransf(rs.getString("tipoTransferencia"));
+			dp.setNFE(rs.getString("NFE"));
+			dp.setDataEmissarNFE(rs.getDate("dataEmissaoNFE"));
+			dp.setTempo(rs.getFloat("tempo"));
+			dp.setIdFornecedor(rs.getInt("codFornecedor"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}	
 }
