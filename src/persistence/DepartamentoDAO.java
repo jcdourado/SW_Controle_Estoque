@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Departamento;
 
@@ -62,6 +64,93 @@ public class DepartamentoDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	public List<Departamento> cons() throws SQLException {
+		List<Departamento> lista = new ArrayList<Departamento>();
+		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
+				+ " codResponsavel FROM departamento";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Departamento dp = new Departamento();
+			dp.setId(rs.getInt("codDepartamento"));
+			dp.setNome(rs.getString("nome"));
+			dp.setAndar(rs.getString("andar"));
+			dp.setPredio(rs.getString("predio"));
+			dp.setTelefone(rs.getString("telefone"));
+			dp.setCodResponsavel(rs.getInt("codResponsavel"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
+	}
+
+	public List<Departamento> consPorId(int id) throws SQLException {
+		List<Departamento> lista = new ArrayList<Departamento>();
+		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
+				+ " codResponsavel FROM departamento WHERE codDepartamento LIKE '%?%'";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Departamento dp = new Departamento();
+			dp.setId(rs.getInt("codDepartamento"));
+			dp.setNome(rs.getString("nome"));
+			dp.setAndar(rs.getString("andar"));
+			dp.setPredio(rs.getString("predio"));
+			dp.setTelefone(rs.getString("telefone"));
+			dp.setCodResponsavel(rs.getInt("codResponsavel"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
+	}
+
+	public List<Departamento> consPorNome(String nome) throws SQLException {
+		List<Departamento> lista = new ArrayList<Departamento>();
+		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
+				+ " codResponsavel FROM departamento WHERE nome LIKE '%?%'";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Departamento dp = new Departamento();
+			dp.setId(rs.getInt("codDepartamento"));
+			dp.setNome(rs.getString("nome"));
+			dp.setAndar(rs.getString("andar"));
+			dp.setPredio(rs.getString("predio"));
+			dp.setTelefone(rs.getString("telefone"));
+			dp.setCodResponsavel(rs.getInt("codResponsavel"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
+	}
+	
+	public List<Departamento> consPorNome(String nome) throws SQLException {
+		List<Departamento> lista = new ArrayList<Departamento>();
+		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
+				+ " codResponsavel FROM departamento WHERE nome LIKE '%?%'";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Departamento dp = new Departamento();
+			dp.setId(rs.getInt("codDepartamento"));
+			dp.setNome(rs.getString("nome"));
+			dp.setAndar(rs.getString("andar"));
+			dp.setPredio(rs.getString("predio"));
+			dp.setTelefone(rs.getString("telefone"));
+			dp.setCodResponsavel(rs.getInt("codResponsavel"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}
 	
 	public int proximoId() throws SQLException {
