@@ -2,6 +2,7 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Tipo;
@@ -47,6 +48,16 @@ public class TipoDAO {
 			ps.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+		}
+	}
+	public int proximoId() throws SQLException {
+		String sql = "SELECT MAX(tipo) + 1 AS proximo_id FROM tipo";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()){
+			return rs.getInt("proximo_id");
+		} else {
+			return 1;
 		}
 	}
 }

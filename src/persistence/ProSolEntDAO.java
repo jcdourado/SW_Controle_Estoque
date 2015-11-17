@@ -2,6 +2,7 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.ProdutoSolicitacaoEntrada;
@@ -17,7 +18,7 @@ public class ProSolEntDAO {
 	public void adicionar(ProdutoSolicitacaoEntrada e) {
 		try {
 			String sql = "INSERT INTO produto_Solicitacao_Entrada (quantidade, uso, "
-					+ "idPoduto, idEntrada, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
+					+ "idProduto, idEntrada, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setFloat(1, e.getQuantidade());
 			ps.setString(2, e.getUso());
@@ -58,6 +59,16 @@ public class ProSolEntDAO {
 			ps.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+		}
+	}
+	public int proximoId() throws SQLException {
+		String sql = "SELECT MAX(codSolicitacaoEntrada) + 1 AS proximo_id FROM produto_Solicitacao_Entrada";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()){
+			return rs.getInt("proximo_id");
+		} else {
+			return 1;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Item;
@@ -54,4 +55,14 @@ private Connection c;
 			e1.printStackTrace();
 		}
 	}
+	public int proximoId() throws SQLException {
+		String sql = "SELECT MAX(codItem) + 1 AS proximo_id FROM item";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()){
+			return rs.getInt("proximo_id");
+		} else {
+			return 1;
+		}
+	}	
 }
