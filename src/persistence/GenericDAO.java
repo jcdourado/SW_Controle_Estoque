@@ -1,17 +1,38 @@
 package persistence;
-
+						
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class GenericDAO {
-	private static String JTDS_DRIVER = "net.sourceforge.jtds.jdbc.Driver";
-	private static String JDBC_URL = "jdbc:jtds:sqlserver://localhost:1433/estoque";
-	private static String USER = "sa";
-	private static String PASSWORD = "1408";
+
+private static Connection con;
+
+	public Connection getConnection() { 
 	
-	public Connection getConnection() throws SQLException, ClassNotFoundException {
-		Class.forName( JTDS_DRIVER );
-		return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+		try { 
+			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=estoque;namedPipe=true","sa","1408");
+			System.out.println("Conexao ok");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
+		return con; 
+	}
+
+
+	public void fechaConexao(){
+		try {
+			if(con!=null) con.close();
+				con =null;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 	}
 }
+
+

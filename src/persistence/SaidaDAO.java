@@ -11,11 +11,7 @@ public class SaidaDAO {
 	
 	public SaidaDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(Saida e) {

@@ -11,11 +11,7 @@ private Connection c;
 	
 	public ItemDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(Item e) {

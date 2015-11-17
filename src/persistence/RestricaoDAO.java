@@ -11,11 +11,7 @@ public class RestricaoDAO {
 	private Connection c;
 	public RestricaoDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(Tipo e, Tipo e2) {

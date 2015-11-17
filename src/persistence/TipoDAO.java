@@ -10,11 +10,7 @@ public class TipoDAO {
 	private Connection c;
 	public TipoDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(Tipo e) {

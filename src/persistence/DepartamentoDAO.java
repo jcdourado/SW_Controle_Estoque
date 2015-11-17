@@ -11,11 +11,7 @@ public class DepartamentoDAO {
 	
 	public DepartamentoDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
-			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+		c = gen.getConnection();
 	}
 	
 	public void adicionar(Departamento e) {

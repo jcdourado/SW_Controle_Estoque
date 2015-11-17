@@ -10,11 +10,7 @@ public class SolicitacaoProdutoFornecedorDAO {
 	private Connection c;
 	public SolicitacaoProdutoFornecedorDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(SolicitacaoProdutoFornecedor e) {

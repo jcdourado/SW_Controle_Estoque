@@ -11,11 +11,7 @@ public class ProSolSaiDAO {
 	
 	public ProSolSaiDAO() {
 		GenericDAO gen = new GenericDAO();
-		try {
 			c = gen.getConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void adicionar(ProdutoSolicitacaoSaida e) {
