@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Saida;
 
@@ -67,6 +69,49 @@ public class SaidaDAO {
 		} else {
 			return 1;
 		}
+	}
+	private String getSql(Saida d){
+		int ver = 0;
+		String sql = "SELECT codSaida ,data, descricao FROM saida ";
+		if(d.getIdSaida() != 0 ){
+			sql += "WHERE codSaida LIKE '%" +d.getIdSaida()+"%' ";
+			ver++;
+		}		
+		if(d.getData() != null){
+			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
+			if(ver>0){
+				sql += "AND data = '%"+sd+"%' ";
+			}
+			else{
+				sql += "WHERE data = '%"+sd+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getDescricao() != null){
+			if(ver>0){
+				sql += "AND descricao LIKE '%"+d.getDescricao()+"%' ";
+			}
+			else{
+				sql += "WHERE descricao LIKE '%"+d.getDescricao()+"%' ";	
+				ver++;
+			}
+		}
+		return sql;
+	}
+		
+	public List<Saida> cons(Saida d) throws SQLException {
+		List<Saida> lista = new ArrayList<Saida>();
+		PreparedStatement ps = c.prepareStatement(getSql(d));
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Saida dp = new Saida();
+			dp.setIdSaida(rs.getInt("codSaida"));
+			dp.setData(rs.getDate("data"));
+			dp.setDescricao(rs.getString("descricao"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}	
-	
 }

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Responsavel;
 
@@ -63,5 +65,48 @@ public class ResponsavelDAO {
 		} else {
 			return 1;
 		}
+	}
+	private String getSql(Responsavel d){
+		int ver = 0;
+		String sql = "SELECT codResponsavel ,nome, telefone FROM responsavel ";
+		if(d.getId() != 0 ){
+			sql += "WHERE codResponsavel LIKE '%" +d.getId()+"%' ";
+			ver++;
+		}		
+		if(d.getNome() != null){
+			if(ver>0){
+				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+			}
+			else{
+				sql += "WHERE nome LIKE '%"+d.getNome()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getTel() != null){
+			if(ver>0){
+				sql += "AND telefone LIKE '%"+d.getTel()+"%' ";
+			}
+			else{
+				sql += "WHERE telefone LIKE '%"+d.getTel()+"%' ";	
+				ver++;
+			}
+		}
+		return sql;
+	}
+		
+	public List<Responsavel> cons(Responsavel d) throws SQLException {
+		List<Responsavel> lista = new ArrayList<Responsavel>();
+		PreparedStatement ps = c.prepareStatement(getSql(d));
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Responsavel dp = new Responsavel();
+			dp.setId(rs.getInt("codResponsavel"));
+			dp.setNome	(rs.getString("nome"));
+			dp.setTel(rs.getString("telefone"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}	
 }

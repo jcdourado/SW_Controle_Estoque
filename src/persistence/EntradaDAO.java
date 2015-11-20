@@ -81,32 +81,10 @@ private Connection c;
 		}
 	}
 	
-	public List<Entrada> cons() throws SQLException {
-		List<Entrada> lista = new ArrayList<Entrada>();
-		String sql = "SELECT codEntrada, data, tipoTransferencia, NFE, "
-					+ "dataEmissaoNFE, tempo, codFornecedor";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Entrada dp = new Entrada();
-			dp.setIdEntrada(rs.getInt("codEntrada"));
-			dp.setData(rs.getDate("data"));
-			dp.setTipoTransf(rs.getString("tipoTransferencia"));
-			dp.setNFE(rs.getString("NFE"));
-			dp.setDataEmissarNFE(rs.getDate("dataEmissaoNFE"));
-			dp.setTempo(rs.getFloat("tempo"));
-			dp.setIdFornecedor(rs.getInt("codFornecedor"));
-			lista.add(dp);
-		}
-		rs.close();
-		ps.close();
-		return lista;
-	}
-	
 	private String getSql(Entrada d){
 		int ver = 0;
 		String sql = "SELECT codEntrada, data, tipoTransferencia, NFE, "
-					+ "dataEmissaoNFE, tempo, codFornecedor ";
+					+ "dataEmissaoNFE, tempo, codFornecedor FROM entrada ";
 		if(d.getIdEntrada() != 0 ){
 			sql += "WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ";
 			ver++;
@@ -114,10 +92,10 @@ private Connection c;
 		if(d.getData() != null){
 			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
 			if(ver>0){
-				sql += "AND data LIKE '%"+sd+"%' ";
+				sql += "AND data = '"+sd+"' ";
 			}
 			else{
-				sql += "WHERE data LIKE '%"+sd+"%' ";	
+				sql += "WHERE data = '"+sd+"' ";	
 				ver++;
 			}
 		}		
@@ -170,7 +148,7 @@ private Connection c;
 		return sql;
 	}
 		
-		public List<Entrada> cons(Entrada d) throws SQLException {
+	public List<Entrada> cons(Entrada d) throws SQLException {
 		List<Entrada> lista = new ArrayList<Entrada>();
 		PreparedStatement ps = c.prepareStatement(getSql(d));
 		ResultSet rs = ps.executeQuery();

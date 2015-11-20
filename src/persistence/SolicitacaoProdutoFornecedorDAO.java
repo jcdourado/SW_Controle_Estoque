@@ -2,7 +2,10 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.SolicitacaoProdutoFornecedor;
 
@@ -53,5 +56,48 @@ public class SolicitacaoProdutoFornecedorDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+	}
+	private String getSql(SolicitacaoProdutoFornecedor d){
+		int ver = 0;
+		String sql = "SELECT id_Produto ,id_Solicitacao, getQuantidade FROM solicitacao_Produto_Fornecedor ";
+		if(d.getIdProduto() != 0 ){
+			sql += "WHERE id_Produto LIKE '%" +d.getIdProduto()+"%' ";
+			ver++;
+		}		
+		if(d.getIdSolicitacao() != 0){
+			if(ver>0){
+				sql += "AND id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";
+			}
+			else{
+				sql += "WHERE id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getQuantidade() != 0){
+			if(ver>0){
+				sql += "AND quantidade LIKE '%"+d.getQuantidade()+"%' ";
+			}
+			else{
+				sql += "WHERE quantidade LIKE '%"+d.getQuantidade()+"%' ";	
+				ver++;
+			}
+		}
+		return sql;
+	}
+		
+	public List<SolicitacaoProdutoFornecedor> cons(SolicitacaoProdutoFornecedor d) throws SQLException {
+		List<SolicitacaoProdutoFornecedor> lista = new ArrayList<SolicitacaoProdutoFornecedor>();
+		PreparedStatement ps = c.prepareStatement(getSql(d));
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			SolicitacaoProdutoFornecedor dp = new SolicitacaoProdutoFornecedor();
+			dp.setIdProduto(rs.getInt("id_Produto"));
+			dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
+			dp.setQuantidade(rs.getFloat("quantidade"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}
 }

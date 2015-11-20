@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Tipo;
 
@@ -59,5 +61,35 @@ public class TipoDAO {
 		} else {
 			return 1;
 		}
+	}
+	public List<Tipo> cons(Tipo d) throws SQLException {
+		List<Tipo> lista = new ArrayList<Tipo>();
+		String sql = "SELECT codTipo, nome FROM tipo ";
+		int ver = 0;
+		if(d.getId() != 0){
+			sql += "WHERE codTipo LIKE '%"+d.getId()+"%' ";
+			ver++;
+		}
+		if(d.getNome() != null){
+			if(ver>0){
+				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+			}
+			else{
+				sql +=  "WHERE nome LIKE '%"+d.getNome()+"%' ";
+				ver++;
+			}
+		}
+		
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Tipo dp = new Tipo();
+			dp.setId(rs.getInt("codTipo"));
+			dp.setNome(rs.getString("nome"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}
 }

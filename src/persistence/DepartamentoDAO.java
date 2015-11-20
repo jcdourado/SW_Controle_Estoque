@@ -66,27 +66,6 @@ public class DepartamentoDAO {
 		}
 	}
 	
-	public List<Departamento> cons() throws SQLException {
-		List<Departamento> lista = new ArrayList<Departamento>();
-		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
-				+ " codResponsavel FROM departamento";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Departamento dp = new Departamento();
-			dp.setId(rs.getInt("codDepartamento"));
-			dp.setNome(rs.getString("nome"));
-			dp.setAndar(rs.getString("andar"));
-			dp.setPredio(rs.getString("predio"));
-			dp.setTelefone(rs.getString("telefone"));
-			dp.setCodResponsavel(rs.getInt("codResponsavel"));
-			lista.add(dp);
-		}
-		rs.close();
-		ps.close();
-		return lista;
-	}
-	
 	private String getSql(Departamento d){
 		int ver = 0;
 		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"

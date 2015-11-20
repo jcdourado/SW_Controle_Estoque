@@ -2,7 +2,10 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Tipo;
 
@@ -38,5 +41,39 @@ public class RestricaoDAO {
 		} catch (SQLException expection) {
 			expection.printStackTrace();
 		}
+	}
+
+	
+	public List<Tipo> cons(Tipo d) throws SQLException {
+		List<Tipo> lista = new ArrayList<Tipo>();
+		String sql = "SELECT codRestTipo_FK, tp.nome, tipo.codTipo FROM tipo"
+				+ " INNER JOIN tipoRestricao " + "ON tipo.codTipo = tipoRestricao.codTipo " +
+				" INNER JOIN tipo tp " + " ON tp.codTipo = tipoRestricao.codRestTipo_FK ";
+		int ver = 0;
+		if(d.getId() != 0){
+			sql += "WHERE tipo.codTipo LIKE '%"+d.getId()+"%' ";
+			ver++;
+		}
+		if(d.getNome() != null){
+			if(ver>0){
+				sql += "AND tipo.nome LIKE '%"+d.getNome()+"%' ";
+			}
+			else{
+				sql +=  "WHERE tipo.nome LIKE '%"+d.getNome()+"%' ";
+				ver++;
+			}
+		}
+		
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Tipo dp = new Tipo();
+			dp.setId(rs.getInt("codRestTipo_FK"));
+			dp.setNome(rs.getString("nome"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}
 }

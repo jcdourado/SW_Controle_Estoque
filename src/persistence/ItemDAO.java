@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Item;
 
@@ -64,5 +66,59 @@ private Connection c;
 		} else {
 			return 1;
 		}
+	}
+	
+	private String getSql(Item d){
+		int ver = 0;
+		String sql = "SELECT codItem ,codProduto, codSaida, codEntrada FROM item ";
+		if(d.getIdEntrada() != 0 ){
+			sql += "WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ";
+			ver++;
+		}		
+		if(d.getIdSaida() != 0){
+			if(ver>0){
+				sql += "AND codSaida LIKE '%"+d.getIdSaida()+"%' ";
+			}
+			else{
+				sql += "WHERE codSaida LIKE '%"+d.getIdSaida()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getIdProduto() != 0){
+			if(ver>0){
+				sql += "AND codProduto LIKE '%"+d.getIdProduto()+"%' ";
+			}
+			else{
+				sql += "WHERE codProduto LIKE '%"+d.getIdProduto()+"%' ";	
+				ver++;
+			}
+		}
+		if(d.getIdItem() != 0){
+			if(ver>0){
+				sql += "AND codItem LIKE '%"+d.getIdItem()+"%' ";
+			}
+			else{
+				sql += "WHERE codProduto LIKE '%"+d.getIdItem()+"%' ";	
+				ver++;
+			}
+		}
+		return sql;
+	}
+		
+	public List<Item> cons(Item d) throws SQLException {
+		List<Item> lista = new ArrayList<Item>();
+		PreparedStatement ps = c.prepareStatement(getSql(d));
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			Item dp = new Item();
+			dp.setIdEntrada(rs.getInt("codEntrada"));
+			dp.setIdSaida(rs.getInt("codSaida"));
+			dp.setIdProduto(rs.getInt("codProduto"));
+			dp.setIdItem(rs.getInt("codItem"));
+			lista.add(dp);
+		}
+		rs.close();
+		ps.close();
+		return lista;
 	}	
 }
