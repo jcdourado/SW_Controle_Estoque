@@ -16,7 +16,7 @@ public class RestricaoDAO {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
-	
+		
 	public void adicionar(Tipo e, Tipo e2) {
 		try {
 			String sql = "INSERT INTO tipoRestricao (codTipo, codRestTipo_FK) VALUES (?, ?)";
