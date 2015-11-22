@@ -1,5 +1,4 @@
 package view;
-// janelas que devem existir: Departamento, Responsavel, Fornecedor, Entradas, Saidas, Items, Produtos, Solicitacoes, Tipo 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -10,9 +9,22 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
+
+import controller.ControleItem;
+import controller.ControllerDepartamento;
+import controller.ControllerEntrada;
+import controller.ControllerFornecedor;
+import controller.ControllerProduto;
+import controller.ControllerResponsavel;
+import controller.ControllerSaida;
+import controller.ControllerSolicitacaoDepartamento;
+import controller.ControllerSolicitacaoFornecedor;
+import controller.ControllerTipo;
 
 public class JanelaPrincipal {
 	private JFrame frame = new JFrame("Tela Principal");
@@ -27,6 +39,28 @@ public class JanelaPrincipal {
 	private JPanel principalFornecedor = new JPanel(new BorderLayout());
 	private JPanel principalSolicitacaoFORN = new JPanel(new BorderLayout());
 	private JPanel principalSolicitacaoDPTO = new JPanel(new BorderLayout());
+	
+	private ControllerTipo ctrTipo = new ControllerTipo();
+	private ControllerProduto ctrProduto = new ControllerProduto();
+	private ControllerSaida ctrSaida = new ControllerSaida();
+	private ControleItem ctrItem = new ControleItem();
+	private ControllerEntrada ctrEntrada = new ControllerEntrada();
+	private ControllerResponsavel ctrResponsavel = new ControllerResponsavel();
+	private ControllerDepartamento ctrDepartamento = new ControllerDepartamento();
+	private ControllerFornecedor ctrFornecedor = new ControllerFornecedor();
+	private ControllerSolicitacaoFornecedor ctrSolFornecedor = new ControllerSolicitacaoFornecedor();
+	private ControllerSolicitacaoDepartamento ctrSolDepartamento = new ControllerSolicitacaoDepartamento();
+	
+	private JTable tabelaTipo = new JTable(ctrTipo);
+	private JTable tabelaProduto = new JTable(ctrProduto);
+	private JTable tabelaSaida = new JTable(ctrSaida);
+	private JTable tabelaItem = new JTable(ctrItem);
+	private JTable tabelaEntrada = new JTable(ctrEntrada);
+	private JTable tabelaResponsavel = new JTable(ctrResponsavel);
+	private JTable tabelaDepartamento = new JTable(ctrDepartamento);
+	private JTable tabelaFornecedor = new JTable(ctrFornecedor);
+	private JTable tabelaSolFornecedor = new JTable(ctrSolFornecedor);
+	private JTable tabelaSolDepartamento = new JTable(ctrSolDepartamento);
 	
 	private JPanel panelTipo = new JPanel(new GridLayout(2, 2));
 	private JPanel panelPro = new JPanel(new GridLayout(10, 2));
@@ -144,6 +178,27 @@ public class JanelaPrincipal {
 		frame.setSize(1000, 600);
 		frame.setContentPane(tabs);
 		
+		JScrollPane scrollTipo = new JScrollPane();
+		JScrollPane scrollProduto = new JScrollPane();
+		JScrollPane scrollSaida = new JScrollPane();
+		JScrollPane scrollItem = new JScrollPane();
+		JScrollPane scrollEntrada = new JScrollPane();
+		JScrollPane scrollResponsavel = new JScrollPane();
+		JScrollPane scrollDepartamento = new JScrollPane();
+		JScrollPane scrollFornecedor = new JScrollPane();
+		JScrollPane scrollSolFornecedor = new JScrollPane();
+		JScrollPane scrollSolDepartamento = new JScrollPane();
+		
+		scrollTipo.getViewport().add(tabelaTipo);
+		scrollProduto.getViewport().add(tabelaProduto);
+		scrollSaida.getViewport().add(tabelaSaida);
+		scrollItem.getViewport().add(tabelaItem);
+		scrollEntrada.getViewport().add(tabelaEntrada);
+		scrollResponsavel.getViewport().add(tabelaResponsavel);
+		scrollDepartamento.getViewport().add(tabelaDepartamento);
+		scrollFornecedor.getViewport().add(tabelaFornecedor);
+		scrollSolFornecedor.getViewport().add(tabelaSolFornecedor);
+		scrollSolDepartamento.getViewport().add(tabelaSolDepartamento);
 
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		dataEnt = new JFormattedTextField(mascaraData);
@@ -331,6 +386,17 @@ public class JanelaPrincipal {
 		principalFornecedor.add(panelFor, BorderLayout.NORTH);
 		principalSolicitacaoFORN.add(panelSolFor, BorderLayout.NORTH);
 		principalSolicitacaoDPTO.add(panelSolDep, BorderLayout.NORTH);
+
+		principalTipo.add(scrollTipo, BorderLayout.CENTER);
+		principalProduto.add(scrollProduto, BorderLayout.CENTER);
+		principalSaida.add(scrollSaida, BorderLayout.CENTER);
+		principalItens.add(scrollItem, BorderLayout.CENTER);
+		principalEntrada.add(scrollEntrada, BorderLayout.CENTER);
+		principalResponsavel.add(scrollResponsavel, BorderLayout.CENTER);
+		principalDepartamento.add(scrollDepartamento, BorderLayout.CENTER);
+		principalFornecedor.add(scrollFornecedor, BorderLayout.CENTER);
+		principalSolicitacaoFORN.add(scrollSolFornecedor, BorderLayout.CENTER);
+		principalSolicitacaoDPTO.add(scrollSolDepartamento, BorderLayout.CENTER);
 
 		principalTipo.add(panelBtnTipo, BorderLayout.SOUTH);
 		principalProduto.add(panelBtnPro, BorderLayout.SOUTH);
