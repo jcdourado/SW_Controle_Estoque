@@ -7,10 +7,34 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Departamento;
+import persistence.DepartamentoDAO;
+import utilities.EstoqueException;
 
 public class ControllerDepartamento implements TableModel{
 	List<Departamento> departamentos = new ArrayList<Departamento>();
+	DepartamentoDAO dao;
 
+	public void adicionar(Departamento d) throws EstoqueException{
+		dao = new DepartamentoDAO();
+		dao.adicionar(d);
+		consultar(new Departamento());
+	}
+	public void atualizar(Departamento d) throws EstoqueException{
+		dao = new DepartamentoDAO();
+		dao.atualizar(d);
+		consultar(new Departamento());
+	}
+	public void remover(Departamento d) throws EstoqueException{
+		dao = new DepartamentoDAO();
+		dao.remove(d.getId());
+		consultar(new Departamento());	
+	}
+	public List<Departamento> consultar(Departamento d) throws EstoqueException{
+		dao = new DepartamentoDAO();
+		departamentos = dao.cons(d);
+		return departamentos;
+	}
+	
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

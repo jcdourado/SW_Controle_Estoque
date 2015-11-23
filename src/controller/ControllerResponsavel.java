@@ -7,10 +7,33 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Responsavel;
+import persistence.ResponsavelDAO;
+import utilities.EstoqueException;
 
 public class ControllerResponsavel implements TableModel{
 	List<Responsavel> responsaveis = new ArrayList<Responsavel>();
+	ResponsavelDAO dao;
 
+	public void adicionar(Responsavel d) throws EstoqueException{
+		dao = new ResponsavelDAO();
+		dao.adicionar(d);
+		consultar(new Responsavel());
+	}
+	public void atualizar(Responsavel d) throws EstoqueException{
+		dao = new ResponsavelDAO();
+		dao.atualizar(d);
+		consultar(new Responsavel());
+	}
+	public void remover(Responsavel d) throws EstoqueException{
+		dao = new ResponsavelDAO();
+		dao.remover(d.getId());
+		consultar(new Responsavel());	
+	}
+	public List<Responsavel> consultar(Responsavel d) throws EstoqueException{
+		dao = new ResponsavelDAO();
+		responsaveis = dao.cons(d);
+		return responsaveis;
+	}
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

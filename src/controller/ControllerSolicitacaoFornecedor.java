@@ -8,10 +8,33 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.SolicitacaoFornecedor;
+import persistence.SolicitacaoFornecedorDAO;
+import utilities.EstoqueException;
 
 public class ControllerSolicitacaoFornecedor implements TableModel{
 	List<SolicitacaoFornecedor> solFornecedores = new ArrayList<SolicitacaoFornecedor>();
-
+	SolicitacaoFornecedorDAO dao;
+	
+	public void adicionar(SolicitacaoFornecedor t) throws EstoqueException{
+		dao = new SolicitacaoFornecedorDAO();
+		dao.adicionar(t);
+		consultar(new SolicitacaoFornecedor());
+	}
+	public void atualizar(SolicitacaoFornecedor t)throws EstoqueException{
+		dao = new SolicitacaoFornecedorDAO();
+		dao.atualizar(t);	
+		consultar(new SolicitacaoFornecedor());	
+	}
+	public void remover(SolicitacaoFornecedor t)throws EstoqueException{
+		dao = new SolicitacaoFornecedorDAO();
+		dao.remove(t.getId());
+		consultar(new SolicitacaoFornecedor());
+	}
+	public List<SolicitacaoFornecedor> consultar(SolicitacaoFornecedor t)throws EstoqueException{
+		dao = new SolicitacaoFornecedorDAO();
+		solFornecedores = dao.cons(t);
+		return (solFornecedores);
+	}
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

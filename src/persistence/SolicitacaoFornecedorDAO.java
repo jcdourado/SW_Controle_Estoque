@@ -31,7 +31,7 @@ public class SolicitacaoFornecedorDAO {
 		}
 	}
 	
-	public void atualizar(int cod, SolicitacaoFornecedor e) throws EstoqueException {
+	public void atualizar( SolicitacaoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "UPDATE solicitacao_Fornecedor SET codFornecedor = ?, data = ? WHERE codSolicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);

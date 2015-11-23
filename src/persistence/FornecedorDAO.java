@@ -37,7 +37,7 @@ public class FornecedorDAO {
 		}
 	}
 	
-	public void atualizar(int cod, Fornecedor e) throws EstoqueException {
+	public void atualizar(Fornecedor e) throws EstoqueException {
 		try {
 			String sql = "UPDATE fornecedor SET rua = ?, numero = ?, bairro = ?, cidade = ?, "
 					+ "estado = ?, nome = ?, telefone = ? WHERE codFornecedor = ?";

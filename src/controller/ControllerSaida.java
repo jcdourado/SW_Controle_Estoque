@@ -8,9 +8,33 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Saida;
+import persistence.SaidaDAO;
+import utilities.EstoqueException;
 
 public class ControllerSaida implements TableModel{
 	List<Saida> saidas = new ArrayList<Saida>();
+	SaidaDAO dao;
+
+	public void adicionar(Saida d) throws EstoqueException{
+		dao = new SaidaDAO();
+		dao.adicionar(d);
+		consultar(new Saida());
+	}
+	public void atualizar(Saida d) throws EstoqueException{
+		dao = new SaidaDAO();
+		dao.atualizar(d);
+		consultar(new Saida());
+	}
+	public void remover(Saida d) throws EstoqueException{
+		dao = new SaidaDAO();
+		dao.remover(d.getIdSaida());
+		consultar(new Saida());	
+	}
+	public List<Saida> consultar(Saida d) throws EstoqueException{
+		dao = new SaidaDAO();
+		saidas = dao.cons(d);
+		return saidas;
+	}
 
 	@Override
 	public void addTableModelListener(TableModelListener l) {

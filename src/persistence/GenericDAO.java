@@ -15,7 +15,6 @@ private static Connection con;
 		try { 
 			Class.forName("net.sourceforge.jtds.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=estoque;namedPipe=true","sa","1408");
-			System.out.println("Conexao ok");
 		} catch (ClassNotFoundException e) {
 			throw new EstoqueException(e);
 		} catch (SQLException e) {

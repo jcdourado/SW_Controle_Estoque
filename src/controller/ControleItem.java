@@ -7,9 +7,33 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Item;
+import persistence.ItemDAO;
+import utilities.EstoqueException;
 
 public class ControleItem implements TableModel{
 	List<Item> itens = new ArrayList<Item>();
+	ItemDAO dao;
+
+	public void adicionar(Item d) throws EstoqueException{
+		dao = new ItemDAO();
+		dao.adicionar(d);
+		consultar(new Item());
+	}
+	public void atualizar(Item d) throws EstoqueException{
+		dao = new ItemDAO();
+		dao.atualizar(d);
+		consultar(new Item());
+	}
+	public void remover(Item d) throws EstoqueException{
+		dao = new ItemDAO();
+		dao.remove(d.getIdItem());
+		consultar(new Item());	
+	}
+	public List<Item> consultar(Item d) throws EstoqueException{
+		dao = new ItemDAO();
+		itens = dao.cons(d);
+		return itens;
+	}
 
 	@Override
 	public void addTableModelListener(TableModelListener arg0) {

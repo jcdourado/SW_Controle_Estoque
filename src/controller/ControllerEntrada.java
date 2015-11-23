@@ -8,10 +8,33 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Entrada;
+import persistence.EntradaDAO;
+import utilities.EstoqueException;
 
 public class ControllerEntrada implements TableModel{
 	List<Entrada> entradas = new ArrayList<Entrada>();
+	EntradaDAO dao;
 
+	public void adicionar(Entrada d) throws EstoqueException{
+		dao = new EntradaDAO();
+		dao.adicionar(d);
+		consultar(new Entrada());
+	}
+	public void atualizar(Entrada d) throws EstoqueException{
+		dao = new EntradaDAO();
+		dao.atualizar(d);
+		consultar(new Entrada());
+	}
+	public void remover(Entrada d) throws EstoqueException{
+		dao = new EntradaDAO();
+		dao.remover(d.getIdEntrada());
+		consultar(new Entrada());	
+	}
+	public List<Entrada> consultar(Entrada d) throws EstoqueException{
+		dao = new EntradaDAO();
+		entradas = dao.cons(d);
+		return entradas;
+	}
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

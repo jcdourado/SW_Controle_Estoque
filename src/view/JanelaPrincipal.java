@@ -348,6 +348,11 @@ public class JanelaPrincipal implements ActionListener{
 		panelBtnPro.add(pesqPro);
 		panelBtnPro.add(remPro);
 		
+		salvarPro.addActionListener(this);
+		alterPro.addActionListener(this);
+		pesqPro.addActionListener(this);
+		remPro.addActionListener(this);
+		
 		JPanel panelBtnSai = new JPanel( new FlowLayout());
 		panelBtnSai.add(salvarSai);
 		panelBtnSai.add(alterSai);
@@ -476,16 +481,45 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Produto fromProduto(){
 		Produto p = new Produto();
-		p.setId(Integer.parseInt(codPro.getText()));
+		try{
+			p.setId(Integer.parseInt(codPro.getText()));
+		}
+		catch(NumberFormatException e){}
+		
 		p.setNome(nomePro.getText());
 		p.setUso(usoPro.getText());
-		p.setQtdMinima(Float.parseFloat(qtdMinima.getText().replace(",", ".")));
-		p.setQtdSeguranca(Float.parseFloat(qtdSeguranca.getText().replace(",", ".")));
-		p.setQtdMaxima(Float.parseFloat(qtdMaxima.getText().replace(",", ".")));
+		
+		try{
+			p.setQtdMinima(Float.parseFloat(qtdMinima.getText().replace(",", ".")));
+		}
+		catch(NumberFormatException e){}
+		
+		try{
+			p.setQtdSeguranca(Float.parseFloat(qtdSeguranca.getText().replace(",", ".")));
+		}
+		catch(NumberFormatException e){}
+		
+		try{
+			p.setQtdMaxima(Float.parseFloat(qtdMaxima.getText().replace(",", ".")));
+		}
+		catch(NumberFormatException e){}
+		
 		p.setConsumoPrevisto(consumoPrevisto.getText());
-		p.setPreco(Float.parseFloat(preco.getText().replace(",", ".")));
-		p.setPeso(Float.parseFloat(peso.getText().replace(",", ".")));
-		p.setTipo(Integer.parseInt(codTipoPro.getText()));
+		try{
+			p.setPreco(Float.parseFloat(preco.getText().replace(",", ".")));
+		}
+		catch(NumberFormatException e){}		
+		
+		try{
+			p.setPeso(Float.parseFloat(peso.getText().replace(",", ".")));
+		}
+		catch(NumberFormatException e){}	
+		
+		try{
+			p.setTipo(Integer.parseInt(codTipoPro.getText()));
+		}
+		catch(NumberFormatException e){}	
+		
 		return p;
 	}
 	
@@ -652,11 +686,51 @@ public class JanelaPrincipal implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-		else{
+		else if (cmd.contains("Remover Tipo")){
 			try {
 				ctrTipo.remover(fromTipo());
 				tabelaTipo.revalidate();
 				scrollTipo.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		if(cmd.contains("Salvar Produto")){
+			try {
+				ctrProduto.adicionar(fromProduto());
+				tabelaProduto.revalidate();
+				scrollProduto.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Produto")){
+			try {
+				ctrProduto.atualizar(fromProduto());
+				tabelaProduto.revalidate();
+				scrollProduto.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Produto")){
+			try {
+				ctrProduto.consultar(fromProduto());
+				tabelaProduto.revalidate();
+				scrollProduto.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Produto")){
+			try {
+				ctrProduto.remover(fromProduto());
+				tabelaProduto.revalidate();
+				scrollProduto.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
