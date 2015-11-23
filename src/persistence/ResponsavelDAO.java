@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Responsavel;
+import utilities.EstoqueException;
 
 public class ResponsavelDAO {
 	private Connection c;
 	
-	public ResponsavelDAO() {
+	public ResponsavelDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(Responsavel e) {
+	public void adicionar(Responsavel e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO responsavel (nome, telefone) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -26,11 +27,11 @@ public class ResponsavelDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);			
 		}
 	}
 	
-	public void atualizar(Responsavel e) {
+	public void atualizar(Responsavel e) throws EstoqueException {
 		try {
 			String sql = "UPDATE responsavel " + 
 				     " SET nome = ?, telefone = ? WHERE codResponsavel = ? ";
@@ -41,11 +42,11 @@ public class ResponsavelDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remover(int cod) {
+	public void remover(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM responsavel WHERE codResponsavel = ? ";
 			PreparedStatement ps = c.prepareStatement( sql );
@@ -53,17 +54,22 @@ public class ResponsavelDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EstoqueException(e);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException {
 		String sql = "SELECT MAX(codResponsavel) + 1 AS proximo_id FROM responsavel";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}
 	private String getSql(Responsavel d){
@@ -95,19 +101,24 @@ public class ResponsavelDAO {
 		return sql.toString();
 	}
 		
-	public List<Responsavel> cons(Responsavel d) throws SQLException {
+	public List<Responsavel> cons(Responsavel d) throws EstoqueException  {
 		List<Responsavel> lista = new ArrayList<Responsavel>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Responsavel dp = new Responsavel();
-			dp.setId(rs.getInt("codResponsavel"));
-			dp.setNome	(rs.getString("nome"));
-			dp.setTel(rs.getString("telefone"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Responsavel dp = new Responsavel();
+				dp.setId(rs.getInt("codResponsavel"));
+				dp.setNome	(rs.getString("nome"));
+				dp.setTel(rs.getString("telefone"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}	
 }

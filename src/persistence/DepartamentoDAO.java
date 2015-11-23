@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Departamento;
+import utilities.EstoqueException;
 
 public class DepartamentoDAO {
 	private Connection c;
 	
-	public DepartamentoDAO() {
+	public DepartamentoDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 		c = gen.getConnection();
 	}
 	
-	public void adicionar(Departamento e) {
+	public void adicionar(Departamento e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO departamento (nome, andar, predio, "
 					+ "telefone, codResponsavel) VALUES (?, ?, ?, ?, ?)";
@@ -30,11 +31,11 @@ public class DepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(Departamento e) {
+	public void atualizar(Departamento e) throws EstoqueException {
 		try {
 			String sql = "UPDATE departamento SET nome = ?, andar = ?, predio = ?, telefone = ?, "
 					+ "codResponsavel = ? WHERE codDepartamento = ?";
@@ -50,11 +51,11 @@ public class DepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM departamento WHERE codDepartamento = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -62,7 +63,7 @@ public class DepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
@@ -123,33 +124,43 @@ public class DepartamentoDAO {
 		return sql.toString();
 	}
 		
-		public List<Departamento> cons(Departamento d) throws SQLException {
+		public List<Departamento> cons(Departamento d) throws EstoqueException {
 		List<Departamento> lista = new ArrayList<Departamento>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Departamento dp = new Departamento();
-			dp.setId(rs.getInt("codDepartamento"));
-			dp.setNome(rs.getString("nome"));
-			dp.setAndar(rs.getString("andar"));
-			dp.setPredio(rs.getString("predio"));
-			dp.setTelefone(rs.getString("telefone"));
-			dp.setCodResponsavel(rs.getInt("codResponsavel"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Departamento dp = new Departamento();
+				dp.setId(rs.getInt("codDepartamento"));
+				dp.setNome(rs.getString("nome"));
+				dp.setAndar(rs.getString("andar"));
+				dp.setPredio(rs.getString("predio"));
+				dp.setTelefone(rs.getString("telefone"));
+				dp.setCodResponsavel(rs.getInt("codResponsavel"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}
 	
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException {
 		String sql = "SELECT MAX(codDepartamento) + 1 AS proximo_id FROM departamento";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}	
 }

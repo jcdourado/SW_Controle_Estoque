@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.SolicitacaoFornecedor;
+import utilities.EstoqueException;
 
 public class SolicitacaoFornecedorDAO {
 	private Connection c;
-	public SolicitacaoFornecedorDAO() {
+	public SolicitacaoFornecedorDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(SolicitacaoFornecedor e) {
+	public void adicionar(SolicitacaoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO solicitacao_Fornecedor (codFornecedor, data) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -26,11 +27,11 @@ public class SolicitacaoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(int cod, SolicitacaoFornecedor e) {
+	public void atualizar(int cod, SolicitacaoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "UPDATE solicitacao_Fornecedor SET codFornecedor = ?, data = ? WHERE codSolicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -41,11 +42,11 @@ public class SolicitacaoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM solicitacao_Fornecedor WHERE codSolicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -53,17 +54,22 @@ public class SolicitacaoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException {
 		String sql = "SELECT MAX(codSolicitacao) + 1 AS proximo_id FROM solicitacao_Fornecedor";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}		
 	private String getSql(SolicitacaoFornecedor d){
@@ -74,16 +80,6 @@ public class SolicitacaoFornecedorDAO {
 			sql.append("WHERE codSolicitacao LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
-		if(d.getData() != null){
-			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );
-			if(ver>0){
-				sql.append("AND data = '"+sd+"' ");
-			}
-			else{
-				sql.append("WHERE data = '%"+sd+"' ");	
-				ver++;
-			}
-		}
 		if(d.getIdFornecedor() != 0){
 			if(ver>0){
 				sql.append("AND codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ");
@@ -96,19 +92,24 @@ public class SolicitacaoFornecedorDAO {
 		return sql.toString();
 	}
 		
-	public List<SolicitacaoFornecedor> cons(SolicitacaoFornecedor d) throws SQLException {
+	public List<SolicitacaoFornecedor> cons(SolicitacaoFornecedor d) throws EstoqueException{
 		List<SolicitacaoFornecedor> lista = new ArrayList<SolicitacaoFornecedor>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			SolicitacaoFornecedor dp = new SolicitacaoFornecedor();
-			dp.setId(rs.getInt("codSolicitacao"));
-			dp.setData(rs.getDate("data"));
-			dp.setIdFornecedor(rs.getInt("codFornecedor"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				SolicitacaoFornecedor dp = new SolicitacaoFornecedor();
+				dp.setId(rs.getInt("codSolicitacao"));
+				dp.setData(rs.getDate("data"));
+				dp.setIdFornecedor(rs.getInt("codFornecedor"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}
 }

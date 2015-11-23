@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Fornecedor;
+import utilities.EstoqueException;
 
 public class FornecedorDAO {
 	private Connection c;
 	
-	public FornecedorDAO() {
+	public FornecedorDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(Fornecedor e) {
+	public void adicionar(Fornecedor e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO fornecedor (rua, numero, bairro, "
 					+ "cidade, estado, nome, telefone) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -32,11 +33,11 @@ public class FornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(int cod, Fornecedor e) {
+	public void atualizar(int cod, Fornecedor e) throws EstoqueException {
 		try {
 			String sql = "UPDATE fornecedor SET rua = ?, numero = ?, bairro = ?, cidade = ?, "
 					+ "estado = ?, nome = ?, telefone = ? WHERE codFornecedor = ?";
@@ -52,11 +53,11 @@ public class FornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM fornecedor WHERE codFornecedor = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -64,18 +65,23 @@ public class FornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException  {
 		String sql = "SELECT MAX(codFornecedor) + 1 AS proximo_id FROM fornecedor";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
+		
 	}
 	
 	private String getSql(Fornecedor d){
@@ -153,24 +159,29 @@ public class FornecedorDAO {
 		return sql.toString();
 	}	
 	
-	public List<Fornecedor> cons(Fornecedor d) throws SQLException {
+	public List<Fornecedor> cons(Fornecedor d) throws EstoqueException {
 		List<Fornecedor> lista = new ArrayList<Fornecedor>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Fornecedor dp = new Fornecedor();
-			dp.setId(rs.getInt("codFornecedor"));
-			dp.setRua(rs.getString("rua"));
-			dp.setNumero(rs.getInt("numero"));
-			dp.setBairro(rs.getString("bairro"));
-			dp.setCidade(rs.getString("cidade"));
-			dp.setEstado(rs.getString("estado"));
-			dp.setNome(rs.getString("nome"));
-			dp.setTel(rs.getString("telefone"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Fornecedor dp = new Fornecedor();
+				dp.setId(rs.getInt("codFornecedor"));
+				dp.setRua(rs.getString("rua"));
+				dp.setNumero(rs.getInt("numero"));
+				dp.setBairro(rs.getString("bairro"));
+				dp.setCidade(rs.getString("cidade"));
+				dp.setEstado(rs.getString("estado"));
+				dp.setNome(rs.getString("nome"));
+				dp.setTel(rs.getString("telefone"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}	
 }

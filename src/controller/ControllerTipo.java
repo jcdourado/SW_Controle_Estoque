@@ -7,10 +7,30 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Tipo;
+import persistence.TipoDAO;
+import utilities.EstoqueException;
 
 public class ControllerTipo implements TableModel{
 	List<Tipo> tipos = new ArrayList<Tipo>();
-
+	TipoDAO dao;
+	
+	public void adicionar(Tipo t) throws EstoqueException{
+		dao = new TipoDAO();
+		dao.adicionar(t);
+	}
+	public void atualizar(Tipo t)throws EstoqueException{
+		dao = new TipoDAO();
+		dao.atualizar(t);		
+	}
+	public void remover(Tipo t)throws EstoqueException{
+		dao = new TipoDAO();
+		dao.remove(t.getId());
+	}
+	public List<Tipo> consultar(Tipo t)throws EstoqueException{
+		dao = new TipoDAO();
+		return (dao.cons(t));
+	}	
+	
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

@@ -2,6 +2,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -9,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -36,10 +39,10 @@ import model.Saida;
 import model.SolicitacaoDepartamento;
 import model.SolicitacaoFornecedor;
 import model.Tipo;
+import utilities.EstoqueException;
 
-public class JanelaPrincipal {
+public class JanelaPrincipal implements ActionListener{
 	private JFrame frame = new JFrame("Tela Principal");
-	
 
 	SimpleDateFormat in = new SimpleDateFormat("dd/MM/yyyy");
 	private JPanel principalTipo = new JPanel(new BorderLayout());
@@ -185,23 +188,23 @@ public class JanelaPrincipal {
 	private JButton pesqSolDep = new JButton("Pesquisar Solicitacao Departamento");
 	private JButton remSolDep = new JButton("Remover Solicitacao Departamento");
 	
+	
+	private JScrollPane scrollTipo = new JScrollPane();
+	private JScrollPane scrollProduto = new JScrollPane();
+	private JScrollPane scrollSaida = new JScrollPane();
+	private JScrollPane scrollItem = new JScrollPane();
+	private JScrollPane scrollEntrada = new JScrollPane();
+	private JScrollPane scrollResponsavel = new JScrollPane();
+	private JScrollPane scrollDepartamento = new JScrollPane();
+	private JScrollPane scrollFornecedor = new JScrollPane();
+	private JScrollPane scrollSolFornecedor = new JScrollPane();
+	private JScrollPane scrollSolDepartamento = new JScrollPane();
 	private JTabbedPane tabs = new JTabbedPane();
 	
 	public JanelaPrincipal() throws ParseException {
 		frame.setSize(1000, 600);
 		frame.setContentPane(tabs);
-		
-		JScrollPane scrollTipo = new JScrollPane();
-		JScrollPane scrollProduto = new JScrollPane();
-		JScrollPane scrollSaida = new JScrollPane();
-		JScrollPane scrollItem = new JScrollPane();
-		JScrollPane scrollEntrada = new JScrollPane();
-		JScrollPane scrollResponsavel = new JScrollPane();
-		JScrollPane scrollDepartamento = new JScrollPane();
-		JScrollPane scrollFornecedor = new JScrollPane();
-		JScrollPane scrollSolFornecedor = new JScrollPane();
-		JScrollPane scrollSolDepartamento = new JScrollPane();
-		
+
 		scrollTipo.getViewport().add(tabelaTipo);
 		scrollProduto.getViewport().add(tabelaProduto);
 		scrollSaida.getViewport().add(tabelaSaida);
@@ -387,7 +390,6 @@ public class JanelaPrincipal {
 		panelBtnSolDep.add(alterSolDep);
 		panelBtnSolDep.add(pesqSolDep);
 		panelBtnSolDep.add(remSolDep);
-		
 		
 		principalTipo.add(panelTipo, BorderLayout.NORTH);
 		principalProduto.add(panelPro, BorderLayout.NORTH);
@@ -607,5 +609,54 @@ public class JanelaPrincipal {
 		sD.setIdDepartamento(Integer.parseInt(codDepSol.getText()));
 		sD.setData(in.parse(dtSolDep.getText()));
 		return sD;		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		String cmd = action.getActionCommand();
+		if(cmd.contains("Salvar Tipo")){
+			ControllerTipo ctrTipo = new ControllerTipo();
+			try {
+				ctrTipo.adicionar(fromTipo());
+				tabelaTipo.revalidate();
+				scrollTipo.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Tipo")){
+			ControllerTipo ctrTipo = new ControllerTipo();
+			try {
+				ctrTipo.atualizar(fromTipo());
+				tabelaTipo.revalidate();
+				scrollTipo.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Tipo")){
+			ControllerTipo ctrTipo = new ControllerTipo();
+			try {
+				ctrTipo.consultar(fromTipo());
+				tabelaTipo.revalidate();
+				scrollTipo.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else{
+			ControllerTipo ctrTipo = new ControllerTipo();
+			try {
+				ctrTipo.remover(fromTipo());
+				tabelaTipo.revalidate();
+				scrollTipo.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
 	}	
 }

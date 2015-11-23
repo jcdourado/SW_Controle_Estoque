@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Tipo;
+import utilities.EstoqueException;
 
 public class TipoDAO {
 	private Connection c;
-	public TipoDAO() {
+	public TipoDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(Tipo e) {
+	public void adicionar(Tipo e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO tipo (nome) VALUES (?)";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -24,11 +25,11 @@ public class TipoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(Tipo e) {
+	public void atualizar(Tipo e) throws EstoqueException {
 		try {
 			String sql = "UPDATE tipo SET nome = ? WHERE codTipo = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -37,11 +38,11 @@ public class TipoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM tipo WHERE codTipo = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -49,20 +50,25 @@ public class TipoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException {
 		String sql = "SELECT MAX(tipo) + 1 AS proximo_id FROM tipo";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}
-	public List<Tipo> cons(Tipo d) throws SQLException {
+	public List<Tipo> cons(Tipo d) throws EstoqueException {
 		List<Tipo> lista = new ArrayList<Tipo>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT codTipo, nome FROM tipo ");
@@ -81,16 +87,21 @@ public class TipoDAO {
 			}
 		}
 		
-		PreparedStatement ps = c.prepareStatement(sql.toString());
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Tipo dp = new Tipo();
-			dp.setId(rs.getInt("codTipo"));
-			dp.setNome(rs.getString("nome"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql.toString());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Tipo dp = new Tipo();
+				dp.setId(rs.getInt("codTipo"));
+				dp.setNome(rs.getString("nome"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}
 }

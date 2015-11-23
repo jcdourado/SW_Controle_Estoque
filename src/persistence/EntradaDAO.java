@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Entrada;
+import utilities.EstoqueException;
 
 public class EntradaDAO {
 private Connection c;
 	
-	public EntradaDAO() {
+	public EntradaDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 		c = gen.getConnection();
 	}
 	
-	public void adicionar(Entrada e) {
+	public void adicionar(Entrada e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO entrada (data, tipoTransferencia, NFE, "
 					+ "dataEmissaoNFE, tempo, codFornecedor) VALUES (?, ?, ?, ?, ?, ?)";
@@ -33,11 +34,11 @@ private Connection c;
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(Entrada e) {
+	public void atualizar(Entrada e) throws EstoqueException {
 		try {
 			String sql = "UPDATE entrada " + 
 				     " SET data = ?, tipoTransferencia = ?, NFE = ?, dataEmissaoNFE = ?"
@@ -55,11 +56,11 @@ private Connection c;
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remover(int cod) {
+	public void remover(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM entrada WHERE codEntrada = ? ";
 			PreparedStatement ps = c.prepareStatement( sql );
@@ -67,17 +68,22 @@ private Connection c;
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EstoqueException(e);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException{
 		String sql = "SELECT MAX(codEntrada) + 1 AS proximo_id FROM entrada";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}
 	
@@ -89,16 +95,6 @@ private Connection c;
 		if(d.getIdEntrada() != 0 ){
 			sql.append("WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ");
 			ver++;
-		}		
-		if(d.getData() != null){
-			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
-			if(ver>0){
-				sql.append("AND data = '"+sd+"' ");
-			}
-			else{
-				sql.append("WHERE data = '"+sd+"' ");	
-				ver++;
-			}
 		}		
 		if(d.getTipoTransf() != null){
 			if(ver>0){
@@ -149,23 +145,28 @@ private Connection c;
 		return sql.toString();
 	}
 		
-	public List<Entrada> cons(Entrada d) throws SQLException {
+	public List<Entrada> cons(Entrada d) throws EstoqueException{
 		List<Entrada> lista = new ArrayList<Entrada>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Entrada dp = new Entrada();
-			dp.setIdEntrada(rs.getInt("codEntrada"));
-			dp.setData(rs.getDate("data"));
-			dp.setTipoTransf(rs.getString("tipoTransferencia"));
-			dp.setNFE(rs.getString("NFE"));
-			dp.setDataEmissarNFE(rs.getDate("dataEmissaoNFE"));
-			dp.setTempo(rs.getFloat("tempo"));
-			dp.setIdFornecedor(rs.getInt("codFornecedor"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Entrada dp = new Entrada();
+				dp.setIdEntrada(rs.getInt("codEntrada"));
+				dp.setData(rs.getDate("data"));
+				dp.setTipoTransf(rs.getString("tipoTransferencia"));
+				dp.setNFE(rs.getString("NFE"));
+				dp.setDataEmissarNFE(rs.getDate("dataEmissaoNFE"));
+				dp.setTempo(rs.getFloat("tempo"));
+				dp.setIdFornecedor(rs.getInt("codFornecedor"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}	
 }

@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.SolicitacaoProdutoDepartamento;
+import utilities.EstoqueException;
 
 public class SolicitacaoProdutoDepartamentoDAO {
 	private Connection c;
-	public SolicitacaoProdutoDepartamentoDAO() {
+	public SolicitacaoProdutoDepartamentoDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(SolicitacaoProdutoDepartamento e) {
+	public void adicionar(SolicitacaoProdutoDepartamento e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO solicitacao_Produto_Departamento (id_Produto, "
 					+ "id_Solicitacao, quantidade) VALUES (?, ?, ?)";
@@ -27,11 +28,11 @@ public class SolicitacaoProdutoDepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(SolicitacaoProdutoDepartamento e) {
+	public void atualizar(SolicitacaoProdutoDepartamento e) throws EstoqueException {
 		try {
 			String sql = "UPDATE solicitacao_Produto_Departamento SET quantidade = ? WHERE id_Produto = ? AND id_Solicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -41,11 +42,11 @@ public class SolicitacaoProdutoDepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(SolicitacaoProdutoDepartamento e) {
+	public void remove(SolicitacaoProdutoDepartamento e) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM solicitacao_Produto_Departamento WHERE id_Produto = ? AND id_Solicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -54,7 +55,7 @@ public class SolicitacaoProdutoDepartamentoDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	private String getSql(SolicitacaoProdutoDepartamento d){
@@ -86,19 +87,24 @@ public class SolicitacaoProdutoDepartamentoDAO {
 		return sql.toString();
 	}
 		
-	public List<SolicitacaoProdutoDepartamento> cons(SolicitacaoProdutoDepartamento d) throws SQLException {
+	public List<SolicitacaoProdutoDepartamento> cons(SolicitacaoProdutoDepartamento d) throws EstoqueException {
 		List<SolicitacaoProdutoDepartamento> lista = new ArrayList<SolicitacaoProdutoDepartamento>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			SolicitacaoProdutoDepartamento dp = new SolicitacaoProdutoDepartamento();
-			dp.setIdProduto(rs.getInt("id_Produto"));
-			dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
-			dp.setQuantidade(rs.getFloat("quantidade"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				SolicitacaoProdutoDepartamento dp = new SolicitacaoProdutoDepartamento();
+				dp.setIdProduto(rs.getInt("id_Produto"));
+				dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
+				dp.setQuantidade(rs.getFloat("quantidade"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}
 }

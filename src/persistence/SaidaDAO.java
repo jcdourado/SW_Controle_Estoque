@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Saida;
+import utilities.EstoqueException;
 
 public class SaidaDAO {
 	private Connection c;
 	
-	public SaidaDAO() {
+	public SaidaDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(Saida e) {
+	public void adicionar(Saida e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO saida (data, descricao) VALUES (?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -27,12 +28,12 @@ public class SaidaDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 		
 	}
 
-	public void atualizar( Saida e) {
+	public void atualizar( Saida e) throws EstoqueException {
 		try {
 			String sql = "UPDATE saida " + 
 				     " SET data = ?, descricao = ? " + 
@@ -45,11 +46,11 @@ public class SaidaDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remover(int cod) {
+	public void remover(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM saida WHERE codSaida = ? ";
 			PreparedStatement ps = c.prepareStatement( sql );
@@ -57,17 +58,22 @@ public class SaidaDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EstoqueException(e);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException {
 		String sql = "SELECT MAX(codSaida) + 1 AS proximo_id FROM saida";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}
 	private String getSql(Saida d){
@@ -78,16 +84,6 @@ public class SaidaDAO {
 			sql.append("WHERE codSaida LIKE '%" +d.getIdSaida()+"%' ");
 			ver++;
 		}		
-		if(d.getData() != null){
-			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
-			if(ver>0){
-				sql.append("AND data = '%"+sd+"%' ");
-			}
-			else{
-				sql.append("WHERE data = '%"+sd+"%' ");	
-				ver++;
-			}
-		}
 		if(d.getDescricao() != null){
 			if(ver>0){
 				sql.append("AND descricao LIKE '%"+d.getDescricao()+"%' ");
@@ -100,19 +96,24 @@ public class SaidaDAO {
 		return sql.toString();
 	}
 		
-	public List<Saida> cons(Saida d) throws SQLException {
+	public List<Saida> cons(Saida d) throws EstoqueException {
 		List<Saida> lista = new ArrayList<Saida>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			Saida dp = new Saida();
-			dp.setIdSaida(rs.getInt("codSaida"));
-			dp.setData(rs.getDate("data"));
-			dp.setDescricao(rs.getString("descricao"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Saida dp = new Saida();
+				dp.setIdSaida(rs.getInt("codSaida"));
+				dp.setData(rs.getDate("data"));
+				dp.setDescricao(rs.getString("descricao"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}	
 }

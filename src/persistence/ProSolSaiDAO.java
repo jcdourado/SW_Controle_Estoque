@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.ProdutoSolicitacaoSaida;
+import utilities.EstoqueException;
 
 public class ProSolSaiDAO {
 	private Connection c;
 	
-	public ProSolSaiDAO() {
+	public ProSolSaiDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(ProdutoSolicitacaoSaida e) {
+	public void adicionar(ProdutoSolicitacaoSaida e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO produto_Solicitacao_Saida (quantidade, uso, "
 					+ "idPoduto, idSaida, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
@@ -30,11 +31,11 @@ public class ProSolSaiDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(ProdutoSolicitacaoSaida e) {
+	public void atualizar(ProdutoSolicitacaoSaida e) throws EstoqueException {
 		try {
 			String sql = "UPDATE produto_Solicitacao_Saida SET quantidade = ?, uso = ?, idProduto = ?, "
 					+ "idEntrada = ?, idSolicitacao = ? WHERE codSolicitacaoSaida = ?";
@@ -48,11 +49,11 @@ public class ProSolSaiDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(int cod) {
+	public void remove(int cod) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM produto_Solicitacao_Saida WHERE codcodSolicitacaoSaida = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -60,17 +61,22 @@ public class ProSolSaiDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
-	public int proximoId() throws SQLException {
+	public int proximoId() throws EstoqueException  {
 		String sql = "SELECT MAX(codSolicitacaoSaida) + 1 AS proximo_id FROM produto_Solicitacao_Saida";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()){
-			return rs.getInt("proximo_id");
-		} else {
-			return 1;
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				return rs.getInt("proximo_id");
+			} else {
+				return 1;
+			}
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
 	}	
 	private String getSql(ProdutoSolicitacaoSaida d){
@@ -130,22 +136,27 @@ public class ProSolSaiDAO {
 		return sql.toString();
 	}
 		
-	public List<ProdutoSolicitacaoSaida> cons(ProdutoSolicitacaoSaida d) throws SQLException {
+	public List<ProdutoSolicitacaoSaida> cons(ProdutoSolicitacaoSaida d) throws EstoqueException {
 		List<ProdutoSolicitacaoSaida> lista = new ArrayList<ProdutoSolicitacaoSaida>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			ProdutoSolicitacaoSaida dp = new ProdutoSolicitacaoSaida();
-			dp.setCodSolicitacaoSaida(rs.getInt("codSolicitacaoSaida"));
-			dp.setQuantidade(rs.getFloat("quantidade"));
-			dp.setUso(rs.getString("uso"));
-			dp.setIdProduto(rs.getInt("codProduto"));
-			dp.setIdSaida(rs.getInt("codSaida"));
-			dp.setIdSolicitacao(rs.getInt("codSolicitacao"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				ProdutoSolicitacaoSaida dp = new ProdutoSolicitacaoSaida();
+				dp.setCodSolicitacaoSaida(rs.getInt("codSolicitacaoSaida"));
+				dp.setQuantidade(rs.getFloat("quantidade"));
+				dp.setUso(rs.getString("uso"));
+				dp.setIdProduto(rs.getInt("codProduto"));
+				dp.setIdSaida(rs.getInt("codSaida"));
+				dp.setIdSolicitacao(rs.getInt("codSolicitacao"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}	
 }

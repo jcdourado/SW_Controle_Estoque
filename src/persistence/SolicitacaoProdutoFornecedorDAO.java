@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.SolicitacaoProdutoFornecedor;
+import utilities.EstoqueException;
 
 public class SolicitacaoProdutoFornecedorDAO {
 	private Connection c;
-	public SolicitacaoProdutoFornecedorDAO() {
+	public SolicitacaoProdutoFornecedorDAO() throws EstoqueException {
 		GenericDAO gen = new GenericDAO();
 			c = gen.getConnection();
 	}
 	
-	public void adicionar(SolicitacaoProdutoFornecedor e) {
+	public void adicionar(SolicitacaoProdutoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO solicitacao_Produto_Fornecedor (idProduto, "
 					+ "idSolicitacao, quantidade) VALUES (?, ?, ?)";
@@ -27,11 +28,11 @@ public class SolicitacaoProdutoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void atualizar(SolicitacaoProdutoFornecedor e) {
+	public void atualizar(SolicitacaoProdutoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "UPDATE solicitacao_Produto_Fornecedor SET quantidade = ? WHERE idProduto = ? AND idSolicitacao = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -41,11 +42,11 @@ public class SolicitacaoProdutoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	
-	public void remove(SolicitacaoProdutoFornecedor e) {
+	public void remove(SolicitacaoProdutoFornecedor e) throws EstoqueException {
 		try {
 			String sql = "DELETE FROM solicitacao_Produto_Fornecedor WHERE id_Solicitacao = ? AND idProduto = ? ";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -54,7 +55,7 @@ public class SolicitacaoProdutoFornecedorDAO {
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new EstoqueException(e1);
 		}
 	}
 	private String getSql(SolicitacaoProdutoFornecedor d){
@@ -86,19 +87,24 @@ public class SolicitacaoProdutoFornecedorDAO {
 		return sql.toString();
 	}
 		
-	public List<SolicitacaoProdutoFornecedor> cons(SolicitacaoProdutoFornecedor d) throws SQLException {
+	public List<SolicitacaoProdutoFornecedor> cons(SolicitacaoProdutoFornecedor d) throws EstoqueException {
 		List<SolicitacaoProdutoFornecedor> lista = new ArrayList<SolicitacaoProdutoFornecedor>();
-		PreparedStatement ps = c.prepareStatement(getSql(d));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			SolicitacaoProdutoFornecedor dp = new SolicitacaoProdutoFornecedor();
-			dp.setIdProduto(rs.getInt("id_Produto"));
-			dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
-			dp.setQuantidade(rs.getFloat("quantidade"));
-			lista.add(dp);
+		PreparedStatement ps;
+		try {
+			ps = c.prepareStatement(getSql(d));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				SolicitacaoProdutoFornecedor dp = new SolicitacaoProdutoFornecedor();
+				dp.setIdProduto(rs.getInt("id_Produto"));
+				dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
+				dp.setQuantidade(rs.getFloat("quantidade"));
+				lista.add(dp);
+			}
+			rs.close();
+			ps.close();
+			return lista;
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
 		}
-		rs.close();
-		ps.close();
-		return lista;
 	}
 }
