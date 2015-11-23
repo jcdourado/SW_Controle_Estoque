@@ -17,18 +17,22 @@ public class ControllerTipo implements TableModel{
 	public void adicionar(Tipo t) throws EstoqueException{
 		dao = new TipoDAO();
 		dao.adicionar(t);
+		consultar(new Tipo());
 	}
 	public void atualizar(Tipo t)throws EstoqueException{
 		dao = new TipoDAO();
-		dao.atualizar(t);		
+		dao.atualizar(t);	
+		consultar(new Tipo());	
 	}
 	public void remover(Tipo t)throws EstoqueException{
 		dao = new TipoDAO();
 		dao.remove(t.getId());
+		consultar(new Tipo());
 	}
 	public List<Tipo> consultar(Tipo t)throws EstoqueException{
 		dao = new TipoDAO();
-		return (dao.cons(t));
+		tipos = dao.cons(t);
+		return (tipos);
 	}	
 	
 	@Override

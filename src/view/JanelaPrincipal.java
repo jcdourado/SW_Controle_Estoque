@@ -337,6 +337,11 @@ public class JanelaPrincipal implements ActionListener{
 		panelBtnTipo.add(pesqTipo);
 		panelBtnTipo.add(remTipo);
 		
+		salvarTipo.addActionListener(this);
+		alterTipo.addActionListener(this);
+		pesqTipo.addActionListener(this);
+		remTipo.addActionListener(this);
+		
 		JPanel panelBtnPro = new JPanel( new FlowLayout());
 		panelBtnPro.add(salvarPro);
 		panelBtnPro.add(alterPro);
@@ -449,7 +454,10 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Tipo fromTipo(){
 		Tipo t = new Tipo();
-		t.setId(Integer.parseInt(codTipo.getText()));
+		try{
+			t.setId(Integer.parseInt(codTipo.getText()));
+		}
+		catch(NumberFormatException e){}
 		t.setNome(nomeTipo.getText());
 		return t;
 	}
@@ -615,7 +623,6 @@ public class JanelaPrincipal implements ActionListener{
 	public void actionPerformed(ActionEvent action) {
 		String cmd = action.getActionCommand();
 		if(cmd.contains("Salvar Tipo")){
-			ControllerTipo ctrTipo = new ControllerTipo();
 			try {
 				ctrTipo.adicionar(fromTipo());
 				tabelaTipo.revalidate();
@@ -626,7 +633,6 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		}
 		else if(cmd.contains("Alterar Tipo")){
-			ControllerTipo ctrTipo = new ControllerTipo();
 			try {
 				ctrTipo.atualizar(fromTipo());
 				tabelaTipo.revalidate();
@@ -637,7 +643,6 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		}
 		else if(cmd.contains("Pesquisar Tipo")){
-			ControllerTipo ctrTipo = new ControllerTipo();
 			try {
 				ctrTipo.consultar(fromTipo());
 				tabelaTipo.revalidate();
@@ -648,7 +653,6 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		}
 		else{
-			ControllerTipo ctrTipo = new ControllerTipo();
 			try {
 				ctrTipo.remover(fromTipo());
 				tabelaTipo.revalidate();
