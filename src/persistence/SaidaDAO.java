@@ -72,31 +72,32 @@ public class SaidaDAO {
 	}
 	private String getSql(Saida d){
 		int ver = 0;
-		String sql = "SELECT codSaida ,data, descricao FROM saida ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codSaida ,data, descricao FROM saida ");
 		if(d.getIdSaida() != 0 ){
-			sql += "WHERE codSaida LIKE '%" +d.getIdSaida()+"%' ";
+			sql.append("WHERE codSaida LIKE '%" +d.getIdSaida()+"%' ");
 			ver++;
 		}		
 		if(d.getData() != null){
 			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );			
 			if(ver>0){
-				sql += "AND data = '%"+sd+"%' ";
+				sql.append("AND data = '%"+sd+"%' ");
 			}
 			else{
-				sql += "WHERE data = '%"+sd+"%' ";	
+				sql.append("WHERE data = '%"+sd+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getDescricao() != null){
 			if(ver>0){
-				sql += "AND descricao LIKE '%"+d.getDescricao()+"%' ";
+				sql.append("AND descricao LIKE '%"+d.getDescricao()+"%' ");
 			}
 			else{
-				sql += "WHERE descricao LIKE '%"+d.getDescricao()+"%' ";	
+				sql.append("WHERE descricao LIKE '%"+d.getDescricao()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<Saida> cons(Saida d) throws SQLException {

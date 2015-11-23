@@ -83,94 +83,95 @@ public class ProdutoDAO {
 	}	
 	private String getSql(Produto d){
 		int ver = 0;
-		String sql = "SELECT codProduto, nome ,uso , qtdMinima , qtdSeguranca , qtdMaxima , "
-					+ "consumoPrevisto, preco , peso , codTipo FROM produto ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codProduto, nome ,uso , qtdMinima , qtdSeguranca , qtdMaxima , "
+					+ "consumoPrevisto, preco , peso , codTipo FROM produto ");
 		if(d.getId() != 0 ){
-			sql += "WHERE codProduto LIKE '%" +d.getId()+"%' ";
+			sql.append("WHERE codProduto LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
 		if(d.getNome() != null){
 			if(ver>0){
-				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+				sql.append("AND nome LIKE '%"+d.getNome()+"%' ");
 			}
 			else{
-				sql += "WHERE nome LIKE '%"+d.getNome()+"%' ";	
+				sql.append("WHERE nome LIKE '%"+d.getNome()+"%' ");	
 				ver++;
 			}
 		}		
 		if(d.getUso() != null){
 			if(ver>0){
-				sql += "AND uso LIKE '%"+d.getUso()+"%' ";
+				sql.append("AND uso LIKE '%"+d.getUso()+"%' ");
 			}
 			else{
-				sql += "WHERE uso LIKE '%"+d.getUso()+"%' ";	
+				sql.append("WHERE uso LIKE '%"+d.getUso()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getQtdMinima() != 0){
 			if(ver>0){
-				sql += "AND qtdMinima LIKE '%"+d.getQtdMinima()+"%' ";
+				sql.append("AND qtdMinima LIKE '%"+d.getQtdMinima()+"%' ");
 			}
 			else{
-				sql += "WHERE qtdMinima LIKE '%"+d.getQtdMinima()+"%' ";	
+				sql.append("WHERE qtdMinima LIKE '%"+d.getQtdMinima()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getQtdSeguranca() != 0){
 			if(ver>0){
-				sql += "AND qtdSeguranca LIKE '%"+d.getQtdSeguranca()+"%' ";
+				sql.append("AND qtdSeguranca LIKE '%"+d.getQtdSeguranca()+"%' ");
 			}
 			else{
-				sql += "WHERE qtdSeguranca LIKE '%"+d.getQtdSeguranca()+"%' ";	
+				sql.append("WHERE qtdSeguranca LIKE '%"+d.getQtdSeguranca()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getQtdMaxima() != 0){
 			if(ver>0){
-				sql += "AND qtdMaxima LIKE '%"+d.getQtdMaxima()+"%' ";
+				sql.append("AND qtdMaxima LIKE '%"+d.getQtdMaxima()+"%' ");
 			}
 			else{
-				sql += "WHERE qtdMaxima LIKE '%"+d.getQtdMaxima()+"%' ";	
+				sql.append("WHERE qtdMaxima LIKE '%"+d.getQtdMaxima()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getConsumoPrevisto() != null){
 			if(ver>0){
-				sql += "AND consumoPrevisto LIKE '%"+d.getConsumoPrevisto()+"%' ";
+				sql.append("AND consumoPrevisto LIKE '%"+d.getConsumoPrevisto()+"%' ");
 			}
 			else{
-				sql += "WHERE consumoPrevisto LIKE '%"+d.getConsumoPrevisto()+"%' ";	
+				sql.append("WHERE consumoPrevisto LIKE '%"+d.getConsumoPrevisto()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getPeso() != 0){
 			if(ver>0){
-				sql += "AND peso LIKE '%"+d.getPeso()+"%' ";
+				sql.append("AND peso LIKE '%"+d.getPeso()+"%' ");
 			}
 			else{
-				sql += "WHERE peso LIKE '%"+d.getPeso()+"%' ";	
+				sql.append("WHERE peso LIKE '%"+d.getPeso()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getPreco() != 0){
 			if(ver>0){
-				sql += "AND preco LIKE '%"+d.getPreco()+"%' ";
+				sql.append("AND preco LIKE '%"+d.getPreco()+"%' ");
 			}
 			else{
-				sql += "WHERE preco LIKE '%"+d.getPreco()+"%' ";	
+				sql.append("WHERE preco LIKE '%"+d.getPreco()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getTipo() != 0){
 			if(ver>0){
-				sql += "AND codTipo LIKE '%"+d.getTipo()+"%' ";
+				sql.append("AND codTipo LIKE '%"+d.getTipo()+"%' ");
 			}
 			else{
-				sql += "WHERE codTipo LIKE '%"+d.getTipo()+"%' ";	
+				sql.append("WHERE codTipo LIKE '%"+d.getTipo()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<Produto> cons(Produto d) throws SQLException {

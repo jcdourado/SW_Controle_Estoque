@@ -1,9 +1,15 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import model.Departamento;
+
 public class ControllerDepartamento implements TableModel{
+	List<Departamento> departamentos = new ArrayList<Departamento>();
 
 	@Override
 	public void addTableModelListener(TableModelListener l) {
@@ -11,27 +17,52 @@ public class ControllerDepartamento implements TableModel{
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
+		switch(columnIndex){
+		case 0: return Integer.class;
+		case 1: return String.class;
+		case 2: return String.class;
+		case 3: return String.class;
+		case 4: return String.class;
+		case 5: return Integer.class;
+		}
 		return null;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return 0;
+		return 6;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		return null;
+		switch(columnIndex){
+		case 0: return "Código";
+		case 1: return "Nome";
+		case 2: return "Andar";
+		case 3: return "Prédio";
+		case 4: return "Telefone";
+		case 5: return "Código Responsável";
+		}
+		return "";
 	}
 
 	@Override
 	public int getRowCount() {
-		return 0;
+		return departamentos.size();
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return null;
+		Departamento d = departamentos.get(rowIndex);
+		switch(columnIndex){
+		case 0: return d.getId();
+		case 1: return d.getNome();
+		case 2: return d.getAndar();
+		case 3: return d.getPredio();
+		case 4: return d.getTelefone();
+		case 5: return d.getCodResponsavel();
+		}
+		return "";
 	}
 
 	@Override

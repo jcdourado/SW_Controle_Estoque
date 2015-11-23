@@ -64,23 +64,24 @@ public class TipoDAO {
 	}
 	public List<Tipo> cons(Tipo d) throws SQLException {
 		List<Tipo> lista = new ArrayList<Tipo>();
-		String sql = "SELECT codTipo, nome FROM tipo ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codTipo, nome FROM tipo ");
 		int ver = 0;
 		if(d.getId() != 0){
-			sql += "WHERE codTipo LIKE '%"+d.getId()+"%' ";
+			sql.append("WHERE codTipo LIKE '%"+d.getId()+"%' ");
 			ver++;
 		}
 		if(d.getNome() != null){
 			if(ver>0){
-				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+				sql.append("AND nome LIKE '%"+d.getNome()+"%' ");
 			}
 			else{
-				sql +=  "WHERE nome LIKE '%"+d.getNome()+"%' ";
+				sql.append( "WHERE nome LIKE '%"+d.getNome()+"%' ");
 				ver++;
 			}
 		}
 		
-		PreparedStatement ps = c.prepareStatement(sql);
+		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()){
 			Tipo dp = new Tipo();

@@ -70,39 +70,40 @@ private Connection c;
 	
 	private String getSql(Item d){
 		int ver = 0;
-		String sql = "SELECT codItem ,codProduto, codSaida, codEntrada FROM item ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codItem ,codProduto, codSaida, codEntrada FROM item ");
 		if(d.getIdEntrada() != 0 ){
-			sql += "WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ";
+			sql.append("WHERE codEntrada LIKE '%" +d.getIdEntrada()+"%' ");
 			ver++;
 		}		
 		if(d.getIdSaida() != 0){
 			if(ver>0){
-				sql += "AND codSaida LIKE '%"+d.getIdSaida()+"%' ";
+				sql.append("AND codSaida LIKE '%"+d.getIdSaida()+"%' ");
 			}
 			else{
-				sql += "WHERE codSaida LIKE '%"+d.getIdSaida()+"%' ";	
+				sql.append("WHERE codSaida LIKE '%"+d.getIdSaida()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getIdProduto() != 0){
 			if(ver>0){
-				sql += "AND codProduto LIKE '%"+d.getIdProduto()+"%' ";
+				sql.append("AND codProduto LIKE '%"+d.getIdProduto()+"%' ");
 			}
 			else{
-				sql += "WHERE codProduto LIKE '%"+d.getIdProduto()+"%' ";	
+				sql.append("WHERE codProduto LIKE '%"+d.getIdProduto()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getIdItem() != 0){
 			if(ver>0){
-				sql += "AND codItem LIKE '%"+d.getIdItem()+"%' ";
+				sql.append("AND codItem LIKE '%"+d.getIdItem()+"%' ");
 			}
 			else{
-				sql += "WHERE codProduto LIKE '%"+d.getIdItem()+"%' ";	
+				sql.append("WHERE codProduto LIKE '%"+d.getIdItem()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<Item> cons(Item d) throws SQLException {

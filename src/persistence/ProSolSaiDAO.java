@@ -75,58 +75,59 @@ public class ProSolSaiDAO {
 	}	
 	private String getSql(ProdutoSolicitacaoSaida d){
 		int ver = 0;
-		String sql = "SELECT codSolicitacaoSaida, quantidade , uso , codSaida , "
-					+ "codProduto, codSolicitacao  FROM produto_Solicitacao_Saida ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codSolicitacaoSaida, quantidade , uso , codSaida , "
+					+ "codProduto, codSolicitacao  FROM produto_Solicitacao_Saida ");
 		if(d.getCodSolicitacaoSaida() != 0 ){
-			sql += "WHERE codSolicitacaoSaida LIKE '%" +d.getCodSolicitacaoSaida()+"%' ";
+			sql.append("WHERE codSolicitacaoSaida LIKE '%" +d.getCodSolicitacaoSaida()+"%' ");
 			ver++;
 		}		
 		if(d.getQuantidade() != 0){
 			if(ver>0){
-				sql += "AND quantidade LIKE '%"+d.getQuantidade()+"%' ";
+				sql.append("AND quantidade LIKE '%"+d.getQuantidade()+"%' ");
 			}
 			else{
-				sql += "WHERE quantidade LIKE '%"+d.getQuantidade()+"%' ";	
+				sql.append("WHERE quantidade LIKE '%"+d.getQuantidade()+"%' ");	
 				ver++;
 			}
 		}		
 		if(d.getUso() != null){
 			if(ver>0){
-				sql += "AND uso LIKE '%"+d.getUso()+"%' ";
+				sql.append("AND uso LIKE '%"+d.getUso()+"%' ");
 			}
 			else{
-				sql += "WHERE uso LIKE '%"+d.getUso()+"%' ";	
+				sql.append("WHERE uso LIKE '%"+d.getUso()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getIdProduto() != 0){
 			if(ver>0){
-				sql += "AND codProduto LIKE '%"+d.getIdProduto()+"%' ";
+				sql.append("AND codProduto LIKE '%"+d.getIdProduto()+"%' ");
 			}
 			else{
-				sql += "WHERE codProduto LIKE '%"+d.getIdProduto()+"%' ";	
+				sql.append("WHERE codProduto LIKE '%"+d.getIdProduto()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getIdSaida() != 0){
 			if(ver>0){
-				sql += "AND codSaida LIKE '%"+d.getIdSaida()+"%' ";
+				sql.append("AND codSaida LIKE '%"+d.getIdSaida()+"%' ");
 			}
 			else{
-				sql += "WHERE codSaida LIKE '%"+d.getIdSaida()+"%' ";	
+				sql.append("WHERE codSaida LIKE '%"+d.getIdSaida()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getIdSolicitacao() != 0){
 			if(ver>0){
-				sql += "AND codSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";
+				sql.append("AND codSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");
 			}
 			else{
-				sql += "WHERE codSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";	
+				sql.append("WHERE codSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<ProdutoSolicitacaoSaida> cons(ProdutoSolicitacaoSaida d) throws SQLException {

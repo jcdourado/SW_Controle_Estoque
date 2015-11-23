@@ -68,31 +68,32 @@ public class SolicitacaoFornecedorDAO {
 	}		
 	private String getSql(SolicitacaoFornecedor d){
 		int ver = 0;
-		String sql = "SELECT codSolicitacao ,data, codFornecedor FROM solicitacao_Fornecedor ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codSolicitacao ,data, codFornecedor FROM solicitacao_Fornecedor ");
 		if(d.getId() != 0 ){
-			sql += "WHERE codSolicitacao LIKE '%" +d.getId()+"%' ";
+			sql.append("WHERE codSolicitacao LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
 		if(d.getData() != null){
 			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );
 			if(ver>0){
-				sql += "AND data = '"+sd+"' ";
+				sql.append("AND data = '"+sd+"' ");
 			}
 			else{
-				sql += "WHERE data = '%"+sd+"' ";	
+				sql.append("WHERE data = '%"+sd+"' ");	
 				ver++;
 			}
 		}
 		if(d.getIdFornecedor() != 0){
 			if(ver>0){
-				sql += "AND codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ";
+				sql.append("AND codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ");
 			}
 			else{
-				sql += "WHERE codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ";	
+				sql.append("WHERE codFornecedor LIKE '%"+d.getIdFornecedor()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<SolicitacaoFornecedor> cons(SolicitacaoFornecedor d) throws SQLException {

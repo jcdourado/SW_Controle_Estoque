@@ -59,30 +59,31 @@ public class SolicitacaoProdutoDepartamentoDAO {
 	}
 	private String getSql(SolicitacaoProdutoDepartamento d){
 		int ver = 0;
-		String sql = "SELECT id_Produto ,id_Solicitacao, getQuantidade FROM solicitacao_Produto_Departamento ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT id_Produto ,id_Solicitacao, getQuantidade FROM solicitacao_Produto_Departamento ");
 		if(d.getIdProduto() != 0 ){
-			sql += "WHERE id_Produto LIKE '%" +d.getIdProduto()+"%' ";
+			sql.append("WHERE id_Produto LIKE '%" +d.getIdProduto()+"%' ");
 			ver++;
 		}		
 		if(d.getIdSolicitacao() != 0){
 			if(ver>0){
-				sql += "AND id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";
+				sql.append("AND id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");
 			}
 			else{
-				sql += "WHERE id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ";	
+				sql.append("WHERE id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getQuantidade() != 0){
 			if(ver>0){
-				sql += "AND quantidade LIKE '%"+d.getQuantidade()+"%' ";
+				sql.append("AND quantidade LIKE '%"+d.getQuantidade()+"%' ");
 			}
 			else{
-				sql += "WHERE quantidade LIKE '%"+d.getQuantidade()+"%' ";	
+				sql.append("WHERE quantidade LIKE '%"+d.getQuantidade()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<SolicitacaoProdutoDepartamento> cons(SolicitacaoProdutoDepartamento d) throws SQLException {

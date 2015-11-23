@@ -68,31 +68,32 @@ public class SolicitacaoDepartamentoDAO {
 	}	
 	private String getSql(SolicitacaoDepartamento d){
 		int ver = 0;
-		String sql = "SELECT codSolicitacao ,data, codDepartamento FROM solicitacao_Departamento ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codSolicitacao ,data, codDepartamento FROM solicitacao_Departamento ");
 		if(d.getId() != 0 ){
-			sql += "WHERE codSolicitacao LIKE '%" +d.getId()+"%' ";
+			sql.append("WHERE codSolicitacao LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
 		if(d.getData() != null){
 			java.sql.Date sd = new java.sql.Date( d.getData().getTime() );
 			if(ver>0){
-				sql += "AND data = '"+sd+"' ";
+				sql.append("AND data = '"+sd+"' ");
 			}
 			else{
-				sql += "WHERE data = '%"+sd+"' ";	
+				sql.append("WHERE data = '%"+sd+"' ");	
 				ver++;
 			}
 		}
 		if(d.getIdDepartamento() != 0){
 			if(ver>0){
-				sql += "AND codDepartamento LIKE '%"+d.getIdDepartamento()+"%' ";
+				sql.append("AND codDepartamento LIKE '%"+d.getIdDepartamento()+"%' ");
 			}
 			else{
-				sql += "WHERE codDepartamento LIKE '%"+d.getIdDepartamento()+"%' ";	
+				sql.append("WHERE codDepartamento LIKE '%"+d.getIdDepartamento()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<SolicitacaoDepartamento> cons(SolicitacaoDepartamento d) throws SQLException {

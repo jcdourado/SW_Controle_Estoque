@@ -46,25 +46,26 @@ public class RestricaoDAO {
 	
 	public List<Tipo> cons(Tipo d) throws SQLException {
 		List<Tipo> lista = new ArrayList<Tipo>();
-		String sql = "SELECT codRestTipo_FK, tp.nome, tipo.codTipo FROM tipo"
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codRestTipo_FK, tp.nome, tipo.codTipo FROM tipo"
 				+ " INNER JOIN tipoRestricao " + "ON tipo.codTipo = tipoRestricao.codTipo " +
-				" INNER JOIN tipo tp " + " ON tp.codTipo = tipoRestricao.codRestTipo_FK ";
+				" INNER JOIN tipo tp " + " ON tp.codTipo = tipoRestricao.codRestTipo_FK ");
 		int ver = 0;
 		if(d.getId() != 0){
-			sql += "WHERE tipo.codTipo LIKE '%"+d.getId()+"%' ";
+			sql.append("WHERE tipo.codTipo LIKE '%"+d.getId()+"%' ");
 			ver++;
 		}
 		if(d.getNome() != null){
 			if(ver>0){
-				sql += "AND tipo.nome LIKE '%"+d.getNome()+"%' ";
+				sql.append("AND tipo.nome LIKE '%"+d.getNome()+"%' ");
 			}
 			else{
-				sql +=  "WHERE tipo.nome LIKE '%"+d.getNome()+"%' ";
+				sql.append( "WHERE tipo.nome LIKE '%"+d.getNome()+"%' ");
 				ver++;
 			}
 		}
 		
-		PreparedStatement ps = c.prepareStatement(sql);
+		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()){
 			Tipo dp = new Tipo();

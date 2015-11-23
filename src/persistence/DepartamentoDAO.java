@@ -68,58 +68,59 @@ public class DepartamentoDAO {
 	
 	private String getSql(Departamento d){
 		int ver = 0;
-		String sql = "SELECT codDepartamento, nome, andar, predio, telefone,"
-				+ " codResponsavel FROM departamento ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codDepartamento, nome, andar, predio, telefone,"
+				+ " codResponsavel FROM departamento ");
 		if(d.getId() != 0 ){
-			sql += "WHERE codDepartamento LIKE '%" +d.getId()+"%' ";
+			sql.append("WHERE codDepartamento LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
 		if(d.getNome() != null){
 			if(ver>0){
-				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+				sql.append("AND nome LIKE '%"+d.getNome()+"%' ");
 			}
 			else{
-				sql += "WHERE nome LIKE '%"+d.getNome()+"%' ";	
+				sql.append("WHERE nome LIKE '%"+d.getNome()+"%' ");	
 				ver++;
 			}
 		}		
 		if(d.getAndar() != null){
 			if(ver>0){
-				sql += "AND andar LIKE '%"+d.getAndar()+"%' ";
+				sql.append("AND andar LIKE '%"+d.getAndar()+"%' ");
 			}
 			else{
-				sql += "WHERE andar LIKE '%"+d.getAndar()+"%' ";	
+				sql.append("WHERE andar LIKE '%"+d.getAndar()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getPredio() != null){
 			if(ver>0){
-				sql += "AND predio LIKE '%"+d.getPredio()+"%' ";
+				sql.append("AND predio LIKE '%"+d.getPredio()+"%' ");
 			}
 			else{
-				sql += "WHERE predio LIKE '%"+d.getPredio()+"%' ";	
+				sql.append("WHERE predio LIKE '%"+d.getPredio()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getTelefone() != null){
 			if(ver>0){
-				sql += "AND telefone LIKE '%"+d.getTelefone()+"%' ";
+				sql.append("AND telefone LIKE '%"+d.getTelefone()+"%' ");
 			}
 			else{
-				sql += "WHERE telefone LIKE '%"+d.getTelefone()+"%' ";	
+				sql.append("WHERE telefone LIKE '%"+d.getTelefone()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getCodResponsavel() != 0){
 			if(ver>0){
-				sql += "AND codResponsavel LIKE '%"+d.getCodResponsavel()+"%' ";
+				sql.append("AND codResponsavel LIKE '%"+d.getCodResponsavel()+"%' ");
 			}
 			else{
-				sql += "WHERE codResponsavel LIKE '%"+d.getCodResponsavel()+"%' ";	
+				sql.append("WHERE codResponsavel LIKE '%"+d.getCodResponsavel()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 		public List<Departamento> cons(Departamento d) throws SQLException {

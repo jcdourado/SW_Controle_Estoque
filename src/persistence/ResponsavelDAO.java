@@ -68,30 +68,31 @@ public class ResponsavelDAO {
 	}
 	private String getSql(Responsavel d){
 		int ver = 0;
-		String sql = "SELECT codResponsavel ,nome, telefone FROM responsavel ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT codResponsavel ,nome, telefone FROM responsavel ");
 		if(d.getId() != 0 ){
-			sql += "WHERE codResponsavel LIKE '%" +d.getId()+"%' ";
+			sql.append("WHERE codResponsavel LIKE '%" +d.getId()+"%' ");
 			ver++;
 		}		
 		if(d.getNome() != null){
 			if(ver>0){
-				sql += "AND nome LIKE '%"+d.getNome()+"%' ";
+				sql.append("AND nome LIKE '%"+d.getNome()+"%' ");
 			}
 			else{
-				sql += "WHERE nome LIKE '%"+d.getNome()+"%' ";	
+				sql.append("WHERE nome LIKE '%"+d.getNome()+"%' ");	
 				ver++;
 			}
 		}
 		if(d.getTel() != null){
 			if(ver>0){
-				sql += "AND telefone LIKE '%"+d.getTel()+"%' ";
+				sql.append("AND telefone LIKE '%"+d.getTel()+"%' ");
 			}
 			else{
-				sql += "WHERE telefone LIKE '%"+d.getTel()+"%' ";	
+				sql.append("WHERE telefone LIKE '%"+d.getTel()+"%' ");	
 				ver++;
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 		
 	public List<Responsavel> cons(Responsavel d) throws SQLException {
