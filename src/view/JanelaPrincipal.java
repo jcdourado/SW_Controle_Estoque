@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -25,10 +26,22 @@ import controller.ControllerSaida;
 import controller.ControllerSolicitacaoDepartamento;
 import controller.ControllerSolicitacaoFornecedor;
 import controller.ControllerTipo;
+import model.Departamento;
+import model.Entrada;
+import model.Fornecedor;
+import model.Item;
+import model.Produto;
+import model.Responsavel;
+import model.Saida;
+import model.SolicitacaoDepartamento;
+import model.SolicitacaoFornecedor;
+import model.Tipo;
 
 public class JanelaPrincipal {
 	private JFrame frame = new JFrame("Tela Principal");
 	
+
+	SimpleDateFormat in = new SimpleDateFormat("dd/MM/yyyy");
 	private JPanel principalTipo = new JPanel(new BorderLayout());
 	private JPanel principalProduto = new JPanel(new BorderLayout());
 	private JPanel principalSaida = new JPanel(new BorderLayout());
@@ -427,4 +440,172 @@ public class JanelaPrincipal {
 	public static void main(String[] args) throws ParseException {
 		new JanelaPrincipal();
 	}
+	
+	public void toTipo(Tipo t){
+		codTipo.setText(String.valueOf(t.getId()));
+		nomeTipo.setText(t.getNome());
+	}
+	public Tipo fromTipo(){
+		Tipo t = new Tipo();
+		t.setId(Integer.parseInt(codTipo.getText()));
+		t.setNome(nomeTipo.getText());
+		return t;
+	}
+	
+	public void toProduto(Produto p){
+		codPro.setText(String.valueOf(p.getId()));
+		nomePro.setText(p.getNome());
+		usoPro.setText(p.getUso());
+		qtdMinima.setText(String.valueOf(p.getQtdMinima()));
+		qtdSeguranca.setText(String.valueOf(p.getQtdSeguranca()));
+		qtdMaxima.setText(String.valueOf(p.getQtdMaxima()));
+		consumoPrevisto.setText(p.getConsumoPrevisto());
+		preco.setText(String.valueOf(p.getPreco()));
+		peso.setText(String.valueOf(p.getPeso()));
+		codTipoPro.setText(String.valueOf(p.getTipo()));
+	}
+	public Produto fromProduto(){
+		Produto p = new Produto();
+		p.setId(Integer.parseInt(codPro.getText()));
+		p.setNome(nomePro.getText());
+		p.setUso(usoPro.getText());
+		p.setQtdMinima(Float.parseFloat(qtdMinima.getText().replace(",", ".")));
+		p.setQtdSeguranca(Float.parseFloat(qtdSeguranca.getText().replace(",", ".")));
+		p.setQtdMaxima(Float.parseFloat(qtdMaxima.getText().replace(",", ".")));
+		p.setConsumoPrevisto(consumoPrevisto.getText());
+		p.setPreco(Float.parseFloat(preco.getText().replace(",", ".")));
+		p.setPeso(Float.parseFloat(peso.getText().replace(",", ".")));
+		p.setTipo(Integer.parseInt(codTipoPro.getText()));
+		return p;
+	}
+	
+	public void toSaida(Saida s){
+		codSai.setText(String.valueOf(s.getIdSaida()));
+		dataSai.setText(in.format(s.getData()));
+		descSaida.setText(s.getDescricao());
+	}
+	public Saida fromSaida() throws ParseException{
+		Saida s = new Saida();
+		s.setIdSaida(Integer.parseInt(codSai.getText()));
+		s.setData(in.parse(dataSai.getText()));
+		s.setDescricao(descSaida.getText());
+		return s;
+	}
+	
+	public void toItem(Item i){
+		codItem.setText(String.valueOf(i.getIdItem()));
+		codProItem.setText(String.valueOf(i.getIdProduto()));
+		codSaiItem.setText(String.valueOf(i.getIdSaida()));
+		codEntItem.setText(String.valueOf(i.getIdEntrada()));
+	}
+	public Item fromItem(){
+		Item i = new Item();
+		i.setIdItem(Integer.parseInt(codItem.getText()));
+		i.setIdProduto(Integer.parseInt(codProItem.getText()));
+		i.setIdSaida(Integer.parseInt(codSaiItem.getText()));
+		i.setIdEntrada(Integer.parseInt(codEntItem.getText()));		
+		return i;
+	}
+	
+	public void toEntrada(Entrada e){
+		codEnt.setText(String.valueOf(e.getIdEntrada()));
+		dataEnt.setText(in.format(e.getData()));
+		tipoEnt.setText(e.getTipoTransf());
+		NFEEnt.setText(e.getNFE());
+		dataNFEEnt.setText(in.format(e.getDataEmissarNFE()));
+		tempoEnt.setText(String.valueOf(e.getTempo()));
+		codForEnt.setText(String.valueOf(e.getIdFornecedor()));
+	}
+	public Entrada fromEntrada() throws ParseException{
+		Entrada e = new Entrada();
+		e.setIdEntrada(Integer.parseInt(codEnt.getText()));
+		e.setData(in.parse(dataEnt.getText()));
+		e.setTipoTransf(tipoEnt.getText());
+		e.setNFE(NFEEnt.getText());
+		e.setDataEmissarNFE(in.parse(dataNFEEnt.getText()));
+		e.setTempo(Float.parseFloat(tempoEnt.getText().replace(",", ".")));
+		e.setIdFornecedor(Integer.parseInt(codForEnt.getText()));
+		return e;
+	}
+	
+	public void toResponsavel(Responsavel r){
+		codResp.setText(String.valueOf(r.getId()));
+		nomeResp.setText(r.getNome());
+		telResp.setText(r.getTel());
+	}
+	public Responsavel fromResponsavel(){
+		Responsavel r = new Responsavel();
+		r.setId(Integer.parseInt(codResp.getText()));
+		r.setNome(nomeResp.getText());
+		r.setTel(telResp.getText());
+		return r;
+	}	
+	
+	public void toDepartamento(Departamento d){
+		codDep.setText(String.valueOf(d.getId()));
+		nomeDep.setText(d.getNome());
+		andarDep.setText(d.getAndar());
+		predioDep.setText(d.getPredio());
+		telDep.setText(d.getTelefone());
+		codRespDep.setText(String.valueOf(d.getCodResponsavel()));
+	}
+	public Departamento fromDepartamento(){
+		Departamento d = new Departamento();
+		d.setId(Integer.parseInt(codDep.getText()));
+		d.setNome(nomeDep.getText());
+		d.setAndar(andarDep.getText());
+		d.setPredio(predioDep.getText());
+		d.setTelefone(telDep.getText());
+		d.setCodResponsavel(Integer.parseInt(codRespDep.getText()));
+		return d;
+	}	
+	
+	public void toFornecedor(Fornecedor f){
+		codFor.setText(String.valueOf(f.getId()));
+		ruaFor.setText(f.getRua());
+		numFor.setText(String.valueOf(f.getNumero()));
+		bairFor.setText(f.getBairro());
+		cidFor.setText(f.getCidade());
+		estFor.setText(f.getEstado());
+		nomeFor.setText(f.getNome());
+		telFor.setText(f.getTel());
+	}
+	public Fornecedor fromFornecedor(){
+		Fornecedor f = new Fornecedor();
+		f.setId(Integer.parseInt(codFor.getText()));
+		f.setRua(ruaFor.getText());
+		f.setNumero(Integer.parseInt(numFor.getText()));
+		f.setBairro(bairFor.getText());
+		f.setCidade(cidFor.getText());
+		f.setEstado(estFor.getText());
+		f.setNome(nomeFor.getText());
+		f.setTel(telFor.getText());
+		return f;
+	}		
+	
+	public void toSolicitacaoFornecedor(SolicitacaoFornecedor sF){
+		codSolFor.setText(String.valueOf(sF.getId()));
+		codForSol.setText(String.valueOf(sF.getIdFornecedor()));
+		dtSolFor.setText(in.format(sF.getData()));		
+	}
+	public SolicitacaoFornecedor fromSolicitacaoFornecedor() throws ParseException{
+		SolicitacaoFornecedor sF = new SolicitacaoFornecedor();
+		sF.setId(Integer.parseInt(codSolFor.getText()));
+		sF.setIdFornecedor(Integer.parseInt(codForSol.getText()));
+		sF.setData(in.parse(dtSolFor.getText()));
+		return sF;
+	}	
+	
+	public void toSolicitacaoDepartamento(SolicitacaoDepartamento sD){
+		codSolDep.setText(String.valueOf(sD.getId()));
+		codDepSol.setText(String.valueOf(sD.getIdDepartamento()));
+		dtSolDep.setText(in.format(sD.getData()));		
+	}
+	public SolicitacaoDepartamento fromSolicitacaoDepartamento() throws ParseException{
+		SolicitacaoDepartamento sD = new SolicitacaoDepartamento();
+		sD.setId(Integer.parseInt(codSolDep.getText()));
+		sD.setIdDepartamento(Integer.parseInt(codDepSol.getText()));
+		sD.setData(in.parse(dtSolDep.getText()));
+		return sD;		
+	}	
 }

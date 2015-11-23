@@ -39,12 +39,12 @@ public class ControllerFornecedor implements TableModel{
 	public String getColumnName(int columnIndex) {
 		switch(columnIndex){
 		case 0: return "Código";
-		case 1: return "Rua";
+		case 1: return "Nome";
 		case 2: return "Número";
-		case 3: return "Bairro";
-		case 4: return "Cidade";
-		case 5: return "Estado";
-		case 6: return "Nome";
+		case 3: return "Rua";
+		case 4: return "Bairro";
+		case 5: return "Cidade";
+		case 6: return "Estado";
 		case 7: return "Telefone";
 		}
 		return "";
@@ -60,12 +60,12 @@ public class ControllerFornecedor implements TableModel{
 		Fornecedor f = fornecedores.get(rowIndex);
 		switch(columnIndex){
 		case 0: return f.getId();
-		case 1: return f.getRua();
+		case 1: return f.getNome();
 		case 2: return f.getNumero();
-		case 3: return f.getBairro();
-		case 4: return f.getCidade();
-		case 5: return f.getEstado();
-		case 6: return f.getNome();
+		case 3: return f.getRua();
+		case 4: return f.getBairro();
+		case 5: return f.getCidade();
+		case 6: return f.getEstado();
 		case 7: return f.getTel();
 		}
 		return "";
