@@ -17,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControleItem;
@@ -40,6 +42,9 @@ import model.SolicitacaoDepartamento;
 import model.SolicitacaoFornecedor;
 import model.Tipo;
 import utilities.EstoqueException;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JanelaPrincipal implements ActionListener{
 	private JFrame frame = new JFrame("Tela Principal");
@@ -203,18 +208,125 @@ public class JanelaPrincipal implements ActionListener{
 	public JanelaPrincipal() throws ParseException {
 		frame.setSize(1000, 600);
 		frame.setContentPane(tabs);
+		
+		scrollTipo.setViewportView(tabelaTipo);
+		scrollProduto.setViewportView(tabelaProduto);
+		scrollSaida.setViewportView(tabelaSaida);
+		scrollItem.setViewportView(tabelaItem);
+		scrollEntrada.setViewportView(tabelaEntrada);
+		scrollResponsavel.setViewportView(tabelaResponsavel);
+		scrollDepartamento.setViewportView(tabelaDepartamento);
+		scrollFornecedor.setViewportView(tabelaFornecedor);
+		scrollSolFornecedor.setViewportView(tabelaSolFornecedor);
+		scrollSolDepartamento.setViewportView(tabelaSolDepartamento);
 
-		scrollTipo.getViewport().add(tabelaTipo);
-		scrollProduto.getViewport().add(tabelaProduto);
-		scrollSaida.getViewport().add(tabelaSaida);
-		scrollItem.getViewport().add(tabelaItem);
-		scrollEntrada.getViewport().add(tabelaEntrada);
-		scrollResponsavel.getViewport().add(tabelaResponsavel);
-		scrollDepartamento.getViewport().add(tabelaDepartamento);
-		scrollFornecedor.getViewport().add(tabelaFornecedor);
-		scrollSolFornecedor.getViewport().add(tabelaSolFornecedor);
-		scrollSolDepartamento.getViewport().add(tabelaSolDepartamento);
+		tabelaTipo.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaTipo.getSelectedRow();
+				toTipo(ctrTipo.getTipos().get(linha));
+			}
+		});
+		
+		tabelaTipo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						@SuppressWarnings("unused")
+						JanelaTipo jTipo = new JanelaTipo(fromTipo());
+						tabelaTipo.revalidate();
+						scrollTipo.repaint();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 
+		tabelaProduto.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaProduto.getSelectedRow();
+				toProduto(ctrProduto.getProdutos().get(linha));
+			}
+		});
+		
+		tabelaSaida.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaSaida.getSelectedRow();
+				toSaida(ctrSaida.getSaidas().get(linha));
+			}
+		});
+		
+		tabelaItem.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaItem.getSelectedRow();
+				toItem(ctrItem.getItens().get(linha));
+			}
+		});
+		
+		tabelaEntrada.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaEntrada.getSelectedRow();
+				toEntrada(ctrEntrada.getEntradas().get(linha));
+			}
+		});
+		
+		tabelaResponsavel.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaResponsavel.getSelectedRow();
+				toResponsavel(ctrResponsavel.getResponsaveis().get(linha));
+			}
+		});
+		
+		tabelaDepartamento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaDepartamento.getSelectedRow();
+				toDepartamento(ctrDepartamento.getDepartamentos().get(linha));
+			}
+		});
+		
+		tabelaFornecedor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaFornecedor.getSelectedRow();
+				toFornecedor(ctrFornecedor.getFornecedores().get(linha));
+			}
+		});
+		
+		tabelaSolFornecedor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaSolFornecedor.getSelectedRow();
+				toSolicitacaoFornecedor(ctrSolFornecedor.getSolFornecedores().get(linha));
+			}
+		});
+		
+		tabelaSolDepartamento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int linha = tabelaSolDepartamento.getSelectedRow();
+				toSolicitacaoDepartamento(ctrSolDepartamento.getSolDepartamentos().get(linha));
+			}
+		});
+		
+		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		dataEnt = new JFormattedTextField(mascaraData);
 		dataSai = new JFormattedTextField(mascaraData);
@@ -1218,5 +1330,6 @@ public class JanelaPrincipal implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-	}	
+	}
+
 }

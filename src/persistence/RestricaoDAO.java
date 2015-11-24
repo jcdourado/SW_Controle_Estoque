@@ -57,21 +57,9 @@ public class RestricaoDAO {
 		sql.append("SELECT codRestTipo_FK, tp.nome, tipo.codTipo FROM tipo"
 				+ " INNER JOIN tipoRestricao " + "ON tipo.codTipo = tipoRestricao.codTipo " +
 				" INNER JOIN tipo tp " + " ON tp.codTipo = tipoRestricao.codRestTipo_FK ");
-		int ver = 0;
 		if(d.getId() != 0){
 			sql.append("WHERE tipo.codTipo LIKE '%"+d.getId()+"%' ");
-			ver++;
 		}
-		if(d.getNome() != null){
-			if(ver>0){
-				sql.append("AND tipo.nome LIKE '%"+d.getNome()+"%' ");
-			}
-			else{
-				sql.append( "WHERE tipo.nome LIKE '%"+d.getNome()+"%' ");
-				ver++;
-			}
-		}
-		
 		PreparedStatement ps;
 		try {
 			ps = c.prepareStatement(sql.toString());

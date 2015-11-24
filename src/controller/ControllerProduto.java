@@ -11,8 +11,8 @@ import persistence.ProdutoDAO;
 import utilities.EstoqueException;
 
 public class ControllerProduto implements TableModel{
-	List<Produto> produtos = new ArrayList<Produto>();
-	ProdutoDAO dao;
+	private List<Produto> produtos = new ArrayList<Produto>();
+	private ProdutoDAO dao;
 
 	public void adicionar(Produto d) throws EstoqueException{
 		dao = new ProdutoDAO();
@@ -32,6 +32,9 @@ public class ControllerProduto implements TableModel{
 	public List<Produto> consultar(Produto d) throws EstoqueException{
 		dao = new ProdutoDAO();
 		produtos = dao.cons(d);
+		return produtos;
+	}
+	public List<Produto> getProdutos(){
 		return produtos;
 	}
 

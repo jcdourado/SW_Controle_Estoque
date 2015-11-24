@@ -12,8 +12,8 @@ import persistence.SaidaDAO;
 import utilities.EstoqueException;
 
 public class ControllerSaida implements TableModel{
-	List<Saida> saidas = new ArrayList<Saida>();
-	SaidaDAO dao;
+	private List<Saida> saidas = new ArrayList<Saida>();
+	private SaidaDAO dao;
 
 	public void adicionar(Saida d) throws EstoqueException{
 		dao = new SaidaDAO();
@@ -36,6 +36,9 @@ public class ControllerSaida implements TableModel{
 		return saidas;
 	}
 
+	public List<Saida> getSaidas(){
+		return saidas;
+	}
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

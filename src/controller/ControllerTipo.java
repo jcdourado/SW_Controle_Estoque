@@ -11,8 +11,8 @@ import persistence.TipoDAO;
 import utilities.EstoqueException;
 
 public class ControllerTipo implements TableModel{
-	List<Tipo> tipos = new ArrayList<Tipo>();
-	TipoDAO dao;
+	private List<Tipo> tipos = new ArrayList<Tipo>();
+	private TipoDAO dao;
 	
 	public void adicionar(Tipo t) throws EstoqueException{
 		dao = new TipoDAO();
@@ -34,6 +34,10 @@ public class ControllerTipo implements TableModel{
 		tipos = dao.cons(t);
 		return (tipos);
 	}	
+
+	public List<Tipo> getTipos(){
+		return tipos;
+	}
 	
 	@Override
 	public void addTableModelListener(TableModelListener l) {

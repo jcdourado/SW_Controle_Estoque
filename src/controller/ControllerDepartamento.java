@@ -11,8 +11,8 @@ import persistence.DepartamentoDAO;
 import utilities.EstoqueException;
 
 public class ControllerDepartamento implements TableModel{
-	List<Departamento> departamentos = new ArrayList<Departamento>();
-	DepartamentoDAO dao;
+	private List<Departamento> departamentos = new ArrayList<Departamento>();
+	private DepartamentoDAO dao;
 
 	public void adicionar(Departamento d) throws EstoqueException{
 		dao = new DepartamentoDAO();
@@ -34,7 +34,9 @@ public class ControllerDepartamento implements TableModel{
 		departamentos = dao.cons(d);
 		return departamentos;
 	}
-	
+	public List<Departamento> getDepartamentos(){
+		return departamentos;
+	}
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 	}

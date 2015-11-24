@@ -12,8 +12,8 @@ import persistence.EntradaDAO;
 import utilities.EstoqueException;
 
 public class ControllerEntrada implements TableModel{
-	List<Entrada> entradas = new ArrayList<Entrada>();
-	EntradaDAO dao;
+	private List<Entrada> entradas = new ArrayList<Entrada>();
+	private EntradaDAO dao;
 
 	public void adicionar(Entrada d) throws EstoqueException{
 		dao = new EntradaDAO();
@@ -43,6 +43,9 @@ public class ControllerEntrada implements TableModel{
 	public List<Entrada> consultar(Entrada d) throws EstoqueException{
 		dao = new EntradaDAO();
 		entradas = dao.cons(d);
+		return entradas;
+	}
+	public List<Entrada> getEntradas(){
 		return entradas;
 	}
 	@Override

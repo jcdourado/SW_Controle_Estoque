@@ -11,8 +11,8 @@ import persistence.ResponsavelDAO;
 import utilities.EstoqueException;
 
 public class ControllerResponsavel implements TableModel{
-	List<Responsavel> responsaveis = new ArrayList<Responsavel>();
-	ResponsavelDAO dao;
+	private List<Responsavel> responsaveis = new ArrayList<Responsavel>();
+	private ResponsavelDAO dao;
 
 	public void adicionar(Responsavel d) throws EstoqueException{
 		dao = new ResponsavelDAO();
@@ -32,6 +32,9 @@ public class ControllerResponsavel implements TableModel{
 	public List<Responsavel> consultar(Responsavel d) throws EstoqueException{
 		dao = new ResponsavelDAO();
 		responsaveis = dao.cons(d);
+		return responsaveis;
+	}
+	public List<Responsavel> getResponsaveis(){
 		return responsaveis;
 	}
 	@Override

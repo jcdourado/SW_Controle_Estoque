@@ -11,8 +11,8 @@ import persistence.FornecedorDAO;
 import utilities.EstoqueException;
 
 public class ControllerFornecedor implements TableModel{
-	List<Fornecedor> fornecedores = new ArrayList<Fornecedor>();
-	FornecedorDAO dao;
+	private List<Fornecedor> fornecedores = new ArrayList<Fornecedor>();
+	private FornecedorDAO dao;
 
 	public void adicionar(Fornecedor d) throws EstoqueException{
 		dao = new FornecedorDAO();
@@ -32,6 +32,9 @@ public class ControllerFornecedor implements TableModel{
 	public List<Fornecedor> consultar(Fornecedor d) throws EstoqueException{
 		dao = new FornecedorDAO();
 		fornecedores = dao.cons(d);
+		return fornecedores;
+	}
+	public List<Fornecedor> getFornecedores(){
 		return fornecedores;
 	}
 	@Override

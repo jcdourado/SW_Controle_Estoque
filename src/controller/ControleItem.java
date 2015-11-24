@@ -11,8 +11,8 @@ import persistence.ItemDAO;
 import utilities.EstoqueException;
 
 public class ControleItem implements TableModel{
-	List<Item> itens = new ArrayList<Item>();
-	ItemDAO dao;
+	private List<Item> itens = new ArrayList<Item>();
+	private ItemDAO dao;
 
 	public void adicionar(Item d) throws EstoqueException{
 		dao = new ItemDAO();
@@ -44,7 +44,9 @@ public class ControleItem implements TableModel{
 		itens = dao.cons(d);
 		return itens;
 	}
-
+	public List<Item> getItens(){
+		return itens;
+	}
 	@Override
 	public void addTableModelListener(TableModelListener arg0) {
 	}
