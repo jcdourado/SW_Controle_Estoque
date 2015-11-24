@@ -242,6 +242,8 @@ public class JanelaSolDepartamento implements ActionListener{
 				cSolicitacaoProdutoFornecedor.remover(sPro);
 				tableSolFor.revalidate();
 				scrollTableSolFor.repaint();
+				tableSolPro.revalidate();
+				scrollTableProEnt.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -255,6 +257,8 @@ public class JanelaSolDepartamento implements ActionListener{
 				cSolicitacaoProdutoFornecedor.consultar(sPro);
 				tableSolFor.revalidate();
 				scrollTableSolFor.repaint();
+				tableSolPro.revalidate();
+				scrollTableProEnt.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -310,6 +314,8 @@ public class JanelaSolDepartamento implements ActionListener{
 			try {
 				sPro = ctrSolFor.getSol().get(linha);
 				ctrSolFor.remover(sPro);
+				tableSolFor.revalidate();
+				scrollTableSolFor.repaint();
 				tableSolPro.revalidate();
 				scrollTableProEnt.repaint();
 			} catch (EstoqueException e) {
@@ -323,6 +329,8 @@ public class JanelaSolDepartamento implements ActionListener{
 				ProdutoSolicitacaoSaida sPro = new ProdutoSolicitacaoSaida();
 				sPro.setIdSolicitacao(Integer.parseInt(idSolicitacaoSolSaida.getText()));
 				ctrSolFor.consultar(sPro);
+				tableSolFor.revalidate();
+				scrollTableSolFor.repaint();
 				tableSolPro.revalidate();
 				scrollTableProEnt.repaint();
 			} catch (EstoqueException e) {

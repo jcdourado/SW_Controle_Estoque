@@ -241,6 +241,8 @@ public class JanelaSolFornecedor implements ActionListener{
 			try {
 				sPro = cSolicitacaoProdutoFornecedor.getSol().get(linha);
 				cSolicitacaoProdutoFornecedor.remover(sPro);
+				tableSolFor.revalidate();
+				scrollTableProEnt.repaint();
 				tableSolPro.revalidate();
 				scrollTableSolFor.repaint();
 			} catch (EstoqueException e) {
@@ -254,6 +256,8 @@ public class JanelaSolFornecedor implements ActionListener{
 				SolicitacaoProdutoFornecedor sPro = new SolicitacaoProdutoFornecedor();
 				sPro.setIdSolicitacao(Integer.parseInt(idSolicitacao.getText()));
 				cSolicitacaoProdutoFornecedor.consultar(sPro);
+				tableSolFor.revalidate();
+				scrollTableProEnt.repaint();
 				tableSolPro.revalidate();
 				scrollTableSolFor.repaint();
 			} catch (EstoqueException e) {
@@ -314,8 +318,10 @@ public class JanelaSolFornecedor implements ActionListener{
 			try {
 				sPro = ctrSolFor.getSol().get(linha);
 				ctrSolFor.remover(sPro);
-				tableSolPro.revalidate();
+				tableSolFor.revalidate();
 				scrollTableProEnt.repaint();
+				tableSolPro.revalidate();
+				scrollTableSolFor.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -327,8 +333,10 @@ public class JanelaSolFornecedor implements ActionListener{
 				ProdutoSolicitacaoEntrada sPro = new ProdutoSolicitacaoEntrada();
 				sPro.setIdSolicitacao(Integer.parseInt(idSolEntrada.getText()));
 				ctrSolFor.consultar(sPro);
-				tableSolPro.revalidate();
+				tableSolFor.revalidate();
 				scrollTableProEnt.repaint();
+				tableSolPro.revalidate();
+				scrollTableSolFor.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
