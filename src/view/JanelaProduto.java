@@ -20,7 +20,7 @@ import model.Fornecedor;
 import model.Produto;
 
 public class JanelaProduto implements ActionListener{
-	private JPanel panelPro = new JPanel(new GridLayout(14, 2));
+	private JPanel panelPro = new JPanel(new GridLayout(12, 2));
 	private ControllerFornecedor ctrForn = new ControllerFornecedor();
 	
 	private JTextField codPro = new JTextField(10);
@@ -33,8 +33,6 @@ public class JanelaProduto implements ActionListener{
 	private JTextField preco = new JTextField(10);
 	private JTextField peso = new JTextField(10);
 	private JTextField codTipoPro = new JTextField(10);
-	private JTextField qtdTotalSolFor = new JTextField(10);
-	private JTextField qtdTotalSolDep = new JTextField(10);
 	private JTextField qtdEstoque = new JTextField(10);
 	private JTextField qtdTotal = new JTextField(10);
 
@@ -59,8 +57,6 @@ public class JanelaProduto implements ActionListener{
 		preco.setText(String.valueOf(p.getPreco()));
 		peso.setText(String.valueOf(p.getPeso()));
 		codTipoPro.setText(String.valueOf(p.getTipo()));
-		qtdTotalSolFor.setText(String.valueOf(p.getQtdPedidoFornecedor()));
-		qtdTotalSolDep.setText(String.valueOf(p.getQtdPedidoDepartamento()));
 		qtdEstoque.setText(String.valueOf(p.getQtdEmEstoque()));
 		qtdTotal.setText(String.valueOf(p.qtdTotal()));
 				
@@ -76,8 +72,6 @@ public class JanelaProduto implements ActionListener{
 		codTipoPro.setEditable(false);
 		qtdTotal.setEditable(false);
 		qtdEstoque.setEditable(false);
-		qtdTotalSolFor.setEditable(false);
-		qtdTotalSolDep.setEditable(false);
 		
 		panelPro.add(new JLabel("Código"));
 		panelPro.add(codPro);
@@ -99,10 +93,6 @@ public class JanelaProduto implements ActionListener{
 		panelPro.add(peso);
 		panelPro.add(new JLabel("Tipo do Produto"));
 		panelPro.add(codTipoPro);
-		panelPro.add(new JLabel("Quantidade total solicitada p/ fornecedor"));
-		panelPro.add(qtdTotalSolFor);
-		panelPro.add(new JLabel("Quantidade total solicitada p/ departamento"));
-		panelPro.add(qtdTotalSolDep);
 		panelPro.add(new JLabel("Quantidade total já rodada"));
 		panelPro.add(qtdTotal);
 		panelPro.add(new JLabel("Quantidade total em estoque"));
@@ -145,7 +135,6 @@ public class JanelaProduto implements ActionListener{
 				List<Fornecedor> list = ctrForn.consultar(f);
 				JOptionPane.showMessageDialog(null, p.qtdPorFornecedor(list.get(0)), "Quantidade!",JOptionPane.INFORMATION_MESSAGE);
 			} catch (EstoqueException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

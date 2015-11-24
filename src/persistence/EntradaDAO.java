@@ -160,16 +160,6 @@ private Connection c;
 				ver++;
 			}
 		}
-		if(d.getDataEmissarNFE() != null){
-			java.sql.Date sd = new java.sql.Date( d.getDataEmissarNFE().getTime() );
-			if(ver>0){
-				sql.append("AND dataEmissaoNFE LIKE '%"+sd+"%' ");
-			}
-			else{
-				sql.append("WHERE dataEmissaoNFE LIKE '%"+sd+"%' ");	
-				ver++;
-			}
-		}
 		if(d.getTempo() != 0){
 			if(ver>0){
 				sql.append("AND tempo LIKE '%"+d.getTempo()+"%' ");

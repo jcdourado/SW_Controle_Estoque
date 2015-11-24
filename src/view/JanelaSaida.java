@@ -15,15 +15,30 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
 import utilities.EstoqueException;
 import controller.ControllerProduto;
+import controller.ControllerProdutoSaidaSolicitacao;
 import model.Produto;
+import model.ProdutoSolicitacaoSaida;
 import model.Saida;
 
 public class JanelaSaida implements ActionListener{
+
+	private JFrame jSolSaida;
+	private JPanel princSolSaida;
+	private JPanel camposSolSaida;
+	private JPanel btnSolSaida;
+	private JTextField idProdutoSolSaida;
+	private JTextField idSolicitacaoSolSaida;
+	private JTextField idSaidaSolSaida;
+	private JTextField usoSolSaida;
+	private JTextField qtdSolSaida;
+	
 	private JTextField codSai = new JTextField(10);
 	private ControllerProduto ctrProduto = new ControllerProduto();
 	private JFormattedTextField dataSai;
@@ -37,16 +52,21 @@ public class JanelaSaida implements ActionListener{
 	private JPanel panelSai;
 	private JPanel panelBtn;
 	private JPanel panelPrinc;
+	private ControllerProdutoSaidaSolicitacao ctrSolFor = new ControllerProdutoSaidaSolicitacao();
+	private JScrollPane scrollTableSolFor;
+	private JTable tableSolFor = new JTable(ctrSolFor);
 	private Saida s;
 	SimpleDateFormat in = new SimpleDateFormat("dd/MM/yyyy");
 	
-	
 	public JanelaSaida(Saida s) throws ParseException{
 		this.s = s;
-		frame.setSize(1000, 600);
+		frame.setSize(1400, 600);
 		panelPrinc = new JPanel(new BorderLayout());
 		panelSai = new JPanel(new GridLayout(8,2));
-		 
+		scrollTableSolFor = new JScrollPane();
+		
+		scrollTableSolFor.getViewport().add(tableSolFor);
+		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		
 		dataSai = new JFormattedTextField(mascaraData);
@@ -96,21 +116,28 @@ public class JanelaSaida implements ActionListener{
 		panelSai.add(pesoGeral);
 		panelPrinc.add(panelSai,BorderLayout.NORTH);
 
+		panelPrinc.add(scrollTableSolFor,BorderLayout.CENTER);
 		panelBtn = new JPanel(new FlowLayout());
 		
 		JButton qtdTotalItemProduto = new JButton("Calcular a quantidade de items por produto");
 		JButton qtdProdutosDoadosProduto = new JButton("Calcular a quantidade de produtos doados");
 		JButton calcPesoPorProduto = new JButton("Calcular o peso por produto");
 		JButton calcPrecoPorProduto = new JButton("Calcular o preço por produto");
+		JButton addSol = new JButton("Adicionar Solicitacao");
+		JButton remSol = new JButton("Remover Solicitacao");
 		panelBtn.add(qtdTotalItemProduto);
 		panelBtn.add(qtdProdutosDoadosProduto);
 		panelBtn.add(calcPesoPorProduto);
 		panelBtn.add(calcPrecoPorProduto);
+		panelBtn.add(addSol);
+		panelBtn.add(remSol);
 		
 		qtdProdutosDoadosProduto.addActionListener(this);
 		qtdTotalItemProduto.addActionListener(this);
 		calcPesoPorProduto.addActionListener(this);
 		calcPrecoPorProduto.addActionListener(this);
+		addSol.addActionListener(this);
+		remSol.addActionListener(this);
 		panelPrinc.add(panelBtn,BorderLayout.SOUTH);
 		
 		frame.setContentPane(panelPrinc);
@@ -159,7 +186,86 @@ public class JanelaSaida implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-		else{
+		else if(cmd.contains("Adicionar")){
+			jSolSaida = new JFrame("Saida");
+			princSolSaida = new JPanel(new BorderLayout());
+			camposSolSaida = new JPanel(new GridLayout(5, 2));
+			btnSolSaida = new JPanel(new FlowLayout());
+			jSolSaida.setSize(500,200);
+			
+			idProdutoSolSaida = new JTextField(10);
+			idSolicitacaoSolSaida = new JTextField(10);
+			qtdSolSaida = new JTextField(10);
+			idSaidaSolSaida = new JTextField(10);
+			usoSolSaida = new JTextField(10);
+			
+			idSaidaSolSaida.setText(String.valueOf(s.getIdSaida()));
+			
+			camposSolSaida.add(new JLabel("Codigo Produto"));
+			camposSolSaida.add(idProdutoSolSaida);
+			camposSolSaida.add(new JLabel("Codigo Solicitacao Departamento"));
+			camposSolSaida.add(idSolicitacaoSolSaida);
+			camposSolSaida.add(new JLabel("Quantidade"));
+			camposSolSaida.add(qtdSolSaida);
+			camposSolSaida.add(new JLabel("Codigo Saida"));
+			camposSolSaida.add(idSaidaSolSaida);
+			camposSolSaida.add(new JLabel("Uso"));
+			camposSolSaida.add(usoSolSaida);
+			
+			princSolSaida.add(camposSolSaida, BorderLayout.NORTH);
+			
+			JButton btnOk = new JButton("Add");
+			JButton btnCancelar = new JButton("Cancel");
+			btnOk.addActionListener(this);
+			btnCancelar.addActionListener(this);
+			
+			btnSolSaida.add(btnOk);
+			btnSolSaida.add(btnCancelar);
+			princSolSaida.add(btnSolSaida, BorderLayout.SOUTH);
+			
+			jSolSaida.setContentPane(princSolSaida);
+			jSolSaida.setVisible(true);
+			jSolSaida.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			ProdutoSolicitacaoSaida sPro = new ProdutoSolicitacaoSaida();
+			sPro.setIdSaida(s.getIdSaida());
+			try {
+				ctrSolFor.consultar(sPro);
+			} catch (EstoqueException e) {
+				e.printStackTrace();
+			}
+			tableSolFor.revalidate();
+			scrollTableSolFor.repaint();
+		}
+		else if(cmd.contains("Remover")){
+			int linha = tableSolFor.getSelectedRow();
+			ProdutoSolicitacaoSaida sPro;
+			try {
+				sPro = ctrSolFor.getSol().get(linha);
+				ctrSolFor.removerPorSaida(sPro);
+				tableSolFor.revalidate();
+				scrollTableSolFor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}			
+		}
+		else if(cmd.equals("Add")){
+			try {
+				ctrSolFor.adicionarPorSaida(fromSolSaida());
+				ProdutoSolicitacaoSaida sPro = new ProdutoSolicitacaoSaida();
+				sPro.setIdSaida(Integer.parseInt(idSaidaSolSaida.getText()));
+				ctrSolFor.consultar(sPro);
+				tableSolFor.revalidate();
+				scrollTableSolFor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.equals("Cancel")){
+			jSolSaida.setVisible(false);
+		}
+		else {
 			int idProduto = Integer.parseInt(JOptionPane.showInputDialog("Digite o codigo do produto"));
 			Produto prod = new Produto();
 			prod.setId(idProduto);
@@ -170,5 +276,15 @@ public class JanelaSaida implements ActionListener{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private ProdutoSolicitacaoSaida fromSolSaida(){
+		ProdutoSolicitacaoSaida solPro = new ProdutoSolicitacaoSaida();
+		solPro.setIdProduto(Integer.parseInt(idProdutoSolSaida.getText()));
+		solPro.setIdSolicitacao(Integer.parseInt(idSolicitacaoSolSaida.getText()));
+		solPro.setQuantidade(Float.parseFloat(qtdSolSaida.getText()));
+		solPro.setIdSaida(Integer.parseInt(idSaidaSolSaida.getText()));
+		solPro.setUso(usoSolSaida.getText());
+		return solPro;
 	}
 }

@@ -122,20 +122,6 @@ public class Produto {
 	public void removeItemPorIndice(int i){
 		itens.remove(i);
 	}
-	public float qtdTotalSolicitadaFornecedor(){
-		float qtd = 0;
-		for(SolicitacaoProdutoFornecedor sol : qtdPedidoFornecedor){
-			qtd += sol.getQuantidade();
-		}
-		return qtd;
-	}
-	public float qtdTotalSolicitadaDepartamento(){
-		float qtd = 0;
-		for(SolicitacaoProdutoDepartamento sol : qtdPedidoDepartamento){
-			qtd += sol.getQuantidade();
-		}
-		return qtd;
-	}
 	public float qtdEmEstoque(){
 		float qtd = 0;
 		for(Item i : itens){

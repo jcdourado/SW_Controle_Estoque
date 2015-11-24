@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import model.Item;
 import model.ProdutoSolicitacaoSaida;
 import persistence.ProSolSaiDAO;
 import utilities.EstoqueException;
@@ -14,11 +15,34 @@ public class ControllerProdutoSaidaSolicitacao implements TableModel{
 	List<ProdutoSolicitacaoSaida> solEnt = new ArrayList<ProdutoSolicitacaoSaida>();
 	ProSolSaiDAO dao;
 	
+	public List<ProdutoSolicitacaoSaida> getSol(){
+		return solEnt;
+	}
 	public void adicionar(ProdutoSolicitacaoSaida pSol) throws EstoqueException{
 		dao = new ProSolSaiDAO();
 		dao.adicionar(pSol);
+		ControleItem ctrItem = new ControleItem();
+		Item i = new Item();
+		i.setIdProduto(pSol.getIdProduto());
+		List<Item> list = ctrItem.consultar(i);
+		int cont = 0;
+		for(Item novoItem : list){
+			if(cont < pSol.getCodSolicitacaoSaida()){
+				if(novoItem.verSaida()){
+					novoItem.setIdSaida(pSol.getIdSaida());
+					ctrItem.atualizar(novoItem);
+				}
+			}
+		}
 		ProdutoSolicitacaoSaida p = new ProdutoSolicitacaoSaida();
 		p.setIdSolicitacao(pSol.getIdSolicitacao());
+		consultar(p);
+	}
+	public void adicionarPorSaida(ProdutoSolicitacaoSaida pSol) throws EstoqueException{
+		dao = new ProSolSaiDAO();
+		dao.adicionar(pSol);
+		ProdutoSolicitacaoSaida p = new ProdutoSolicitacaoSaida();
+		p.setIdSaida(pSol.getIdSaida());
 		consultar(p);
 	}
 	public void remover(ProdutoSolicitacaoSaida pSol) throws EstoqueException{
@@ -26,6 +50,13 @@ public class ControllerProdutoSaidaSolicitacao implements TableModel{
 		dao.remove(pSol.getCodSolicitacaoSaida());
 		ProdutoSolicitacaoSaida p = new ProdutoSolicitacaoSaida();
 		p.setIdSolicitacao(pSol.getIdSolicitacao());
+		consultar(p);
+	}
+	public void removerPorSaida(ProdutoSolicitacaoSaida pSol) throws EstoqueException{
+		dao = new ProSolSaiDAO();
+		dao.remove(pSol.getCodSolicitacaoSaida());
+		ProdutoSolicitacaoSaida p = new ProdutoSolicitacaoSaida();
+		p.setIdSaida(pSol.getIdSaida());
 		consultar(p);
 	}
 	public List<ProdutoSolicitacaoSaida> consultar(ProdutoSolicitacaoSaida pSol)throws EstoqueException{

@@ -7,7 +7,6 @@ public class ProdutoSolicitacaoEntrada {
 	private int idProduto;
 	private int idEntrada;
 	private int idSolicitacao;
-	private Produto p;
 	public int getCodSolicitacaoEntrada() {
 		return codSolicitacaoEntrada;
 	}
@@ -43,11 +42,5 @@ public class ProdutoSolicitacaoEntrada {
 	}
 	public void setIdSolicitacao(int idSolicitacao) {
 		this.idSolicitacao = idSolicitacao;
-	}
-	public Produto getP() {
-		return p;
-	}
-	public void setP(Produto p) {
-		this.p = p;
 	}
 }

@@ -27,7 +27,7 @@ public class ProSolSaiDAO {
 	public void adicionar(ProdutoSolicitacaoSaida e) throws EstoqueException {
 		try {
 			String sql = "INSERT INTO produto_Solicitacao_Saida (quantidade, uso, "
-					+ "idPoduto, idSaida, idSolicitacao) VALUES (?, ?, ?, ?, ?)";
+					+ "codProduto, codSaida, codSolicitacao) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setFloat(1, e.getQuantidade());
 			ps.setString(2, e.getUso());
@@ -44,7 +44,7 @@ public class ProSolSaiDAO {
 	public void atualizar(ProdutoSolicitacaoSaida e) throws EstoqueException {
 		try {
 			String sql = "UPDATE produto_Solicitacao_Saida SET quantidade = ?, uso = ?, idProduto = ?, "
-					+ "idEntrada = ?, idSolicitacao = ? WHERE codSolicitacaoSaida = ?";
+					+ "codSaida = ?, codSolicitacao = ? WHERE codSolicitacaoSaida = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setFloat(1, e.getQuantidade());
 			ps.setString(2, e.getUso());
@@ -61,7 +61,7 @@ public class ProSolSaiDAO {
 	
 	public void remove(int cod) throws EstoqueException {
 		try {
-			String sql = "DELETE FROM produto_Solicitacao_Saida WHERE codcodSolicitacaoSaida = ?";
+			String sql = "DELETE FROM produto_Solicitacao_Saida WHERE codSolicitacaoSaida = ?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, cod);
 			ps.execute();

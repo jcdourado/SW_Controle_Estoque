@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import model.Item;
 import model.ProdutoSolicitacaoEntrada;
 import persistence.ProSolEntDAO;
 import utilities.EstoqueException;
@@ -17,6 +18,13 @@ public class ControllerProdutoEntradaSolicitacao implements TableModel{
 	public void adicionar(ProdutoSolicitacaoEntrada pSol) throws EstoqueException{
 		dao = new ProSolEntDAO();
 		dao.adicionar(pSol);
+		ControleItem ctrItem = new ControleItem();
+		for(int i = 0; i < pSol.getQuantidade() ; i ++){
+			Item d = new Item();
+			d.setIdEntrada(pSol.getIdEntrada());
+			d.setIdProduto(pSol.getIdProduto());
+			ctrItem.adicionar(d);
+		}
 		ProdutoSolicitacaoEntrada p = new ProdutoSolicitacaoEntrada();
 		p.setIdSolicitacao(pSol.getIdSolicitacao());
 		consultar(p);
@@ -99,5 +107,8 @@ public class ControllerProdutoEntradaSolicitacao implements TableModel{
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+	}
+	public List<ProdutoSolicitacaoEntrada> getSol() {
+		return solEnt;
 	}
 }

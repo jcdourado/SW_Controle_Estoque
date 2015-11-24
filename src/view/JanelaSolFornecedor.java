@@ -30,6 +30,25 @@ import model.SolicitacaoProdutoFornecedor;
 import utilities.EstoqueException;
 
 public class JanelaSolFornecedor implements ActionListener{
+	private JFrame j;
+	private JPanel princ;
+	private JPanel campos;
+	private JPanel btn;
+	private JTextField idProduto;
+	private JTextField idSolicitacao;
+	private JTextField qtd;
+	
+	private JFrame jSolEntrada;
+	private JPanel princSolEntrada;
+	private JPanel camposSolEntrada;
+	private JPanel btnSolEntrada;
+	private JTextField codEntrada;
+	private JTextField qtdEntrada;
+	private JTextField uso;
+	private JTextField idProdutoEntrada;
+	private JTextField idEntEntrada;
+	private JTextField idSolEntrada;
+	
 	SimpleDateFormat in = new SimpleDateFormat("dd/MM/yyyy");
 	private JTextField codSolFor = new JTextField(10);
 	private JTextField codForSol = new JTextField(10);
@@ -106,23 +125,29 @@ public class JanelaSolFornecedor implements ActionListener{
 		JButton calcPrecoPorProduto = new JButton("Calcular preço");
 		JButton adicionarQtdproduto = new JButton("Adicionar solicitação produto");
 		JButton removerQtdProduto = new JButton("Remover solicitação produto");
+		JButton adicionarEntrada = new JButton("Adicionar entrada");
+		JButton removerEntrada = new JButton("Remover entrada");
 		
 		qtdRestante.addActionListener(this);
 		calcPesoPorProduto.addActionListener(this);
 		calcPrecoPorProduto.addActionListener(this);
 		adicionarQtdproduto.addActionListener(this);
 		removerQtdProduto.addActionListener(this);
+		adicionarEntrada.addActionListener(this);
+		removerEntrada.addActionListener(this);
 		
 		panelBtn.add(qtdRestante);
 		panelBtn.add(calcPesoPorProduto);
 		panelBtn.add(calcPrecoPorProduto);
 		panelBtn.add(adicionarQtdproduto);
 		panelBtn.add(removerQtdProduto);
+		panelBtn.add(adicionarEntrada);
+		panelBtn.add(removerEntrada);
 		
 		panelPrincipal.add(panelTables,BorderLayout.CENTER);
 		panelPrincipal.add(panelBtn,BorderLayout.SOUTH);
 		
-		janela.setSize(1000, 600);
+		janela.setSize(1400, 600);
 		janela.setContentPane(panelPrincipal);
 		janela.setVisible(true);
 		janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -177,10 +202,159 @@ public class JanelaSolFornecedor implements ActionListener{
 			catch(NumberFormatException e){}
 		}
 		else if(cmd.equals("Adicionar solicitação produto")){
+			j = new JFrame("Solicitacao");
+			princ = new JPanel(new BorderLayout());
+			campos = new JPanel(new GridLayout(3, 2));
+			btn = new JPanel(new FlowLayout());
+			j.setSize(200,200);
+			idProduto = new JTextField(10);
+			idSolicitacao = new JTextField(10);
+			qtd = new JTextField(10);
 			
-		}
-		else{
+			idSolicitacao.setText(String.valueOf(solF.getId()));
 			
+			campos.add(new JLabel("Codigo Produto"));
+			campos.add(idProduto);
+			campos.add(new JLabel("Codigo Solicitacao"));
+			campos.add(idSolicitacao);
+			campos.add(new JLabel("Quantidade"));
+			campos.add(qtd);
+			
+			princ.add(campos, BorderLayout.NORTH);
+			
+			JButton btnOk = new JButton("Ok");
+			JButton btnCancelar = new JButton("Cancelar");
+			btnOk.addActionListener(this);
+			btnCancelar.addActionListener(this);
+			
+			btn.add(btnOk);
+			btn.add(btnCancelar);
+			princ.add(btn, BorderLayout.SOUTH);
+			
+			j.setContentPane(princ);
+			j.setVisible(true);
+			j.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
+		else if(cmd.equals("Remover solicitação produto")){
+			int linha = tableSolPro.getSelectedRow();
+			SolicitacaoProdutoFornecedor sPro;
+			try {
+				sPro = cSolicitacaoProdutoFornecedor.getSol().get(linha);
+				cSolicitacaoProdutoFornecedor.remover(sPro);
+				tableSolPro.revalidate();
+				scrollTableSolFor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.equals("Ok")){
+			try {
+				cSolicitacaoProdutoFornecedor.adicionar(fromSolPro());
+				SolicitacaoProdutoFornecedor sPro = new SolicitacaoProdutoFornecedor();
+				sPro.setIdSolicitacao(Integer.parseInt(idSolicitacao.getText()));
+				cSolicitacaoProdutoFornecedor.consultar(sPro);
+				tableSolPro.revalidate();
+				scrollTableSolFor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.equals("Cancelar")){
+			j.setVisible(false);
+		}
+		else if(cmd.equals("Adicionar entrada")){
+			jSolEntrada= new JFrame("Entrada");
+			princSolEntrada = new JPanel(new BorderLayout());
+			camposSolEntrada = new JPanel(new GridLayout(6, 2));
+			btnSolEntrada = new JPanel(new FlowLayout());
+			jSolEntrada.setSize(500,200);
+			
+			codEntrada = new JTextField(10);
+			idEntEntrada = new JTextField(10);
+			qtdEntrada = new JTextField(10);
+			uso = new JTextField(30);
+			idProdutoEntrada = new JTextField(10);
+			idSolEntrada = new JTextField(10);
+			
+			idSolEntrada.setText(String.valueOf(solF.getId()));
+			
+			camposSolEntrada.add(new JLabel("Codigo"));
+			camposSolEntrada.add(codEntrada);
+			camposSolEntrada.add(new JLabel("Codigo Entrada"));
+			camposSolEntrada.add(idEntEntrada);
+			camposSolEntrada.add(new JLabel("Quantidade"));
+			camposSolEntrada.add(qtdEntrada);
+			camposSolEntrada.add(new JLabel("Uso"));
+			camposSolEntrada.add(uso);
+			camposSolEntrada.add(new JLabel("Código Produto"));
+			camposSolEntrada.add(idProdutoEntrada);
+			camposSolEntrada.add(new JLabel("Código Fornecedor"));
+			camposSolEntrada.add(idSolEntrada);
+			
+			princSolEntrada.add(camposSolEntrada, BorderLayout.NORTH);
+			
+			JButton btnOk = new JButton("Add");
+			JButton btnCancelar = new JButton("Cancel");
+			btnOk.addActionListener(this);
+			btnCancelar.addActionListener(this);
+			
+			btnSolEntrada.add(btnOk);
+			btnSolEntrada.add(btnCancelar);
+			princSolEntrada.add(btnSolEntrada, BorderLayout.SOUTH);
+			
+			jSolEntrada.setContentPane(princSolEntrada);
+			jSolEntrada.setVisible(true);
+			jSolEntrada.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		else if(cmd.equals("Remover entrada")){
+			int linha = tableSolFor.getSelectedRow();
+			ProdutoSolicitacaoEntrada sPro;
+			try {
+				sPro = ctrSolFor.getSol().get(linha);
+				ctrSolFor.remover(sPro);
+				tableSolPro.revalidate();
+				scrollTableProEnt.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}			
+		}
+		else if(cmd.equals("Add")){
+			try {
+				ctrSolFor.adicionar(fromSolEntrada());
+				ProdutoSolicitacaoEntrada sPro = new ProdutoSolicitacaoEntrada();
+				sPro.setIdSolicitacao(Integer.parseInt(idSolEntrada.getText()));
+				ctrSolFor.consultar(sPro);
+				tableSolPro.revalidate();
+				scrollTableProEnt.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro!","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.equals("Cancel")){
+			jSolEntrada.setVisible(false);
+		}
+	}
+	
+	private SolicitacaoProdutoFornecedor fromSolPro(){
+		SolicitacaoProdutoFornecedor solPro = new SolicitacaoProdutoFornecedor();
+		solPro.setIdProduto(Integer.parseInt(idProduto.getText()));
+		solPro.setIdSolicitacao(Integer.parseInt(idSolicitacao.getText()));
+		solPro.setQuantidade(Float.parseFloat(qtd.getText()));
+		return solPro;
+	}
+	
+	private ProdutoSolicitacaoEntrada fromSolEntrada(){
+		ProdutoSolicitacaoEntrada solPro = new ProdutoSolicitacaoEntrada();
+		solPro.setCodSolicitacaoEntrada(Integer.parseInt(codEntrada.getText()));
+		solPro.setIdEntrada(Integer.parseInt(idEntEntrada.getText()));
+		solPro.setQuantidade(Float.parseFloat(qtdEntrada.getText()));
+		solPro.setUso(uso.getText());
+		solPro.setIdProduto(Integer.parseInt(idProdutoEntrada.getText()));
+		solPro.setIdSolicitacao(Integer.parseInt(idSolEntrada.getText()));
+		return solPro;
 	}
 }
