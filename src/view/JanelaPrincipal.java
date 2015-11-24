@@ -37,6 +37,7 @@ import model.Entrada;
 import model.Fornecedor;
 import model.Item;
 import model.Produto;
+import model.ProdutoSolicitacaoEntrada;
 import model.ProdutoSolicitacaoSaida;
 import model.Responsavel;
 import model.Saida;
@@ -266,7 +267,11 @@ public class JanelaPrincipal implements ActionListener{
 					Item i = new Item();
 					i.setIdProduto(p.getId());
 					try {
-						p.setItens(ctrItem.consultar(i));
+						for(Item item : ctrItem.consultar(i)){
+							if(item.getIdProduto() == p.getId()){
+								p.adicionaItem(item);
+							}
+						}
 						List<SolicitacaoFornecedor> sF = ctrSolFornecedor.consultar(new SolicitacaoFornecedor());
 						for(SolicitacaoFornecedor s : sF){
 							for(SolicitacaoProdutoFornecedor spf : s.getSolicitacoes()){
@@ -311,7 +316,11 @@ public class JanelaPrincipal implements ActionListener{
 						Saida s = fromSaida();
 						Item i = new Item();
 						i.setIdSaida(s.getIdSaida());
-						s.setItens(ctrItem.consultar(i));
+						for(Item item : ctrItem.consultar(i)){
+							if(item.getIdSaida() == s.getIdSaida()){
+								s.adiciona(item);
+							}
+						}
 						List<SolicitacaoDepartamento> solDpto = ctrSolDepartamento.consultar(new SolicitacaoDepartamento());
 						for(SolicitacaoDepartamento sDpto : solDpto){
 							for(ProdutoSolicitacaoSaida spd : sDpto.getRecebidos()){
@@ -351,6 +360,41 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		});
 		
+		tabelaEntrada.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						Entrada s = fromEntrada();
+						Item i = new Item();
+						i.setIdSaida(s.getIdEntrada());
+						for(Item item : ctrItem.consultar(i)){
+							if(item.getIdEntrada() == s.getIdEntrada()){
+								s.adiciona(item);
+							}
+						}
+						List<SolicitacaoFornecedor> solForn = ctrSolFornecedor.consultar(new SolicitacaoFornecedor());
+						for(SolicitacaoFornecedor sForn : solForn){
+							for(ProdutoSolicitacaoEntrada spd : sForn.getEntregues()){
+								if(spd.getIdEntrada() == s.getIdEntrada()){
+									s.adicionaEntregue(spd);
+								}
+							}
+						}
+						@SuppressWarnings("unused")
+						JanelaEntrada jEntrada = new JanelaEntrada(s);
+						tabelaEntrada.revalidate();
+						scrollEntrada.repaint();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		
 		tabelaResponsavel.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -368,6 +412,32 @@ public class JanelaPrincipal implements ActionListener{
 				toDepartamento(ctrDepartamento.getDepartamentos().get(linha));
 			}
 		});
+		
+		tabelaDepartamento.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						Departamento s = fromDepartamento();
+						SolicitacaoDepartamento solDp = new SolicitacaoDepartamento();
+						solDp.setIdDepartamento(s.getId());
+
+						for(SolicitacaoDepartamento sol : ctrSolDepartamento.consultar(solDp)){
+							if(solDp.getIdDepartamento() == sol.getIdDepartamento()){
+								s.adiciona(sol);
+							}
+						}
+						@SuppressWarnings("unused")
+						JanelaDepartamento jDepartamento = new JanelaDepartamento(s);
+						tabelaDepartamento.revalidate();
+						scrollDepartamento.repaint();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
 		
 		tabelaFornecedor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			

@@ -126,5 +126,5 @@ public class ResponsavelDAO {
 		} catch (SQLException e) {
 			throw new EstoqueException(e);
 		}
-	}	
+	}
 }
