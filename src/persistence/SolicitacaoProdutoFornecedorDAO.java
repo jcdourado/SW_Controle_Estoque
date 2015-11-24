@@ -8,13 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.SolicitacaoProdutoFornecedor;
+import utilities.DBResourceManager;
 import utilities.EstoqueException;
 
 public class SolicitacaoProdutoFornecedorDAO {
 	private Connection c;
 	public SolicitacaoProdutoFornecedorDAO() throws EstoqueException {
-		GenericDAO gen = new GenericDAO();
-			c = gen.getConnection();
+		try {
+			c = DBResourceManager.getRecource().getConnection();
+		} catch (ClassNotFoundException e) {
+			throw new EstoqueException(e);
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
+		}
 	}
 	
 	public void adicionar(SolicitacaoProdutoFornecedor e) throws EstoqueException {

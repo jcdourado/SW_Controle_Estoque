@@ -117,7 +117,7 @@ public class JanelaPrincipal implements ActionListener{
 	private JButton salvarSai = new JButton("Salvar Saida");
 	private JButton alterSai = new JButton("Alterar Saida");
 	private JButton pesqSai = new JButton("Pesquisar Saida");
-	private JButton remSai = new JButton("Remover Saida");
+	private JButton remSai = new JButton("Remover Saida");	
 	
 	private JTextField codItem = new JTextField(10);
 	private JTextField codProItem = new JTextField(10);
@@ -175,10 +175,10 @@ public class JanelaPrincipal implements ActionListener{
 	private JTextField codSolFor = new JTextField(10);
 	private JTextField codForSol = new JTextField(10);
 	private JFormattedTextField dtSolFor;
-	private JButton salvarSolFor = new JButton("Salvar Solicitacao Fornecedor.");
+	private JButton salvarSolFor = new JButton("Salvar Solicitacao Fornecedor");
 	private JButton alterSolFor = new JButton("Alterar Solicitacao Fornecedor");
-	private JButton pesqSolFor = new JButton("Pesquisar Solicitacao Fornecedor.");
-	private JButton remSolFor = new JButton("Remover Solicitacao Fornecedor.");
+	private JButton pesqSolFor = new JButton("Pesquisar Solicitacao Fornecedor");
+	private JButton remSolFor = new JButton("Remover Solicitacao Fornecedor");
 	
 	private JTextField codSolDep = new JTextField(10);
 	private JTextField codDepSol = new JTextField(10);
@@ -187,7 +187,6 @@ public class JanelaPrincipal implements ActionListener{
 	private JButton alterSolDep = new JButton("Alterar Solicitacao Departamento");
 	private JButton pesqSolDep = new JButton("Pesquisar Solicitacao Departamento");
 	private JButton remSolDep = new JButton("Remover Solicitacao Departamento");
-	
 	
 	private JScrollPane scrollTipo = new JScrollPane();
 	private JScrollPane scrollProduto = new JScrollPane();
@@ -358,48 +357,80 @@ public class JanelaPrincipal implements ActionListener{
 		panelBtnSai.add(alterSai);
 		panelBtnSai.add(pesqSai);
 		panelBtnSai.add(remSai);
+		salvarSai.addActionListener(this);
+		alterSai.addActionListener(this);
+		pesqSai.addActionListener(this);
+		remSai.addActionListener(this);
 		
 		JPanel panelBtnIte = new JPanel( new FlowLayout());
 		panelBtnIte.add(salvarItem);
 		panelBtnIte.add(alterItem);
 		panelBtnIte.add(pesqItem);
 		panelBtnIte.add(remItem);
+		salvarItem.addActionListener(this);
+		alterItem.addActionListener(this);
+		pesqItem.addActionListener(this);
+		remItem.addActionListener(this);
 		
 		JPanel panelBtnEnt = new JPanel( new FlowLayout());
 		panelBtnEnt.add(salvarEnt);
 		panelBtnEnt.add(alterEnt);
 		panelBtnEnt.add(pesqEnt);
 		panelBtnEnt.add(remEnt);
+		salvarEnt.addActionListener(this);
+		alterEnt.addActionListener(this);
+		pesqEnt.addActionListener(this);
+		remEnt.addActionListener(this);
 		
 		JPanel panelBtnResp = new JPanel( new FlowLayout());
 		panelBtnResp.add(salvarResp);
 		panelBtnResp.add(alterResp);
 		panelBtnResp.add(pesqResp);
 		panelBtnResp.add(remResp);
+		salvarResp.addActionListener(this);
+		alterResp.addActionListener(this);
+		pesqResp.addActionListener(this);
+		remResp.addActionListener(this);
 		
 		JPanel panelBtnDep = new JPanel( new FlowLayout());
 		panelBtnDep.add(salvarDep);
 		panelBtnDep.add(alterDep);
 		panelBtnDep.add(pesqDep);
 		panelBtnDep.add(remDep);
+		salvarDep.addActionListener(this);
+		alterDep.addActionListener(this);
+		pesqDep.addActionListener(this);
+		remDep.addActionListener(this);
 		
 		JPanel panelBtnFor = new JPanel( new FlowLayout());
 		panelBtnFor.add(salvarFor);
 		panelBtnFor.add(alterFor);
 		panelBtnFor.add(pesqFor);
 		panelBtnFor.add(remFor);
+		salvarFor.addActionListener(this);
+		alterFor.addActionListener(this);
+		pesqFor.addActionListener(this);
+		remFor.addActionListener(this);
 		
 		JPanel panelBtnSolFor = new JPanel( new FlowLayout());
 		panelBtnSolFor.add(salvarSolFor);
 		panelBtnSolFor.add(alterSolFor);
 		panelBtnSolFor.add(pesqSolFor);
 		panelBtnSolFor.add(remSolFor);
+		salvarSolFor.addActionListener(this);
+		alterSolFor.addActionListener(this);
+		pesqSolFor.addActionListener(this);
+		remSolFor.addActionListener(this);
 		
 		JPanel panelBtnSolDep = new JPanel( new FlowLayout());
 		panelBtnSolDep.add(salvarSolDep);
 		panelBtnSolDep.add(alterSolDep);
 		panelBtnSolDep.add(pesqSolDep);
 		panelBtnSolDep.add(remSolDep);
+		salvarSolDep.addActionListener(this);
+		alterSolDep.addActionListener(this);
+		pesqSolDep.addActionListener(this);
+		remSolDep.addActionListener(this);
 		
 		principalTipo.add(panelTipo, BorderLayout.NORTH);
 		principalProduto.add(panelPro, BorderLayout.NORTH);
@@ -523,15 +554,21 @@ public class JanelaPrincipal implements ActionListener{
 		return p;
 	}
 	
-	public void toSaida(Saida s){
+	public void toSaida(Saida s) {
 		codSai.setText(String.valueOf(s.getIdSaida()));
 		dataSai.setText(in.format(s.getData()));
 		descSaida.setText(s.getDescricao());
 	}
 	public Saida fromSaida() throws ParseException{
 		Saida s = new Saida();
-		s.setIdSaida(Integer.parseInt(codSai.getText()));
-		s.setData(in.parse(dataSai.getText()));
+		try{
+			s.setIdSaida(Integer.parseInt(codSai.getText()));
+		}
+		catch(NumberFormatException e){}
+		try{
+			s.setData(in.parse(dataSai.getText()));
+		}
+		catch(ParseException e){}
 		s.setDescricao(descSaida.getText());
 		return s;
 	}
@@ -544,10 +581,18 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Item fromItem(){
 		Item i = new Item();
-		i.setIdItem(Integer.parseInt(codItem.getText()));
-		i.setIdProduto(Integer.parseInt(codProItem.getText()));
-		i.setIdSaida(Integer.parseInt(codSaiItem.getText()));
-		i.setIdEntrada(Integer.parseInt(codEntItem.getText()));		
+		try{
+			i.setIdItem(Integer.parseInt(codItem.getText()));
+		} catch(NumberFormatException e){}
+		try{
+			i.setIdProduto(Integer.parseInt(codProItem.getText()));
+		} catch(NumberFormatException e){}
+		try{
+			i.setIdSaida(Integer.parseInt(codSaiItem.getText()));
+		} catch(NumberFormatException e){}
+		try{
+			i.setIdEntrada(Integer.parseInt(codEntItem.getText()));
+		} catch(NumberFormatException e){}
 		return i;
 	}
 	
@@ -562,13 +607,25 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Entrada fromEntrada() throws ParseException{
 		Entrada e = new Entrada();
-		e.setIdEntrada(Integer.parseInt(codEnt.getText()));
-		e.setData(in.parse(dataEnt.getText()));
+		try{
+			e.setIdEntrada(Integer.parseInt(codEnt.getText()));
+		} catch(NumberFormatException e1){}
+		try{
+			e.setData(in.parse(dataEnt.getText()));
+		}
+		catch(ParseException e1){}
 		e.setTipoTransf(tipoEnt.getText());
 		e.setNFE(NFEEnt.getText());
-		e.setDataEmissarNFE(in.parse(dataNFEEnt.getText()));
-		e.setTempo(Float.parseFloat(tempoEnt.getText().replace(",", ".")));
-		e.setIdFornecedor(Integer.parseInt(codForEnt.getText()));
+		try{
+			e.setDataEmissarNFE(in.parse(dataNFEEnt.getText()));
+		}
+		catch(ParseException e1){}
+		try{
+			e.setTempo(Float.parseFloat(tempoEnt.getText().replace(",", ".")));
+		} catch(NumberFormatException e1){}
+		try{
+			e.setIdFornecedor(Integer.parseInt(codForEnt.getText()));
+		} catch(NumberFormatException e1){}
 		return e;
 	}
 	
@@ -579,7 +636,10 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Responsavel fromResponsavel(){
 		Responsavel r = new Responsavel();
-		r.setId(Integer.parseInt(codResp.getText()));
+		try{
+			r.setId(Integer.parseInt(codResp.getText()));
+		}
+		catch(NumberFormatException e){}
 		r.setNome(nomeResp.getText());
 		r.setTel(telResp.getText());
 		return r;
@@ -595,12 +655,18 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Departamento fromDepartamento(){
 		Departamento d = new Departamento();
-		d.setId(Integer.parseInt(codDep.getText()));
+		try{
+			d.setId(Integer.parseInt(codDep.getText()));
+		}
+		catch(NumberFormatException e){}
 		d.setNome(nomeDep.getText());
 		d.setAndar(andarDep.getText());
 		d.setPredio(predioDep.getText());
 		d.setTelefone(telDep.getText());
-		d.setCodResponsavel(Integer.parseInt(codRespDep.getText()));
+		try{
+			d.setCodResponsavel(Integer.parseInt(codRespDep.getText()));
+		}
+		catch(NumberFormatException e){}
 		return d;
 	}	
 	
@@ -616,9 +682,15 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public Fornecedor fromFornecedor(){
 		Fornecedor f = new Fornecedor();
-		f.setId(Integer.parseInt(codFor.getText()));
+		try{
+			f.setId(Integer.parseInt(codFor.getText()));
+		}
+		catch(NumberFormatException e){}
 		f.setRua(ruaFor.getText());
-		f.setNumero(Integer.parseInt(numFor.getText()));
+		try{
+			f.setNumero(Integer.parseInt(numFor.getText()));
+		}
+		catch(NumberFormatException e){}
 		f.setBairro(bairFor.getText());
 		f.setCidade(cidFor.getText());
 		f.setEstado(estFor.getText());
@@ -634,9 +706,18 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public SolicitacaoFornecedor fromSolicitacaoFornecedor() throws ParseException{
 		SolicitacaoFornecedor sF = new SolicitacaoFornecedor();
-		sF.setId(Integer.parseInt(codSolFor.getText()));
-		sF.setIdFornecedor(Integer.parseInt(codForSol.getText()));
-		sF.setData(in.parse(dtSolFor.getText()));
+		try{
+			sF.setId(Integer.parseInt(codSolFor.getText()));
+		}
+		catch(NumberFormatException e){}
+		try{
+			sF.setIdFornecedor(Integer.parseInt(codForSol.getText()));
+		}
+		catch(NumberFormatException e){}
+		try{
+			sF.setData(in.parse(dtSolFor.getText()));
+		}
+		catch(ParseException e){}
 		return sF;
 	}	
 	
@@ -647,9 +728,18 @@ public class JanelaPrincipal implements ActionListener{
 	}
 	public SolicitacaoDepartamento fromSolicitacaoDepartamento() throws ParseException{
 		SolicitacaoDepartamento sD = new SolicitacaoDepartamento();
-		sD.setId(Integer.parseInt(codSolDep.getText()));
-		sD.setIdDepartamento(Integer.parseInt(codDepSol.getText()));
-		sD.setData(in.parse(dtSolDep.getText()));
+		try{
+			sD.setId(Integer.parseInt(codSolDep.getText()));
+		}
+		catch(NumberFormatException e){}
+		try{
+			sD.setIdDepartamento(Integer.parseInt(codDepSol.getText()));
+		}
+		catch(NumberFormatException e){}
+		try{
+			sD.setData(in.parse(dtSolDep.getText()));
+		}
+		catch(ParseException e){}
 		return sD;		
 	}
 
@@ -658,9 +748,15 @@ public class JanelaPrincipal implements ActionListener{
 		String cmd = action.getActionCommand();
 		if(cmd.contains("Salvar Tipo")){
 			try {
-				ctrTipo.adicionar(fromTipo());
-				tabelaTipo.revalidate();
-				scrollTipo.repaint();
+				Tipo t = fromTipo();
+				if(t.getNome().equals("")){
+					JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);					
+				}
+				else{
+					ctrTipo.adicionar(t);
+					tabelaTipo.revalidate();
+					scrollTipo.repaint();
+				}
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -668,9 +764,15 @@ public class JanelaPrincipal implements ActionListener{
 		}
 		else if(cmd.contains("Alterar Tipo")){
 			try {
-				ctrTipo.atualizar(fromTipo());
-				tabelaTipo.revalidate();
-				scrollTipo.repaint();
+				Tipo t = fromTipo();
+				if(t.getNome().equals("")){
+					JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);					
+				}
+				else{
+					ctrTipo.atualizar(t);
+					tabelaTipo.revalidate();
+					scrollTipo.repaint();
+				}
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
@@ -696,7 +798,7 @@ public class JanelaPrincipal implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-		if(cmd.contains("Salvar Produto")){
+		else if(cmd.contains("Salvar Produto")){
 			try {
 				ctrProduto.adicionar(fromProduto());
 				tabelaProduto.revalidate();
@@ -733,6 +835,386 @@ public class JanelaPrincipal implements ActionListener{
 				scrollProduto.repaint();
 			} catch (EstoqueException e) {
 				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Saida")){
+			try {
+				ctrSaida.adicionar(fromSaida());
+				tabelaSaida.revalidate();
+				scrollSaida.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro no campo Data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Saida")){
+			try {
+				ctrSaida.atualizar(fromSaida());
+				tabelaSaida.revalidate();
+				scrollSaida.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro no campo Data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Saida")){
+			try {
+				ctrSaida.consultar(fromSaida());
+				tabelaSaida.revalidate();
+				scrollSaida.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro no campo Data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Saida")){
+			try {
+				ctrSaida.remover(fromSaida());
+				tabelaSaida.revalidate();
+				scrollSaida.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro no campo Data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Item")){
+			try {
+				ctrItem.adicionar(fromItem());
+				tabelaItem.revalidate();
+				scrollItem.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Item")){
+			try {
+				ctrItem.atualizar(fromItem());
+				tabelaItem.revalidate();
+				scrollItem.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Item")){
+			try {
+				ctrItem.consultar(fromItem());
+				tabelaItem.revalidate();
+				scrollItem.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Item")){
+			try {
+				ctrItem.remover(fromItem());
+				tabelaItem.revalidate();
+				scrollItem.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Entrada")){
+			try {
+				ctrEntrada.adicionar(fromEntrada());
+				tabelaEntrada.revalidate();
+				scrollEntrada.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Entrada")){
+			try {
+				ctrEntrada.atualizar(fromEntrada());
+				tabelaEntrada.revalidate();
+				scrollEntrada.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Entrada")){
+			try {
+				ctrEntrada.consultar(fromEntrada());
+				tabelaEntrada.revalidate();
+				scrollEntrada.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Entrada")){
+			try {
+				ctrEntrada.remover(fromEntrada());
+				tabelaEntrada.revalidate();
+				scrollEntrada.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Responsavel")){
+			try {
+				Responsavel r = fromResponsavel();
+				if(r.getNome().equals("") || r.getTel().equals("")){
+					JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					ctrResponsavel.adicionar(r);
+					tabelaResponsavel.revalidate();
+					scrollResponsavel.repaint();
+				}
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Responsavel")){
+			try {
+				Responsavel r = fromResponsavel();
+				if(r.getNome().equals("") || r.getTel().equals("")){
+					JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					ctrResponsavel.atualizar(r);
+					tabelaResponsavel.revalidate();
+					scrollResponsavel.repaint();
+				}
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Responsavel")){
+			try {
+				ctrResponsavel.consultar(fromResponsavel());
+				tabelaResponsavel.revalidate();
+				scrollResponsavel.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Responsavel")){
+			try {
+				ctrResponsavel.remover(fromResponsavel());
+				tabelaResponsavel.revalidate();
+				scrollResponsavel.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Departamento")){
+			try {
+				ctrDepartamento.adicionar(fromDepartamento());
+				tabelaDepartamento.revalidate();
+				scrollDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Departamento")){
+			try {
+				ctrDepartamento.atualizar(fromDepartamento());
+				tabelaDepartamento.revalidate();
+				scrollDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Departamento")){
+			try {
+				ctrDepartamento.consultar(fromDepartamento());
+				tabelaDepartamento.revalidate();
+				scrollDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Departamento")){
+			try {
+				ctrDepartamento.remover(fromDepartamento());
+				tabelaDepartamento.revalidate();
+				scrollDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Fornecedor")){
+			try {
+				ctrFornecedor.adicionar(fromFornecedor());
+				tabelaFornecedor.revalidate();
+				scrollFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Fornecedor")){
+			try {
+				ctrFornecedor.atualizar(fromFornecedor());
+				tabelaFornecedor.revalidate();
+				scrollFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Fornecedor")){
+			try {
+				ctrFornecedor.consultar(fromFornecedor());
+				tabelaFornecedor.revalidate();
+				scrollFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Fornecedor")){
+			try {
+				ctrFornecedor.remover(fromFornecedor());
+				tabelaFornecedor.revalidate();
+				scrollFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Solicitacao Fornecedor")){
+			try {
+				ctrSolFornecedor.adicionar(fromSolicitacaoFornecedor());
+				tabelaSolFornecedor.revalidate();
+				scrollSolFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Solicitacao Fornecedor")){
+			try {
+				ctrSolFornecedor.atualizar(fromSolicitacaoFornecedor());
+				tabelaSolFornecedor.revalidate();
+				scrollSolFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Solicitacao Fornecedor")){
+			try {
+				ctrSolFornecedor.consultar(fromSolicitacaoFornecedor());
+				tabelaSolFornecedor.revalidate();
+				scrollSolFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Solicitacao Fornecedor")){
+			try {
+				ctrSolFornecedor.remover(fromSolicitacaoFornecedor());
+				tabelaSolFornecedor.revalidate();
+				scrollSolFornecedor.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Salvar Solicitacao Departamento")){
+			try {
+				ctrSolDepartamento.adicionar(fromSolicitacaoDepartamento());
+				tabelaSolDepartamento.revalidate();
+				scrollSolDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Alterar Solicitacao Departamento")){
+			try {
+				ctrSolDepartamento.atualizar(fromSolicitacaoDepartamento());
+				tabelaSolDepartamento.revalidate();
+				scrollSolDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if(cmd.contains("Pesquisar Solicitacao Departamento")){
+			try {
+				ctrSolDepartamento.consultar(fromSolicitacaoDepartamento());
+				tabelaSolDepartamento.revalidate();
+				scrollSolDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+		else if (cmd.contains("Remover Solicitacao Departamento")){
+			try {
+				ctrSolDepartamento.remover(fromSolicitacaoDepartamento());
+				tabelaSolDepartamento.revalidate();
+				scrollSolDepartamento.repaint();
+			} catch (EstoqueException e) {
+				JOptionPane.showMessageDialog(null, "Erro","Erro!",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (ParseException e) {
+				JOptionPane.showMessageDialog(null, "Erro com data","Erro!",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}

@@ -16,12 +16,22 @@ public class ControleItem implements TableModel{
 
 	public void adicionar(Item d) throws EstoqueException{
 		dao = new ItemDAO();
-		dao.adicionar(d);
+		if(d.getIdSaida() != 0){
+			dao.adicionar(d);
+		}
+		else{
+			dao.adicionarSemSaida(d);
+		}
 		consultar(new Item());
 	}
 	public void atualizar(Item d) throws EstoqueException{
 		dao = new ItemDAO();
-		dao.atualizar(d);
+		if(d.getIdSaida() != 0){
+			dao.atualizar(d);
+		}
+		else{
+			dao.atualizarSemSaida(d);
+		}
 		consultar(new Item());
 	}
 	public void remover(Item d) throws EstoqueException{
@@ -77,7 +87,10 @@ public class ControleItem implements TableModel{
 		switch(col){
 		case 0: return i.getIdItem();
 		case 1: return i.getIdProduto();
-		case 2: return i.getIdSaida();
+		case 2: if(i.getIdSaida() == 0){
+			return "";
+		}
+			return i.getIdSaida();
 		case 3: return i.getIdEntrada();
 		}
 		return "";

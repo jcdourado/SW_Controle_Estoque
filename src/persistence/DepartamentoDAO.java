@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Departamento;
+import utilities.DBResourceManager;
 import utilities.EstoqueException;
 
 public class DepartamentoDAO {
 	private Connection c;
 	
 	public DepartamentoDAO() throws EstoqueException {
-		GenericDAO gen = new GenericDAO();
-		c = gen.getConnection();
+		try {
+			c = DBResourceManager.getRecource().getConnection();
+		} catch (ClassNotFoundException e) {
+			throw new EstoqueException(e);
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
+		}
 	}
 	
 	public void adicionar(Departamento e) throws EstoqueException {

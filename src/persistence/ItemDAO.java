@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Item;
+import utilities.DBResourceManager;
 import utilities.EstoqueException;
 
 public class ItemDAO {
 private Connection c;
 	
 	public ItemDAO() throws EstoqueException {
-		GenericDAO gen = new GenericDAO();
-			c = gen.getConnection();
+		try {
+			c = DBResourceManager.getRecource().getConnection();
+		} catch (ClassNotFoundException e) {
+			throw new EstoqueException(e);
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
+		}
 	}
 	
 	public void adicionar(Item e) throws EstoqueException {
@@ -32,6 +38,19 @@ private Connection c;
 		}
 	}
 	
+	public void adicionarSemSaida(Item e) throws EstoqueException {
+		try {
+			String sql = "INSERT INTO item (codProduto, codEntrada) VALUES (?, ?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, e.getIdProduto());
+			ps.setInt(2, e.getIdEntrada());
+			ps.execute();
+			ps.close();
+		} catch (SQLException e1) {
+			throw new EstoqueException(e1);
+		}
+	}
+	
 	public void atualizar(Item e) throws EstoqueException {
 		try {
 			String sql = "UPDATE item SET codProduto = ?, codSaida = ?, codEntrada = ? WHERE codItem = ?";
@@ -40,6 +59,20 @@ private Connection c;
 			ps.setInt(2, e.getIdSaida());
 			ps.setInt(3, e.getIdEntrada());
 			ps.setInt(4, e.getIdItem());
+			ps.execute();
+			ps.close();
+		} catch (SQLException e1) {
+			throw new EstoqueException(e1);
+		}
+	}
+	
+	public void atualizarSemSaida(Item e) throws EstoqueException {
+		try {
+			String sql = "UPDATE item SET codProduto = ?, codEntrada = ? WHERE codItem = ?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, e.getIdProduto());
+			ps.setInt(2, e.getIdEntrada());
+			ps.setInt(3, e.getIdItem());
 			ps.execute();
 			ps.close();
 		} catch (SQLException e1) {
@@ -105,7 +138,7 @@ private Connection c;
 				sql.append("AND codItem LIKE '%"+d.getIdItem()+"%' ");
 			}
 			else{
-				sql.append("WHERE codProduto LIKE '%"+d.getIdItem()+"%' ");	
+				sql.append("WHERE codItem LIKE '%"+d.getIdItem()+"%' ");	
 				ver++;
 			}
 		}

@@ -17,12 +17,22 @@ public class ControllerEntrada implements TableModel{
 
 	public void adicionar(Entrada d) throws EstoqueException{
 		dao = new EntradaDAO();
-		dao.adicionar(d);
+		if(d.getIdFornecedor() != 0){
+			dao.adicionar(d);			
+		}
+		else{
+			dao.adicionarSemFornecedor(d);			
+		}
 		consultar(new Entrada());
 	}
 	public void atualizar(Entrada d) throws EstoqueException{
 		dao = new EntradaDAO();
-		dao.atualizar(d);
+		if(d.getIdFornecedor() != 0){
+			dao.atualizar(d);
+		}
+		else{
+			dao.atualizarSemFornecedor(d);
+		}
 		consultar(new Entrada());
 	}
 	public void remover(Entrada d) throws EstoqueException{
@@ -87,7 +97,10 @@ public class ControllerEntrada implements TableModel{
 		case 3: return e.getNFE();
 		case 4: return e.getDataEmissarNFE();
 		case 5: return e.getTempo();
-		case 6: return e.getIdFornecedor();
+		case 6: if(e.getIdFornecedor() != 0){ 
+			return e.getIdFornecedor();
+		}
+			return "";
 		}
 		return "";
 	}

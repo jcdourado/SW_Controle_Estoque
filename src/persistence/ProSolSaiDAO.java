@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.ProdutoSolicitacaoSaida;
+import utilities.DBResourceManager;
 import utilities.EstoqueException;
 
 public class ProSolSaiDAO {
 	private Connection c;
 	
 	public ProSolSaiDAO() throws EstoqueException {
-		GenericDAO gen = new GenericDAO();
-			c = gen.getConnection();
+		try {
+			c = DBResourceManager.getRecource().getConnection();
+		} catch (ClassNotFoundException e) {
+			throw new EstoqueException(e);
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
+		}
 	}
 	
 	public void adicionar(ProdutoSolicitacaoSaida e) throws EstoqueException {

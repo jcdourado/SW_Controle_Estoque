@@ -8,13 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Tipo;
+import utilities.DBResourceManager;
 import utilities.EstoqueException;
 
 public class TipoDAO {
 	private Connection c;
-	public TipoDAO() throws EstoqueException {
-		GenericDAO gen = new GenericDAO();
-			c = gen.getConnection();
+	public TipoDAO()  throws EstoqueException {
+		try {
+			c = DBResourceManager.getRecource().getConnection();
+		} catch (ClassNotFoundException e) {
+			throw new EstoqueException(e);
+		} catch (SQLException e) {
+			throw new EstoqueException(e);
+		}
 	}
 	
 	public void adicionar(Tipo e) throws EstoqueException {
