@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -36,10 +37,13 @@ import model.Entrada;
 import model.Fornecedor;
 import model.Item;
 import model.Produto;
+import model.ProdutoSolicitacaoSaida;
 import model.Responsavel;
 import model.Saida;
 import model.SolicitacaoDepartamento;
 import model.SolicitacaoFornecedor;
+import model.SolicitacaoProdutoDepartamento;
+import model.SolicitacaoProdutoFornecedor;
 import model.Tipo;
 import utilities.EstoqueException;
 
@@ -254,12 +258,78 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		});
 		
+		tabelaProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					Produto p = fromProduto();
+					Item i = new Item();
+					i.setIdProduto(p.getId());
+					try {
+						p.setItens(ctrItem.consultar(i));
+						List<SolicitacaoFornecedor> sF = ctrSolFornecedor.consultar(new SolicitacaoFornecedor());
+						for(SolicitacaoFornecedor s : sF){
+							for(SolicitacaoProdutoFornecedor spf : s.getSolicitacoes()){
+								if(spf.getIdProduto() == p.getId()){
+									p.adicionarSolicitacaoFornecedor(spf);
+								}
+							}
+						}
+						List<SolicitacaoDepartamento> sD = ctrSolDepartamento.consultar(new SolicitacaoDepartamento());
+						for(SolicitacaoDepartamento s : sD){
+							for(SolicitacaoProdutoDepartamento spf : s.getSoliticacoes()){
+								if(spf.getIdProduto() == p.getId()){
+									p.adicionarSolicitacaoDepartamento(spf);
+								}
+							}
+						}
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+					@SuppressWarnings("unused")
+					JanelaProduto jProduto = new JanelaProduto(p);
+					tabelaProduto.revalidate();
+					scrollProduto.repaint();
+				}
+			}
+		});
+		
 		tabelaSaida.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int linha = tabelaSaida.getSelectedRow();
 				toSaida(ctrSaida.getSaidas().get(linha));
+			}
+		});
+
+		tabelaSaida.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						Saida s = fromSaida();
+						Item i = new Item();
+						i.setIdSaida(s.getIdSaida());
+						s.setItens(ctrItem.consultar(i));
+						List<SolicitacaoDepartamento> solDpto = ctrSolDepartamento.consultar(new SolicitacaoDepartamento());
+						for(SolicitacaoDepartamento sDpto : solDpto){
+							for(ProdutoSolicitacaoSaida spd : sDpto.getRecebidos()){
+								if(spd.getIdSaida() == s.getIdSaida()){
+									s.adicionaSolicitacao(spd);
+								}
+							}
+						}
+						@SuppressWarnings("unused")
+						JanelaSaida jSaida = new JanelaSaida(s);
+						tabelaSaida.revalidate();
+						scrollSaida.repaint();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		
