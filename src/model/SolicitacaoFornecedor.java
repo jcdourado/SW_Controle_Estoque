@@ -141,18 +141,4 @@ public class SolicitacaoFornecedor {
 		preco += p.getPreco() * solProduto.getQuantidade();
 		return preco;
 	}
-	public float calcPesoGeral(){
-		float peso = 0;
-		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
-			peso += solProduto.getP().getPeso() * solProduto.getQuantidade();
-		}
-		return peso;
-	}
-	public float calcPrecoGeral(){
-		float preco = 0;
-		for(SolicitacaoProdutoFornecedor solProduto : solicitacoes){
-			preco += solProduto.getP().getPreco() * solProduto.getQuantidade();
-		}
-		return preco;
-	}	
 }

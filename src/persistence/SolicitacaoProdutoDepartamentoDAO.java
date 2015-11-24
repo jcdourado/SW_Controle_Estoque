@@ -67,7 +67,7 @@ public class SolicitacaoProdutoDepartamentoDAO {
 	private String getSql(SolicitacaoProdutoDepartamento d){
 		int ver = 0;
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT id_Produto ,id_Solicitacao, getQuantidade FROM solicitacao_Produto_Departamento ");
+		sql.append("SELECT id_Produto ,id_Solicitacao, quantidade FROM solicitacao_Produto_Departamento ");
 		if(d.getIdProduto() != 0 ){
 			sql.append("WHERE id_Produto LIKE '%" +d.getIdProduto()+"%' ");
 			ver++;

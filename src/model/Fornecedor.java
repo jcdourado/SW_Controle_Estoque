@@ -239,20 +239,6 @@ public class Fornecedor {
 		}
 		return rest;
 	}	
-	public float calcPesoGeral(){
-		int preco = 0;
-		for(SolicitacaoFornecedor sol: solicitacoes){
-			preco += sol.calcPesoGeral();
-		}
-		return preco;
-	}	
-	public float calcPrecoGeral(){
-		int preco = 0;
-		for(SolicitacaoFornecedor sol: solicitacoes){
-			preco += sol.calcPrecoGeral();
-		}
-		return preco;
-	}	
 	public float calcPesoPorProduto(Produto p){
 		int preco = 0;
 		for(SolicitacaoFornecedor sol: solicitacoes){

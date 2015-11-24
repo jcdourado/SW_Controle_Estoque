@@ -27,8 +27,12 @@ import controller.ControllerDepartamento;
 import controller.ControllerEntrada;
 import controller.ControllerFornecedor;
 import controller.ControllerProduto;
+import controller.ControllerProdutoEntradaSolicitacao;
+import controller.ControllerProdutoSaidaSolicitacao;
 import controller.ControllerResponsavel;
 import controller.ControllerSaida;
+import controller.ControllerSolDepartamento;
+import controller.ControllerSolFornecedor;
 import controller.ControllerSolicitacaoDepartamento;
 import controller.ControllerSolicitacaoFornecedor;
 import controller.ControllerTipo;
@@ -76,6 +80,10 @@ public class JanelaPrincipal implements ActionListener{
 	private ControllerFornecedor ctrFornecedor = new ControllerFornecedor();
 	private ControllerSolicitacaoFornecedor ctrSolFornecedor = new ControllerSolicitacaoFornecedor();
 	private ControllerSolicitacaoDepartamento ctrSolDepartamento = new ControllerSolicitacaoDepartamento();
+	private ControllerSolFornecedor ctrSoliticacoesProduto = new ControllerSolFornecedor();
+	private ControllerProdutoEntradaSolicitacao ctrSolEntrada = new ControllerProdutoEntradaSolicitacao();
+	private ControllerSolDepartamento ctrSoliticacoesProdutoDepartamento = new ControllerSolDepartamento();
+	private ControllerProdutoSaidaSolicitacao ctrSolSaida= new ControllerProdutoSaidaSolicitacao();
 	
 	private JTable tabelaTipo = new JTable(ctrTipo);
 	private JTable tabelaProduto = new JTable(ctrProduto);
@@ -437,7 +445,6 @@ public class JanelaPrincipal implements ActionListener{
 				}
 			}
 		});
-
 		
 		tabelaFornecedor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
@@ -445,6 +452,31 @@ public class JanelaPrincipal implements ActionListener{
 			public void valueChanged(ListSelectionEvent e) {
 				int linha = tabelaFornecedor.getSelectedRow();
 				toFornecedor(ctrFornecedor.getFornecedores().get(linha));
+			}
+		});
+		
+		tabelaFornecedor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						Fornecedor s = fromFornecedor();
+						SolicitacaoFornecedor solDp = new SolicitacaoFornecedor();
+						solDp.setIdFornecedor(s.getId());
+
+						for(SolicitacaoFornecedor sol : ctrSolFornecedor.consultar(solDp)){
+							if(solDp.getIdFornecedor() == sol.getIdFornecedor()){
+								s.adiciona(sol);
+							}
+						}
+						@SuppressWarnings("unused")
+						JanelaFornecedor jFornecedor = new JanelaFornecedor(s);
+						tabelaFornecedor.revalidate();
+						scrollFornecedor.repaint();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		
@@ -457,6 +489,32 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		});
 		
+		tabelaSolFornecedor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						SolicitacaoFornecedor s = fromSolicitacaoFornecedor();
+						SolicitacaoProdutoFornecedor sProFor = new SolicitacaoProdutoFornecedor();
+						sProFor.setIdSolicitacao(s.getId());
+						s.setSolicitacoes(ctrSoliticacoesProduto.consultar(sProFor));
+						ProdutoSolicitacaoEntrada pSolEnt = new ProdutoSolicitacaoEntrada();
+						pSolEnt.setIdSolicitacao(s.getId());
+						s.setEntregues(ctrSolEntrada.consultar(pSolEnt));
+						
+						@SuppressWarnings("unused")
+						JanelaSolFornecedor jFornecedor = new JanelaSolFornecedor(s);
+						tabelaSolFornecedor.revalidate();
+						scrollSolFornecedor.repaint();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
 		tabelaSolDepartamento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -466,6 +524,31 @@ public class JanelaPrincipal implements ActionListener{
 			}
 		});
 		
+		tabelaSolDepartamento.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent action) {
+				if(action.getClickCount() >= 2){
+					try {
+						SolicitacaoDepartamento s = fromSolicitacaoDepartamento();
+						SolicitacaoProdutoDepartamento sProDep = new SolicitacaoProdutoDepartamento();
+						sProDep.setIdSolicitacao(s.getId());
+						s.setSoliticacoes(ctrSoliticacoesProdutoDepartamento.consultar(sProDep));
+						ProdutoSolicitacaoSaida pSolSai = new ProdutoSolicitacaoSaida();
+						pSolSai.setIdSolicitacao(s.getId());
+						s.setRecebidos(ctrSolSaida.consultar(pSolSai));
+						
+						@SuppressWarnings("unused")
+						JanelaSolDepartamento jDepartamento = new JanelaSolDepartamento(s);
+						tabelaSolDepartamento.revalidate();
+						scrollSolDepartamento.repaint();
+					} catch (EstoqueException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		dataEnt = new JFormattedTextField(mascaraData);

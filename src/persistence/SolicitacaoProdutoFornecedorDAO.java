@@ -54,7 +54,7 @@ public class SolicitacaoProdutoFornecedorDAO {
 	
 	public void remove(SolicitacaoProdutoFornecedor e) throws EstoqueException {
 		try {
-			String sql = "DELETE FROM solicitacao_Produto_Fornecedor WHERE id_Solicitacao = ? AND idProduto = ? ";
+			String sql = "DELETE FROM solicitacao_Produto_Fornecedor WHERE idSolicitacao = ? AND idProduto = ? ";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, e.getIdSolicitacao());
 			ps.setInt(2, e.getIdProduto());
@@ -67,17 +67,17 @@ public class SolicitacaoProdutoFornecedorDAO {
 	private String getSql(SolicitacaoProdutoFornecedor d){
 		int ver = 0;
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT id_Produto ,id_Solicitacao, getQuantidade FROM solicitacao_Produto_Fornecedor ");
+		sql.append("SELECT idProduto ,idSolicitacao, quantidade FROM solicitacao_Produto_Fornecedor ");
 		if(d.getIdProduto() != 0 ){
-			sql.append("WHERE id_Produto LIKE '%" +d.getIdProduto()+"%' ");
+			sql.append("WHERE idProduto LIKE '%" +d.getIdProduto()+"%' ");
 			ver++;
 		}		
 		if(d.getIdSolicitacao() != 0){
 			if(ver>0){
-				sql.append("AND id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");
+				sql.append("AND idSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");
 			}
 			else{
-				sql.append("WHERE id_Solicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");	
+				sql.append("WHERE idSolicitacao LIKE '%"+d.getIdSolicitacao()+"%' ");	
 				ver++;
 			}
 		}
@@ -101,8 +101,8 @@ public class SolicitacaoProdutoFornecedorDAO {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				SolicitacaoProdutoFornecedor dp = new SolicitacaoProdutoFornecedor();
-				dp.setIdProduto(rs.getInt("id_Produto"));
-				dp.setIdSolicitacao(rs.getInt("id_Solicitacao"));
+				dp.setIdProduto(rs.getInt("idProduto"));
+				dp.setIdSolicitacao(rs.getInt("idSolicitacao"));
 				dp.setQuantidade(rs.getFloat("quantidade"));
 				lista.add(dp);
 			}
